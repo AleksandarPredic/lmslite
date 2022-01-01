@@ -2,8 +2,15 @@
 
 Features
 * Manage users
-* Create courses and groups
-* Create calendar events: single and recurring
+  * Admin can
+    * Visit admin dashboard 
+    * Create courses and groups
+    * Create calendar events: single and recurring
+  * Student can
+    * Visit student dashboard
+    * Preview calendar events
+  * Student guest can
+    * I still have no idea :) 
 
 ## Production setup
 

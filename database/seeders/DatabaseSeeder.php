@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Course;
 use App\Models\User;
 use App\Models\UserRole;
-use Database\Factories\UserFactory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
-           RoleSeeder::class
+            RoleSeeder::class,
         ]);
 
         // Create one admin and one guest student user
@@ -52,6 +52,12 @@ class DatabaseSeeder extends Seeder
                 'role_id' => 2,
                 'user_id' => $user->id
             ]);
+        }
+
+        // Create a few courses
+        $courses = ['Slikanje', 'Programiranje', 'Tehnicko'];
+        foreach ($courses as $course) {
+            Course::factory()->create(['name' => $course]);
         }
     }
 }

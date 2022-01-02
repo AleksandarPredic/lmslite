@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CourseController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,9 +23,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 Route::name('admin.')->middleware('can:admin')->group(function () {
-    Route::get('/dashboard/admin', function () {
-        echo 'Hello';
-    })->name('test');
+    Route::resource('/admin/courses', CourseController::class);
 });
 
 require __DIR__.'/auth.php';

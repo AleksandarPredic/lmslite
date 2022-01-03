@@ -2,85 +2,109 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreCourseRequest;
-use App\Http\Requests\UpdateCourseRequest;
 use App\Models\Course;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class CourseController extends Controller
 {
     /**
      * Display a listing of the resource.
+     *
+     * @return View
      */
     public function index()
     {
         return view('admin.course.index', [
-            'courses' => Course::paginate(10)->withQueryString()
+            'courses' => Course::orderBy('name', 'asc')->paginate(3)->withQueryString()
         ]);
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return View
      */
     public function create()
     {
-        //
+        return view('admin.course.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreCourseRequest  $request
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse
      */
-    public function store(StoreCourseRequest $request)
+    public function store()
     {
-        //
-    }
+        $attributes = $this->processRequest();
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Course  $course
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Course $course)
-    {
-        //
+        $course = Course::create([
+            'name' => $attributes['name']
+        ]);
+
+        return redirect(route('admin.courses.index'))->with('form.message.success', "Course, {$course->name}, created!");
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Course  $course
-     * @return \Illuminate\Http\Response
+     * @param Course $course
+     *
+     * @return View
      */
     public function edit(Course $course)
     {
-        //
+        return view('admin.course.edit', [
+           'course' => $course
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateCourseRequest  $request
-     * @param  \App\Models\Course  $course
-     * @return \Illuminate\Http\Response
+     * @param Course $course
+     *
+     * @return RedirectResponse
      */
-    public function update(UpdateCourseRequest $request, Course $course)
+    public function update(Course $course)
     {
-        //
+        $attributes = $this->processRequest();
+
+        $course->update([
+            'name' => $attributes['name']
+        ]);
+
+        return back()->with('form.message.success', 'Course updated!');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Course  $course
-     * @return \Illuminate\Http\Response
+     * @param Course $course
+     *
+     * @return RedirectResponse
      */
     public function destroy(Course $course)
     {
-        //
+        $course->delete();
+
+        return redirect(route('admin.courses.index'))->with('form.message.success', "Course, {$course->name}, deleted!");
+    }
+
+    /**
+     * Validate request
+     *
+     * @return array
+     */
+    protected function processRequest(): array
+    {
+        $attributes = \request()->validate([
+            'name' => ['required', 'min:3','max:255']
+        ]);
+
+        $attributes['name'] = strip_tags($attributes['name']);
+
+        return $attributes;
     }
 }

@@ -23,7 +23,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 Route::name('admin.')->middleware('can:admin')->group(function () {
-    Route::resource('/admin/courses', CourseController::class);
+    Route::resource('/admin/courses', CourseController::class)->except(['show']);
 });
 
 require __DIR__.'/auth.php';

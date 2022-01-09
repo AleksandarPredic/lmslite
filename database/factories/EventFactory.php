@@ -18,7 +18,7 @@ class EventFactory extends Factory
         $ending = clone $starting;
 
         return [
-            'name' => $this->faker->title,
+            'name' => $this->faker->sentence(),
             'recurring' => rand(0, 1),
             'days' => [1, 3],
             'occurrence' => 'weekly',

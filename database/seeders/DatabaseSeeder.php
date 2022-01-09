@@ -59,5 +59,9 @@ class DatabaseSeeder extends Seeder
         foreach ($courses as $course) {
             Course::factory()->create(['name' => $course]);
         }
+
+        $this->call([
+            EventSeeder::class,
+        ]);
     }
 }

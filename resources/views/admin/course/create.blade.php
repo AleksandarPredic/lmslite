@@ -10,7 +10,6 @@
             :buttonText="__('Create')"
         >
 
-            <!-- Name -->
             <x-admin.form.input
                 name="name"
                 :value="old('name')"

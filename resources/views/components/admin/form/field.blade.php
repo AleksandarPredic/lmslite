@@ -1,3 +1,3 @@
-<div class="admin-form__field">
+<div {{ $attributes->merge(['class' => 'admin-form__field mb-4']) }}>
     {{ $slot }}
 </div>

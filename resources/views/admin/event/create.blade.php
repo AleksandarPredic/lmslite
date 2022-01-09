@@ -1,22 +1,26 @@
 <x-app-layout>
     <x-admin.header>
-        {{ __('Edit course') }} - <a href="{{ route('admin.courses.index') }}" class="text-base underline" >Back to all!</a>
+        {{ __('Create event') }}
     </x-admin.header>
 
     <x-admin.main>
         <x-admin.form.wrapper
-            action="{{ route('admin.courses.update', [$course]) }}"
+            action="{{ route('admin.events.store') }}"
             method="post"
-            :buttonText="__('Update')"
+            :buttonText="__('Create')"
         >
-            @method('patch')
-
             <x-admin.form.input
                 name="name"
-                :value="old('name', $course->name)"
+                :value="old('name')"
                 :label="__('Name')"
                 :required="true"
             />
+
+            <x-admin.form.event.recurring :value="0" />
+
+            <x-admin.form.event.days />
+
+            <x-admin.form.event.occurrence />
 
         </x-admin.form.wrapper>
     </x-admin.main>

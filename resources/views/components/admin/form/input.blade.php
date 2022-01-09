@@ -1,15 +1,19 @@
-@props(['name', 'value', 'label', 'required' => false])
+@props(['name', 'value', 'label', 'required' => false, 'type' => 'text'])
 
 <x-admin.form.field>
-    <x-label for="{{ $name }}" :value="$label" />
+    <x-admin.form.label for="{{ $name }}" :value="$label" />
 
-    <x-input
+    @php
+        $required = $required? 'required' : '';
+    @endphp
+
+    <input
         id="{{ $name }}"
-        class="block mt-1 w-full"
-        type="text"
+        class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+        type="{{ $type }}"
         name="{{ $name }}"
-        :value="$value"
-        :required="$required"
+        value="{{ $value }}"
+        {{ $required }}
     />
 
     <x-admin.form.error name="{{ $name }}" />

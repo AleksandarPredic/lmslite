@@ -33,7 +33,7 @@ class EventObserver
 
         if ('weekly' === $event->occurrence) {
             $durationInSeconds = $event->ending_at->diffInSeconds($event->starting_at);
-            $period = CarbonPeriod::create($event->starting_at, $event->ending_at);
+            $period = CarbonPeriod::create($event->starting_at, $event->recurring_until);
 
             foreach ($period as $date) {
                 // Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday - $date->dayName
@@ -44,7 +44,7 @@ class EventObserver
 
                 $event->recurringEvent()->create([
                     'starting_at' => $date,
-                    'ending_at' => $date->addSeconds($durationInSeconds),
+                    'ending_at' => (clone $date)->addSeconds($durationInSeconds),
                 ]);
             }
         }

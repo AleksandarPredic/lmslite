@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use Carbon\Carbon;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class EventController extends Controller
@@ -11,17 +13,19 @@ class EventController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return View
      */
     public function index()
     {
-        return Event::all();
+        return view('admin.event.index', [
+            'events' => Event::orderBy('starting_at', 'asc')->paginate(10)->withQueryString()
+        ]);
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse
      */
     public function create()
     {
@@ -53,10 +57,12 @@ class EventController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse
      */
     public function store(Request $request)
     {
+        //dd($request->all());
+        //dd(Carbon::parse($request->get('starting_at')));
         // TODO: handle Carbon exception here
         return back()->withInput();
     }
@@ -65,18 +71,18 @@ class EventController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Event  $event
-     * @return \Illuminate\Http\Response
+     * @return View
      */
     public function show(Event $event)
     {
-        //
+        // TODO: Lazy load relationships with Event::WithAll()
     }
 
     /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Event  $event
-     * @return \Illuminate\Http\Response
+     * @return View
      */
     public function edit(Event $event)
     {
@@ -88,7 +94,7 @@ class EventController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Event  $event
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse
      */
     public function update(Request $request, Event $event)
     {
@@ -99,7 +105,7 @@ class EventController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Event  $event
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse
      */
     public function destroy(Event $event)
     {

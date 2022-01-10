@@ -22,6 +22,7 @@ class CreateEventsTable extends Migration
             $table->enum('occurrence', ['daily', 'weekly'])->nullable(); // TODO: add more options later
             $table->timestamp('starting_at');
             $table->timestamp('ending_at');
+            $table->timestamp('recurring_until')->nullable();
             $table->text('note')->nullable();
             $table->timestamps();
         });

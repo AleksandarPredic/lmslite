@@ -22,6 +22,27 @@
 
             <x-admin.form.event.occurrence />
 
+            {{-- # https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/datetime-local --}}
+            <x-admin.form.input-date-time
+                name="starting_at"
+                :value="old('starting_at')"
+                :label="__('Starting at')"
+                :required="true"
+            />
+
+            <x-admin.form.input-date-time
+                name="ending_at"
+                :value="old('ending_at')"
+                :label="__('Ending at')"
+                :required="true"
+            />
+
+            <x-admin.form.input-date-time
+                name="recurring_until"
+                :value="old('recurring_until')"
+                :label="__('Recurrng until')"
+                :required="true"
+            />
         </x-admin.form.wrapper>
     </x-admin.main>
 </x-app-layout>

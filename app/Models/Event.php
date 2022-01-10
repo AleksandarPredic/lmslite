@@ -6,18 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Support\Carbon;
 
 class Event extends Model
 {
     use HasFactory;
 
-    protected $observerData;
-
-    protected $fillable = ['name', 'recurring', 'days', 'occurrence', 'starting_at', 'ending_at', 'note'];
-
-    // Always eager load with these
-    protected $with = ['singleEvent', 'recurringEvent'];
+    protected $fillable = ['name', 'recurring', 'days', 'occurrence', 'starting_at', 'ending_at', 'recurring_until', 'note'];
 
     /**
      * The attributes that should be cast.
@@ -30,16 +24,12 @@ class Event extends Model
         'days' => 'array',
         'starting_at' => 'datetime',
         'ending_at' => 'datetime',
+        'recurring_until' => 'datetime',
     ];
 
-    public function setObserverData($data)
+    public function scopeWithAll($query)
     {
-        $this->observerData = $data;
-    }
-
-    public function getObserverData($data)
-    {
-        return $this->observerData = $data;
+        $query->with('singleEvent', 'recurringEvent');
     }
 
     public function singleEvent(): HasOne

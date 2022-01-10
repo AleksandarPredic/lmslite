@@ -17,6 +17,9 @@ class EventSeeder extends Seeder
         // Create one single and one recurring event
         Event::factory()->create([
             'recurring' => false,
+            'days' => null,
+            'occurrence' => null,
+            'recurring_until' => null,
         ]);
 
         Event::factory()->create([

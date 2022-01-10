@@ -14,8 +14,7 @@ class EventFactory extends Factory
      */
     public function definition()
     {
-        $starting = Carbon::now()->addWeek()->addHours(3)->addMinutes(45);
-        $ending = clone $starting;
+        $starting = Carbon::now()->addWeek(rand(1, 3))->addHours(3)->addMinutes(45);
 
         return [
             'name' => $this->faker->sentence(),
@@ -23,7 +22,8 @@ class EventFactory extends Factory
             'days' => [1, 3],
             'occurrence' => 'weekly',
             'starting_at' => $starting,
-            'ending_at' => $ending->addMonths(2),
+            'ending_at' => (clone $starting)->addHours(1),
+            'recurring_until' => (clone $starting)->addMonths(2),
             'note' => $this->faker->paragraph()
         ];
     }

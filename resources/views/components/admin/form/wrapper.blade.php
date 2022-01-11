@@ -1,6 +1,6 @@
 @props(['action', 'method', 'buttonText'])
 
-<form class="admin-form" action="{{ $action }}" method="{{ $method }}">
+<form {{ $attributes->merge(['class' => 'admin-form']) }} action="{{ $action }}" method="{{ $method }}">
     @csrf
 
     {{ $slot }}

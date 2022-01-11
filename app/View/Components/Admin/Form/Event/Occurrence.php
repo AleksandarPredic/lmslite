@@ -8,14 +8,14 @@ class Occurrence extends Component
 {
     /**
      * Component prop
-     * @var mixed
+     * @var null|string
      */
     public $value;
 
     /**
      * Create a new component instance.
      *
-     * @param null|mixed $value
+     * @param null|string $value
      */
     public function __construct($value = null)
     {

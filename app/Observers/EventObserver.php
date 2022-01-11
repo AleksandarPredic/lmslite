@@ -3,7 +3,6 @@
 namespace App\Observers;
 
 use App\Models\Event;
-use Carbon\CarbonInterval;
 use Carbon\CarbonPeriod;
 
 class EventObserver
@@ -58,7 +57,7 @@ class EventObserver
      */
     public function updated(Event $event)
     {
-        //
+        // TODO: Create change for updated event. If single all the same, if we have recurring event, we should ask the user from when to apply the update
     }
 
     /**
@@ -69,28 +68,6 @@ class EventObserver
      */
     public function deleted(Event $event)
     {
-        //
-    }
-
-    /**
-     * Handle the Event "restored" event.
-     *
-     * @param  \App\Models\Event  $event
-     * @return void
-     */
-    public function restored(Event $event)
-    {
-        //
-    }
-
-    /**
-     * Handle the Event "force deleted" event.
-     *
-     * @param  \App\Models\Event  $event
-     * @return void
-     */
-    public function forceDeleted(Event $event)
-    {
-        //
+        // TODO: I don't think we have anything todo on delete as we have cascade on delete in the table relationship
     }
 }

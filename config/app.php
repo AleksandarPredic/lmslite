@@ -76,10 +76,9 @@ return [
     |
     */
     'datetime_format' => [
-        'for_display' => [
-            'default' => 'd.m.Y h:i:s',
-            'no_seconds' => 'd.m.Y h:i'
-        ]
+        'default' => 'd.m.Y h:i:s',
+        // Used in various blade files to display event starting and ending times
+        'public' => 'l | d.m.Y h:i'
     ],
 
     /*

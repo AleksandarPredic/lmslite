@@ -1,6 +1,9 @@
-@props(['name', 'value', 'label', 'options', 'required' => false])
+@props(['name', 'value', 'label', 'options', 'required' => false, 'class' => ''])
 
-<x-admin.form.field>
+<x-admin.form.field
+    class="{{ $class }}"
+    data-selected="{{ $value }}"
+>
     <x-label for="{{ $name }}" :value="$label" />
 
     @php
@@ -11,6 +14,7 @@
         class="block mt-1 w-full"
         name="{{ $name }}"
         id="{{ $name }}"
+        onchange="this.parentElement.dataset.selected = this.value;"
         {{ $required }}
     >
         @foreach($options as $optionValue => $optionName)

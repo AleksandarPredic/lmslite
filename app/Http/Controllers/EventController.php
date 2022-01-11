@@ -63,7 +63,7 @@ class EventController extends Controller
     {
         //dd($request->all());
         //dd(Carbon::parse($request->get('starting_at')));
-        // TODO: handle Carbon exception here
+        // TODO: handle Carbon exception here + validation request
         return back()->withInput();
     }
 
@@ -86,7 +86,9 @@ class EventController extends Controller
      */
     public function edit(Event $event)
     {
-        //
+        return view('admin.event.edit', [
+            'event' => $event
+        ]);
     }
 
     /**
@@ -98,7 +100,7 @@ class EventController extends Controller
      */
     public function update(Request $request, Event $event)
     {
-        //
+        // TODO: Update validation request
     }
 
     /**

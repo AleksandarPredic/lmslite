@@ -12,6 +12,10 @@
     margin: 0 auto;
 }
 
+/*******************
+ * ADMIN
+ *******************/
+
 /** COMPONENTS **/
 
 /**
@@ -46,4 +50,11 @@
 
 .admin-form__inner-field .admin-form__checkbox:not(:last-child) {
     margin-right: 1rem;
+}
+
+/**
+ Forms: Event form
+ */
+.admin-form-event__recurring[data-selected='0'] ~ .admin-form__field {
+    display: none;
 }

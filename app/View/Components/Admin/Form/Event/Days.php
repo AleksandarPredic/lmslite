@@ -8,14 +8,14 @@ class Days extends Component
 {
     /**
      * Component prop
-     * @var mixed
+     * @var array|null
      */
     public $value;
 
     /**
      * Create a new component instance.
      *
-     * @param null|mixed $value
+     * @param array|null $value
      */
     public function __construct($value = null)
     {

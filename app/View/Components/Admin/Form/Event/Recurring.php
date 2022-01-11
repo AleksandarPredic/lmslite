@@ -8,16 +8,16 @@ class Recurring extends Component
 {
     /**
      * Component prop
-     * @var mixed
+     * @var bool
      */
     public $value;
 
     /**
      * Create a new component instance.
      *
-     * @param null|mixed $value
+     * @param bool $value
      */
-    public function __construct($value = null)
+    public function __construct(bool $value = false)
     {
         $this->value = $value;
     }

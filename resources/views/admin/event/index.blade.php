@@ -17,22 +17,22 @@
                             </x-admin.data-cards.property>
 
                             <x-admin.data-cards.property>
-                                {{ __('Starting at') }}: {{ $event->starting_at }}
+                                {{ __('Starting') }}: {{ lmsCarbonPublicFormat($event->starting_at) }}
                             </x-admin.data-cards.property>
 
                             <x-admin.data-cards.property>
-                                {{ __('Ending at') }}: {{ $event->ending_at }}
+                                {{ __('Ending') }}: {{ lmsCarbonPublicFormat($event->ending_at) }}
                             </x-admin.data-cards.property>
 
                             @if($event->recurring)
                                 <x-admin.data-cards.property>
-                                    {{ __('Recurring until') }}: {{ $event->recurring_until }}
+                                    {{ __('Recurring until') }}: {{ lmsCarbonPublicFormat($event->recurring_until) }}
                                 </x-admin.data-cards.property>
                             @endif
                         </x-slot>
 
                         <x-admin.data-cards.link
-                            href="{{ route('admin.courses.edit', [$event]) }}"
+                            href="{{ route('admin.events.edit', [$event]) }}"
                             title="Edit" />
 
                         <x-admin.form.delete-button action="{{ route('admin.events.destroy', [$event]) }}" />

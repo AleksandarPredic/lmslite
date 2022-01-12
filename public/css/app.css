@@ -1150,7 +1150,12 @@ select {
 /**
  Forms: Event form
  */
+/* Hide fields that are not for single event */
 .admin-form-event__recurring[data-selected='0'] ~ .admin-form__field {
+    display: none;
+}
+/* Hide days selection fields if the user selec daily recurring event */
+.admin-form-event__occurrence[data-selected='daily'] + .admin-form__field {
     display: none;
 }
 .hover\:border-gray-300:hover {

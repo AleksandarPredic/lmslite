@@ -35,9 +35,9 @@
 
             <x-admin.form.event.recurring :value="$event->recurring" />
 
-            <x-admin.form.event.days :value="$event->days"/>
-
             <x-admin.form.event.occurrence :value="$event->occurrence" />
+
+            <x-admin.form.event.days :value="$event->days"/>
 
             <x-admin.form.input-date-time
                 name="recurring_until"

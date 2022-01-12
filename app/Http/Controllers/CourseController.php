@@ -43,7 +43,8 @@ class CourseController extends Controller
             'name' => $attributes['name']
         ]);
 
-        return redirect(route('admin.courses.index'))->with('form.message.success', "Course, {$course->name}, created!");
+        return redirect(route('admin.courses.index'))
+            ->with('admin.message.success', "Course, {$course->name}, created!");
     }
 
     /**
@@ -75,7 +76,7 @@ class CourseController extends Controller
             'name' => $attributes['name']
         ]);
 
-        return back()->with('form.message.success', 'Course updated!');
+        return back()->with('admin.message.success', 'Course updated!');
     }
 
     /**
@@ -89,7 +90,8 @@ class CourseController extends Controller
     {
         $course->delete();
 
-        return redirect(route('admin.courses.index'))->with('form.message.success', "Course, {$course->name}, deleted!");
+        return redirect(route('admin.courses.index'))
+            ->with('admin.message.success', "Course, {$course->name}, deleted!");
     }
 
     /**

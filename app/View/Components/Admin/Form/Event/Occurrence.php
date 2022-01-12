@@ -2,6 +2,7 @@
 
 namespace App\View\Components\Admin\Form\Event;
 
+use App\Models\Event;
 use Illuminate\View\Component;
 
 class Occurrence extends Component
@@ -30,10 +31,7 @@ class Occurrence extends Component
     public function render()
     {
         return view('components.admin.form.event.occurrence', [
-            'options' => [
-                'daily' => __('Daily'),
-                'weekly' => __('Weekly')
-            ]
+            'options' => Event::getOccurrenceOptions()
         ]);
     }
 }

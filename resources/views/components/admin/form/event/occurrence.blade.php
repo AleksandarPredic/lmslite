@@ -6,5 +6,5 @@
     :value="old('occurrence', $value)"
     :label="__('Occurrence')"
     :options="$options"
-    :required="true"
+    :required="false"
 />

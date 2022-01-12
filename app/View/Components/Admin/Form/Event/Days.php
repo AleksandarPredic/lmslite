@@ -23,6 +23,23 @@ class Days extends Component
     }
 
     /**
+     * Used in the blade files for select field and in contollers for validation rules
+     * @return array
+     */
+    public static function getDaysOptions(): array
+    {
+        return [
+            0 => __('Monday'),
+            1 => __('Tuesday'),
+            3 => __('Wednesday'),
+            4 => __('Thursday'),
+            5 => __('Friday'),
+            6 => __('Saturday'),
+            7 => __('Sunday')
+        ];
+    }
+
+    /**
      * Get the view / contents that represent the component.
      *
      * @return \Illuminate\Contracts\View\View|\Closure|string
@@ -30,15 +47,7 @@ class Days extends Component
     public function render()
     {
         return view('components.admin.form.event.days', [
-            'options' => [
-                0 => __('Monday'),
-                1 => __('Tuesday'),
-                3 => __('Wednesday'),
-                4 => __('Thursday'),
-                5 => __('Friday'),
-                6 => __('Saturday'),
-                7 => __('Sunday')
-            ]
+            'options' => self::getDaysOptions()
         ]);
     }
 }

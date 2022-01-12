@@ -41,7 +41,7 @@
                 name="recurring_until"
                 :value="old('recurring_until')"
                 :label="__('Recurrng until')"
-                :required="true"
+                :required="false"
             />
         </x-admin.form.wrapper>
     </x-admin.main>

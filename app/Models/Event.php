@@ -27,6 +27,18 @@ class Event extends Model
         'recurring_until' => 'datetime',
     ];
 
+    /**
+     * Used in the blade files for select field and in controllers for validation rules
+     * @return array
+     */
+    public static function getOccurrenceOptions(): array
+    {
+        return [
+            'daily' => __('Daily'),
+            'weekly' => __('Weekly')
+        ];
+    }
+
     public function scopeWithAll($query)
     {
         $query->with('singleEvent', 'recurringEvent');

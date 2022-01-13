@@ -6,9 +6,9 @@
     <x-admin.main>
         <x-admin.form.wrapper
             class="admin-form-event"
-            action="{{ route('admin.events.store') }}"
+            action="{{ route('admin.events.update', $event) }}"
             method="post"
-            :buttonText="__('Create')"
+            :buttonText="__('Update')"
         >
             @method('patch')
 

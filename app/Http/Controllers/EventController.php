@@ -21,39 +21,21 @@ class EventController extends Controller
     public function index()
     {
         return view('admin.event.index', [
-            'events' => Event::orderBy('starting_at', 'asc')->paginate(10)->withQueryString()
+            //'events' => Event::orderBy('starting_at', 'asc')->paginate(10)->withQueryString()
+            'events' => Event::latest()->paginate(10)->withQueryString()
         ]);
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return RedirectResponse
+     * @return View
      */
     public function create()
     {
-
-        return view('admin.event.create');
-
-        /*$event = Event::create([
-            'name' => 'Single event test',
-            'recurring' => false,
-            'starting_at' => Carbon::make('2022-01-15 10:45:25'),
-            'ending_at' => Carbon::make('2022-01-15 11:45:25'),
-            'note' => 'Some test note for recurring event'
-        ]);*/
-
-        $event = Event::create([
-            'name' => 'Recurring event test',
-            'recurring' => true,
-            'days' => [1, 3],
-            'occurrence' => 'weekly',
-            'starting_at' => Carbon::make('2022-01-15 10:45:25'),
-            'ending_at' => Carbon::make('2022-02-11 11:45:25'),
-            'note' => 'Some test note for recurring event'
+        return view('admin.event.create', [
+            'occurenceDefault' => 'weekly'
         ]);
-
-        dd($event);
     }
 
     /**
@@ -63,48 +45,7 @@ class EventController extends Controller
      */
     public function store()
     {
-        $attributes = request()->validate([
-            'name' => ['required', 'min:3', 'max:255'],
-            'recurring' => ['required', 'boolean'],
-            'occurrence' => ['nullable', Rule::in(array_keys(Event::getOccurrenceOptions()))],
-            'days' => ['nullable', 'array', Rule::in(array_keys(Days::getDaysOptions()))],
-            'starting_at' => ['required', 'date', 'after:today'],
-            'ending_at' => ['required', 'date', 'after:today'],
-            'recurring_until' => ['nullable', 'date', 'after:tomorrow'],
-            'note' => ['nullable'],
-        ]);
-
-        // Additional validation
-
-        // If occurrence is daily we should not pass any selected days
-        if (isset($attributes['occurrence']) && 'daily' === $attributes['occurrence'] && isset($attributes['days'])) {
-            // Show message on occurrence as days will not be visible in the form
-            throw ValidationException::withMessages(
-                ['occurrence' => 'Please deselect days! We can\'t assign days for daily occurrence.']
-            );
-
-        }
-
-        // If occurrence is weekly we must pass any selected days
-        if (isset($attributes['occurrence']) && 'weekly' === $attributes['occurrence'] && ! isset($attributes['days'])) {
-            throw ValidationException::withMessages(
-                ['days' => 'Please select days!']
-            );
-        }
-
-        // If we selected recurring event, we need recurring_until date as required field
-        if ($attributes['recurring'] && ! isset($attributes['recurring_until'])) {
-            throw ValidationException::withMessages(
-                ['recurring_until' => 'Please select until date!']
-            );
-        }
-
-        // additional sanitization
-        $attributes['name'] = strip_tags($attributes['name']);
-
-        if (isset($attributes['note'])) {
-            $attributes['note'] = strip_tags($attributes['note']);
-        }
+        $attributes = $this->validateSanitizeRequest();
 
         // Create event
         $event = Event::create($attributes);
@@ -146,13 +87,35 @@ class EventController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Event  $event
      * @return RedirectResponse
      */
-    public function update(Request $request, Event $event)
+    public function update(Event $event)
     {
-        // TODO: Update validation request
+        $attributes = $this->validateSanitizeRequest();
+
+        // Update observer will only be fired if the model is dirty
+        $updated = $event->update($attributes);
+
+        if (! $updated) {
+            return redirect()->back()->with(
+                'admin.message.error',
+                sprintf(
+                    '[ERROR] Event, <a href="%1$s">%2$s</a> could not be updated!',
+                    route('admin.events.show', $event),
+                    $event->name
+                )
+            );
+        }
+
+        return redirect()->back()->with(
+            'admin.message.success',
+            sprintf(
+                'Event, <a href="%1$s">%2$s</a> updated!',
+                route('admin.events.show', $event),
+                $event->name
+            )
+        );
     }
 
     /**
@@ -164,5 +127,61 @@ class EventController extends Controller
     public function destroy(Event $event)
     {
         //
+    }
+
+    /**
+     * Validate and sanatize request
+     *
+     * @return array
+     *
+     * @throws ValidationException
+     */
+    protected function validateSanitizeRequest(): array
+    {
+        $attributes = request()->validate([
+            'name' => ['required', 'min:3', 'max:255'],
+            'recurring' => ['required', 'boolean'],
+            'occurrence' => ['nullable', Rule::in(Event::getOccurrenceOptions(true))],
+            'days' => ['nullable', 'array', Rule::in(Days::getDaysOptions(true))],
+            'starting_at' => ['required', 'date', 'after:today'],
+            'ending_at' => ['required', 'date', 'after:today'],
+            'recurring_until' => ['nullable', 'date', 'after:tomorrow'],
+            'note' => ['nullable'],
+        ]);
+
+        // Additional validation for recurring events
+        if ($attributes['recurring']) {
+            // If occurrence is daily we should not pass any selected days
+            if (isset($attributes['occurrence']) && 'daily' === $attributes['occurrence'] && isset($attributes['days'])) {
+                // Show message on occurrence as days will not be visible in the form
+                throw ValidationException::withMessages(
+                    ['occurrence' => 'Please deselect days! We can\'t assign days for daily occurrence.']
+                );
+
+            }
+
+            // If occurrence is weekly we must pass any selected days
+            if (isset($attributes['occurrence']) && 'weekly' === $attributes['occurrence'] && ! isset($attributes['days'])) {
+                throw ValidationException::withMessages(
+                    ['days' => 'Please select days!']
+                );
+            }
+
+            // If we selected recurring event, we need recurring_until date as required field
+            if (! isset($attributes['recurring_until'])) {
+                throw ValidationException::withMessages(
+                    ['recurring_until' => 'Please select until date!']
+                );
+            }
+        }
+
+        // additional sanitization
+        $attributes['name'] = strip_tags($attributes['name']);
+
+        if (isset($attributes['note'])) {
+            $attributes['note'] = strip_tags($attributes['note']);
+        }
+
+        return $attributes;
     }
 }

@@ -24,11 +24,14 @@ class Days extends Component
 
     /**
      * Used in the blade files for select field and in contollers for validation rules
+     *
+     * @param bool $returnKeys
+     *
      * @return array
      */
-    public static function getDaysOptions(): array
+    public static function getDaysOptions(bool $returnKeys = false): array
     {
-        return [
+        $options = [
             0 => __('Monday'),
             1 => __('Tuesday'),
             3 => __('Wednesday'),
@@ -37,6 +40,12 @@ class Days extends Component
             6 => __('Saturday'),
             7 => __('Sunday')
         ];
+
+        if ($returnKeys) {
+            return array_keys($options);
+        }
+
+        return $options;
     }
 
     /**

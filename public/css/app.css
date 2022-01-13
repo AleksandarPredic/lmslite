@@ -1119,6 +1119,16 @@ select {
  * ADMIN
  *******************/
 /** COMPONENTS **/
+/*
+ Flash admin messages
+ */
+.flash-message-admin a {
+    text-decoration: underline;
+}
+.flash-message-admin--error {
+    color: white;
+    font-weight: bold;
+}
 /**
  Data cards component
  */

@@ -33,7 +33,7 @@
 
             <x-admin.form.event.recurring :value="0" />
 
-            <x-admin.form.event.occurrence />
+            <x-admin.form.event.occurrence :value="$occurenceDefault" />
 
             <x-admin.form.event.days />
 

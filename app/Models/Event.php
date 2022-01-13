@@ -29,14 +29,23 @@ class Event extends Model
 
     /**
      * Used in the blade files for select field and in controllers for validation rules
+     *
+     * @param bool $returnKeys
+     *
      * @return array
      */
-    public static function getOccurrenceOptions(): array
+    public static function getOccurrenceOptions(bool $returnKeys = false): array
     {
-        return [
+        $options = [
             'daily' => __('Daily'),
             'weekly' => __('Weekly')
         ];
+
+        if ($returnKeys) {
+            return array_keys($options);
+        }
+
+        return $options;
     }
 
     public function scopeWithAll($query)

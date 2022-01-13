@@ -8,6 +8,7 @@
 # the displayed date and time are formatted according to the user's locale as reported by their operating system,
 # whereas the date/time value is always formatted YYYY-MM-DDThh:mm
 --}}
+@php($value = is_a($value, \Carbon\Carbon::class) ? $value->format('Y-m-d\TH:i:s') : $value)
 <x-admin.form.input
     name="{{ $name }}"
     type="datetime-local"

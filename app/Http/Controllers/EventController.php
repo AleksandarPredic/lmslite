@@ -4,10 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use App\View\Components\Admin\Form\Event\Days;
-use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
@@ -20,8 +18,9 @@ class EventController extends Controller
      */
     public function index()
     {
+        // return Event::latest()->with('recurringEvent')->first(); // TODO: delete this
         return view('admin.event.index', [
-            //'events' => Event::orderBy('starting_at', 'asc')->paginate(10)->withQueryString()
+            //'events' => Event::orderBy('starting_at', 'asc')->paginate(10)->withQueryString() // TODO: restore this
             'events' => Event::latest()->paginate(10)->withQueryString()
         ]);
     }

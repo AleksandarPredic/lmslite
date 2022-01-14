@@ -4,7 +4,7 @@ namespace App\View\Components\Admin\Form\Event;
 
 use Illuminate\View\Component;
 
-class Days extends Component
+class Days extends Component implements DaysContract
 {
     /**
      * Component prop
@@ -23,7 +23,7 @@ class Days extends Component
     }
 
     /**
-     * Used in the blade files for select field and in contollers for validation rules
+     * Used in the blade files for select field and in controllers for validation rules
      *
      * @param bool $returnKeys
      *

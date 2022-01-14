@@ -33,6 +33,11 @@
                 :required="true"
             />
 
+            <x-admin.form.textarea
+                name="note"
+                :label="__('Ending at')"
+            >{{ old('note', $event->note) }}</x-admin.form.textarea>
+
             <x-admin.form.event.recurring :value="$event->recurring" />
 
             <x-admin.form.event.occurrence :value="$event->occurrence" />

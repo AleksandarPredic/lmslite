@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CalendarEvent;
 use App\Models\Event;
 use App\View\Components\Admin\Form\Event\Days;
 use Illuminate\Contracts\View\View;
@@ -35,7 +34,7 @@ class EventController extends Controller
     public function create()
     {
         return view('admin.event.create', [
-            'occurenceDefault' => 'weekly'
+            'occurrenceDefault' => 'weekly'
         ]);
     }
 
@@ -64,18 +63,23 @@ class EventController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Event  $event
+     * @param Event $event
+     *
      * @return View
      */
     public function show(Event $event)
     {
         // TODO: Lazy load relationships with Event::WithAll()
+       return view('admin.event.show', [
+           'event' => $event->load('calendarEvents')
+       ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Event  $event
+     * @param Event $event
+     *
      * @return View
      */
     public function edit(Event $event)
@@ -88,7 +92,8 @@ class EventController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Models\Event  $event
+     * @param Event  $event
+     *
      * @return RedirectResponse
      */
     public function update(Event $event)
@@ -122,7 +127,8 @@ class EventController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Event  $event
+     * @param  Event  $event
+     *
      * @return RedirectResponse
      */
     public function destroy(Event $event)
@@ -147,7 +153,7 @@ class EventController extends Controller
             'starting_at' => ['required', 'date', 'after:today'],
             'ending_at' => ['required', 'date', 'after:today'],
             'recurring_until' => ['nullable', 'date', 'after:tomorrow'],
-            'note' => ['nullable'],
+            'note' => ['nullable', 'min:3', 'max:255'],
         ]);
 
         // Additional validation for recurring events

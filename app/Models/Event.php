@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\View\Components\Admin\Form\Event\Days;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -27,6 +28,11 @@ class Event extends Model
         'recurring_until' => 'datetime',
     ];
 
+    public function calendarEvents(): HasMany
+    {
+        return $this->hasMany(CalendarEvent::class);
+    }
+
     /**
      * Used in the blade files for select field and in controllers for validation rules
      *
@@ -48,13 +54,22 @@ class Event extends Model
         return $options;
     }
 
-    public function scopeWithAll($query)
+    /**
+     * Convert day numbers to day names in array
+     *
+     * @return array
+     */
+    public function getDaysAsNames()
     {
-        $query->with('calendarEvents');
-    }
+        if (empty($this->days)) {
+            return [];
+        }
 
-    public function calendarEvents(): HasMany
-    {
-        return $this->hasMany(CalendarEvent::class);
+        $days = Days::getDaysOptions();
+
+        return array_map(
+            fn($key) => $days[$key],
+            $this->days
+        );
     }
 }

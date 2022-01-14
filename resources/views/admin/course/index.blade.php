@@ -5,8 +5,9 @@
 
     <x-admin.main>
         <div class="flex justify-end mb-4 px-4">
-            <x-admin.data-cards.link-button href="{{ route('admin.courses.create') }}" title="Create" />
+            <x-admin.action-link-button href="{{ route('admin.courses.create') }}" title="Create" />
         </div>
+
         <x-admin.data-cards.wrapper>
             <x-slot name="cards">
                 @foreach($courses as $course)

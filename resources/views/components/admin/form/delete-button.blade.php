@@ -3,7 +3,7 @@
 <form
     action="{{ $action }}"
     method="post"
-    class="ml-12"
+    class="delete-model-form"
     onsubmit="return confirm('Are you sure')"
 >
     @csrf

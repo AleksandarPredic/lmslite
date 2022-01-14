@@ -100,7 +100,7 @@
                                     {{ __('Starting') }}: {{ lmsCarbonPublicFormat($calendarEvent->starting_at) }}
                                 </x-admin.data-property>
 
-                                <x-admin.data-property>
+                                <x-admin.data-property class="ml-4">
                                     {{ __('Ending') }}: {{ lmsCarbonPublicFormat($calendarEvent->ending_at) }}
                                 </x-admin.data-property>
 

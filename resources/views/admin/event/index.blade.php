@@ -14,7 +14,7 @@
                     {{-- Event properties --}}
                     <x-admin.data-cards.card :name="$event->name">
                         <x-slot name="properties">
-                            <x-admin.data-property background="{{ $event->recurring ? 'bg-gray-100' : 'bg-white' }}">
+                            <x-admin.data-property class="{{ $event->recurring ? 'bg-gray-100' : 'bg-white' }}">
                                 {{ __('Recurring') }}: {{ $event->recurring ? __('Yes') : __('No') }}
                             </x-admin.data-property>
 

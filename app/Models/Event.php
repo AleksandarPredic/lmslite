@@ -50,16 +50,11 @@ class Event extends Model
 
     public function scopeWithAll($query)
     {
-        $query->with('singleEvent', 'recurringEvent');
+        $query->with('calendarEvents');
     }
 
-    public function singleEvent(): HasOne
+    public function calendarEvents(): HasMany
     {
-        return $this->hasOne(SingleEvent::class);
-    }
-
-    public function recurringEvent(): HasMany
-    {
-        return $this->hasMany(RecurringEvent::class);
+        return $this->hasMany(CalendarEvent::class);
     }
 }

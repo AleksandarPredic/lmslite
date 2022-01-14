@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CalendarEvent;
 use App\Models\Event;
 use App\View\Components\Admin\Form\Event\Days;
 use Illuminate\Contracts\View\View;
@@ -18,7 +19,8 @@ class EventController extends Controller
      */
     public function index()
     {
-        // return Event::latest()->with('recurringEvent')->first(); // TODO: delete this
+        //return Event::latest()->with('calendarEvents')->first(); // TODO: delete this
+        //return CalendarEvent::latest()->with('event')->get(); // TODO: delete this
         return view('admin.event.index', [
             //'events' => Event::orderBy('starting_at', 'asc')->paginate(10)->withQueryString() // TODO: restore this
             'events' => Event::latest()->paginate(10)->withQueryString()

@@ -12,6 +12,30 @@
 
 namespace App\Models{
 /**
+ * App\Models\CalendarEvent
+ *
+ * @property int $id
+ * @property int $event_id
+ * @property \Illuminate\Support\Carbon $starting_at
+ * @property \Illuminate\Support\Carbon $ending_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Event $event
+ * @method static \Illuminate\Database\Eloquent\Builder|CalendarEvent newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CalendarEvent newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CalendarEvent query()
+ * @method static \Illuminate\Database\Eloquent\Builder|CalendarEvent whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CalendarEvent whereEndingAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CalendarEvent whereEventId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CalendarEvent whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CalendarEvent whereStartingAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CalendarEvent whereUpdatedAt($value)
+ */
+	class CalendarEvent extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\Course
  *
  * @property int $id
@@ -41,13 +65,12 @@ namespace App\Models{
  * @property string|null $occurrence
  * @property \Illuminate\Support\Carbon $starting_at
  * @property \Illuminate\Support\Carbon $ending_at
- * @property string|null $recurring_until
+ * @property \Illuminate\Support\Carbon|null $recurring_until
  * @property string|null $note
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\RecurringEvent[] $recurringEvent
- * @property-read int|null $recurring_event_count
- * @property-read \App\Models\SingleEvent|null $singleEvent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CalendarEvent[] $calendarEvents
+ * @property-read int|null $calendar_events_count
  * @method static \Database\Factories\EventFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Event newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Event newQuery()
@@ -70,30 +93,6 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\RecurringEvent
- *
- * @property int $id
- * @property int $event_id
- * @property \Illuminate\Support\Carbon $starting_at
- * @property \Illuminate\Support\Carbon $ending_at
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Event $event
- * @method static \Illuminate\Database\Eloquent\Builder|RecurringEvent newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|RecurringEvent newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|RecurringEvent query()
- * @method static \Illuminate\Database\Eloquent\Builder|RecurringEvent whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|RecurringEvent whereEndingAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|RecurringEvent whereEventId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|RecurringEvent whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|RecurringEvent whereStartingAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|RecurringEvent whereUpdatedAt($value)
- */
-	class RecurringEvent extends \Eloquent {}
-}
-
-namespace App\Models{
-/**
  * App\Models\Role
  *
  * @property int $id
@@ -109,30 +108,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Role whereUpdatedAt($value)
  */
 	class Role extends \Eloquent {}
-}
-
-namespace App\Models{
-/**
- * App\Models\SingleEvent
- *
- * @property int $id
- * @property int $event_id
- * @property \Illuminate\Support\Carbon $starting_at
- * @property \Illuminate\Support\Carbon $ending_at
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Event $event
- * @method static \Illuminate\Database\Eloquent\Builder|SingleEvent newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|SingleEvent newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|SingleEvent query()
- * @method static \Illuminate\Database\Eloquent\Builder|SingleEvent whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SingleEvent whereEndingAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SingleEvent whereEventId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SingleEvent whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SingleEvent whereStartingAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SingleEvent whereUpdatedAt($value)
- */
-	class SingleEvent extends \Eloquent {}
 }
 
 namespace App\Models{

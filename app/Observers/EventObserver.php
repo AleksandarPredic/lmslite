@@ -17,7 +17,7 @@ class EventObserver
     {
         // Single event mapping
         if (! $event->recurring) {
-            $event->singleEvent()->create([
+            $event->calendarEvents()->create([
                 'starting_at' => $event->starting_at,
                 'ending_at' => $event->ending_at
             ]);
@@ -41,7 +41,7 @@ class EventObserver
                 }
             }
 
-            $event->recurringEvent()->create([
+            $event->calendarEvents()->create([
                 'starting_at' => $date,
                 'ending_at' => (clone $date)->addSeconds($durationInSeconds),
             ]);

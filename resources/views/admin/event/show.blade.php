@@ -10,6 +10,10 @@
     </x-admin.header>
 
     <x-admin.main>
+        <div class="flex mb-4">
+            <x-admin.redirect-link href="{{ route('admin.events.index') }}" :title="__('Back to all!')" />
+        </div>
+
         <div class="flex justify-end mb-4 px-4">
             <x-admin.action-link-button href="{{ route('admin.events.edit', $event) }}" title="Edit" />
             <x-admin.action-delete-button action="{{ route('admin.courses.destroy', $event) }}" />

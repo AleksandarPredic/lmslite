@@ -4,6 +4,10 @@
     </x-admin.header>
 
     <x-admin.main>
+        <div class="flex justify-end">
+            <x-admin.redirect-link href="{{ route('admin.events.index') }}" :title="__('Back to all!')" />
+        </div>
+
         <x-admin.form.wrapper
             class="admin-form-event"
             action="{{ route('admin.events.store') }}"

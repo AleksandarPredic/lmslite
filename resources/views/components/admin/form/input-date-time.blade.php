@@ -1,4 +1,4 @@
-@props(['name', 'value', 'label', 'required' => false])
+@props(['name', 'value' => Carbon\Carbon::now(), 'label', 'required' => false])
 
 {{--
 # Wrapper so we can change date time if needed in the future
@@ -8,10 +8,11 @@
 # the displayed date and time are formatted according to the user's locale as reported by their operating system,
 # whereas the date/time value is always formatted YYYY-MM-DDThh:mm
 --}}
-@php($value = is_a($value, \Carbon\Carbon::class) ? $value->format('Y-m-d\TH:i:s') : $value)
+@php($value = is_a($value, \Carbon\Carbon::class) ? $value->format('Y-m-d\TH:i') : $value)
 <x-admin.form.input
     name="{{ $name }}"
     type="datetime-local"
+    step="60"
     :value="$value"
     :label="$label"
     :required="$required"

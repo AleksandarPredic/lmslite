@@ -58,11 +58,56 @@ class EventObserver
     public function updated(Event $event)
     {
         dd('continue here to handle observer on update');
-        // TODO: Create change for updated event. If single all the same, if we have recurring event, we should ask the user from when to apply the update
+
         /**
-         * Things to cover for recurring events:
-         * - If they have any override, that should be kept somehow, or maybe deleted as we anyway ara changing the date so the override maybe doesn't apply
-         * - Maybe we need to add cascade data on update, but I'm not sure what that does
+         * IMPORTANT: For proper testing and to avoid testing it again, we can't start this until we have Groups and Calendar
+         * overrides created and working.
+         */
+
+        /**
+         * Edit to cover
+         *
+         * RECURRING UNTIL CHANGES but Start at and Start end is the same
+         * - When the new recurring_until is later than current one, add new calendar events
+         * - When the new recurring_until is earlier delete later calendar events
+         *
+         * COMPARING IF EVENT EXISTS
+         * - Compare Carbon objects but set seconds to 00, to avoid new events accidentally scheduled
+         *
+         * WHEN NEW START AT is later than the old start at (can't be smaller by validation)
+         * - Delete all calendar events from now in the future
+         * - Do not delete old calendar events until now, we need them for the history and statistics
+         * - Schedule new calendar events from new start at until recurring until
+         *
+         * WHEN OCCURRENCE CHANGE
+         * - Occurrence change not allowed to keep the logic as simple as possible, as this will not be used in this
+         * project. The user will delete the current event and schedule a new one. This can be implemented in the future
+         * if we see this case start happening.
+         *
+         * WHEN DAYS CHANGE
+         * - Occurrence change not allowed to keep the logic as simple as possible, as this will not be used in this
+         * project. The user will delete the current event and schedule a new one. This can be implemented in the future
+         * if we see this case start happening.
+         *
+         * WHEN RECURRING CHANGE
+         * - Converting single event to recurring and opposite is not allowed to keep the logic as simple as possible,
+         * as this will not be used in this project. The user will delete the current event and schedule a new one.
+         * This can be implemented in the future if we see this case start happening.
+         *
+         * TO test observer
+         * - Change only recurring_until
+         * - Change only starting at
+         * - Change only Ending at
+         * - Change only starting at and ending at
+         * - Change only starting at and recurring_until
+         * - Change only ending at and recurring_until
+         * - Change only starting at, ending at and recurring_until
+         *
+         * DB testing
+         * - Maybe we need to add cascade DB data on update, but I'm not sure what that does
+         * - Test if changes above, removing events or connected data, remove linked data in db table. Example, if
+         * when we change the event, the unneeded calendar events are deleted
+         * - Test if overrides for calendar event are deleted when we delete calendar event
          */
     }
 

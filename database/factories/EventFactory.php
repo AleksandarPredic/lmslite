@@ -22,8 +22,8 @@ class EventFactory extends Factory
             'days' => [1, 3],
             'occurrence' => 'weekly',
             'starting_at' => $starting,
-            'ending_at' => (clone $starting)->addHours(1),
-            'recurring_until' => (clone $starting)->addMonths(2),
+            'ending_at' => (clone $starting)->addHours(1)->setSecond(0),
+            'recurring_until' => (clone $starting)->addMonths(2)->setSecond(0),
             'note' => $this->faker->paragraph()
         ];
     }

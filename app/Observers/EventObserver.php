@@ -25,23 +25,8 @@ class EventObserver
             return;
         }
 
-        // Recurring event mapping
-
-        $durationInSeconds = $event->ending_at->diffInSeconds($event->starting_at);
-        $period = CarbonPeriod::create($event->starting_at, $event->recurring_until);
-
-        foreach ($period as $date) {
-            // Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday - $date->dayName
-            // 0, 1, 2, 3, 4, 5, 6 - $date->dayOfWeek starting from Monday as 0
-            if (! in_array($date->dayOfWeek, $event->days)) {
-                continue;
-            }
-
-            $event->calendarEvents()->create([
-                'starting_at' => $date,
-                'ending_at' => (clone $date)->addSeconds($durationInSeconds),
-            ]);
-        }
+        // Recurring event
+        $this->createCalendarEventsUntil($event);
     }
 
     /**
@@ -53,8 +38,6 @@ class EventObserver
      */
     public function updated(Event $event)
     {
-
-
         // In single event case, only update the starting_at and ending at of the relationships
         if (! $event->recurring) {
             $event->calendarEvents[0]->update([
@@ -65,10 +48,44 @@ class EventObserver
             return;
         }
 
-        dd('continue here to handle observer on update');
+        /**
+         * recurrint_until changes
+         * - When the new recurring_until is later than current one, add new calendar events
+         * - When the new recurring_until is earlier delete later calendar events
+         */
+        if ($event->isDirty(['recurring_until'])) {
+            if ($event->recurring_until > $event->getOriginal('recurring_until')) {
+                // Create new calendar events
+                $this->createCalendarEventsUntil($event);
+            } else {
+                foreach ($event->calendarEvents as $calendarEvent) {
+                    if ($calendarEvent->starting_at <= $event->recurring_until) {
+                        continue;
+                    }
 
-        // First check recurring_until
-        dd($event->isDirty(['recurring_until']));
+                    // Remove extra calendar events
+                    $calendarEvent->delete();
+                }
+            }
+        }
+
+        /**
+         * WHEN START AT OR END AT HOURS CHANGE
+         * - just update existing events with new datetime
+         *
+         * WHEN NEW START AT is later than the old start at (can't be smaller by validation)
+         * - Update existing ones with new datetime Schedule
+         * - Delete all calendar events from now and up to Start at, now < start_at
+         * - If recurring_until change perform the step above for recurring_until
+         * - Do not delete old calendar events until now, we need them for the history and statistics
+         */
+        if ($event->isDirty(['starting_at'])) {
+            if ($event->starting_at > $event->getOriginal('starting_at')) {
+                // TODO: continue here and check if only hours are changed
+            }
+        }
+
+        dd('continue here to handle observer on update');
 
         /**
          * Edit to cover
@@ -130,4 +147,33 @@ class EventObserver
         dd('continue here to handle observer on delete');
         // TODO: I don't think we have anything todo on delete as we have cascade on delete in the table relationship
     }
+
+    /**
+     * Create calendar events for the difference between starting_at and recurring until
+     *
+     * @param Event $event
+     *
+     * @return Event
+     */
+    protected function createCalendarEventsUntil(Event $event): Event
+    {
+        $durationInSeconds = $event->ending_at->diffInSeconds($event->starting_at);
+        $period = CarbonPeriod::create($event->starting_at, $event->recurring_until);
+
+        foreach ($period as $date) {
+            // Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday - $date->dayName
+            // 0, 1, 2, 3, 4, 5, 6 - $date->dayOfWeek starting from Monday as 0
+            if (! in_array($date->dayOfWeek, $event->days)) {
+                continue;
+            }
+
+            $event->calendarEvents()->create([
+                'starting_at' => $date,
+                'ending_at' => (clone $date)->addSeconds($durationInSeconds),
+            ]);
+        }
+
+        return $event;
+    }
+
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use App\View\Components\Admin\Form\Event\Days;
+use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Validation\Rule;
@@ -43,7 +44,7 @@ class EventController extends Controller
      */
     public function store()
     {
-        $attributes = $this->validateSanitizeRequest();
+        $attributes = $this->validateSanitizeRequest(new Event());
 
         // Create event
         $event = Event::create($attributes);
@@ -80,6 +81,8 @@ class EventController extends Controller
      */
     public function edit(Event $event)
     {
+       /* $newStartingAt = ($event->ending_at)->addHours(5);
+        dd($event->starting_at, $newStartingAt, $event->starting_at->isSameDay($newStartingAt));*/
         return view('admin.event.edit', [
             'event' => $event
         ]);
@@ -94,7 +97,7 @@ class EventController extends Controller
      */
     public function update(Event $event)
     {
-        $attributes = $this->validateSanitizeRequest();
+        $attributes = $this->validateSanitizeRequest($event);
 
         // Update observer will only be fired if the model is dirty
         $updated = $event->update($attributes);
@@ -133,11 +136,12 @@ class EventController extends Controller
     /**
      * Validate and sanatize request
      *
+     * @param Event $event
+     *
      * @return array
      *
-     * @throws ValidationException
      */
-    protected function validateSanitizeRequest(): array
+    protected function validateSanitizeRequest(Event $event): array
     {
         $attributes = request()->validate([
             'name' => ['required', 'min:3', 'max:255'],
@@ -148,6 +152,20 @@ class EventController extends Controller
             'recurring_until' => ['exclude_if:recurring,false', 'required', 'date', 'after_or_equal:+6 day'],
             'note' => ['nullable', 'min:3', 'max:255'],
         ]);
+
+        // Additional validation rules for update action
+        if ($event->exists) {
+            $newStartingAt = Carbon::parse($attributes['starting_at']);
+            // Allow change of time, only if starting_at remains the same day, but not in the past
+            if (
+                ! $newStartingAt->isSameDay($event->starting_at)
+                && $event->starting_at > $newStartingAt
+            ) {
+                throw ValidationException::withMessages(
+                    ['starting_at' => 'Start at field can not be set to past.']
+                );
+            }
+        }
 
         // additional sanitization
         $attributes['name'] = strip_tags($attributes['name']);

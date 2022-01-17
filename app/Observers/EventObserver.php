@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Event;
+use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 
 class EventObserver
@@ -56,6 +57,12 @@ class EventObserver
         if ($event->isDirty(['recurring_until'])) {
             if ($event->recurring_until > $event->getOriginal('recurring_until')) {
                 // Create new calendar events
+                /************************************************************
+                 * TODO: CONTINUE HERE 1
+                 * I need to somehow add check if this Calendar event exists already, so I don't create a new one with the same Event->id
+                 * If it exists, I can also check if I need to update the data, and do the calendar event data update
+                 * This will allow me to just run this again and again
+                 ************************************************************/
                 $this->createCalendarEventsUntil($event);
             } else {
                 foreach ($event->calendarEvents as $calendarEvent) {
@@ -66,6 +73,8 @@ class EventObserver
                     // Remove extra calendar events
                     $calendarEvent->delete();
                 }
+
+                unset($calendarEvent);
             }
         }
 
@@ -80,12 +89,50 @@ class EventObserver
          * - Do not delete old calendar events until now, we need them for the history and statistics
          */
         if ($event->isDirty(['starting_at'])) {
-            if ($event->starting_at > $event->getOriginal('starting_at')) {
-                // TODO: continue here and check if only hours are changed
+            $originalStartingAt = $event->getOriginal('starting_at');
+
+            /**
+             * If we only changed time of the event, but it is still the same day as previous starting_at,
+             * just update all calendar events
+             */
+            if ($event->starting_at->isSameDay($originalStartingAt)) {
+                foreach ($event->calendarEvents as $calendarEvent) {
+                    $calendarEvent->update([
+                        'starting_at' => $calendarEvent->starting_at->setHours($event->starting_at->hour)->setMinutes($event->starting_at->minute),
+                        'ending_at' => $calendarEvent->ending_at->setHours($event->ending_at->hour)->setMinutes($event->ending_at->minute)
+                    ]);
+                }
+            } elseif ($event->starting_at > $originalStartingAt) {
+                /**
+                 * In validation, it is forbidden to set the starting_at in the past, so we only check if it is bigger,
+                 * but not just change in the same day time
+                 */
+                foreach ($event->calendarEvents as $calendarEvent) {
+                    // If calendar event is starting after new starting at keep it
+                    // If calendar event is before now, we want to keep it for history statistics
+                    if (
+                        $calendarEvent->starting_at > $event->starting_at
+                        || $calendarEvent->starting_at < Carbon::now()
+                    ) {
+                        continue;
+                    }
+
+                    // Update new date time values for both starting_at and ending_at
+                    /************************************************************
+                     * TODO: CONTINUE HERE 2
+                     * Here I must compare if I already have events for the new dateTime starting_at or I need to create a new calendar event
+                     * I need to also set each date starting_at and ending_at for that weekday and date
+                     * Also, should I first run here recurring_until changes of not
+                     ************************************************************/
+
+                    $calendarEvent->delete();
+                }
+
+                unset($calendarEvent);
             }
         }
 
-        dd('continue here to handle observer on update');
+        //dd('continue here to handle observer on update');
 
         /**
          * Edit to cover

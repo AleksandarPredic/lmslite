@@ -13,21 +13,14 @@ class Recurring extends Component
     public $value;
 
     /**
-     * Component prop
-     * @var bool
-     */
-    public $disabled;
-
-    /**
      * Create a new component instance.
      *
      * @param bool $value
      * @param bool $disabled
      */
-    public function __construct(bool $value = false, bool $disabled = false)
+    public function __construct(bool $value = false)
     {
         $this->value = $value;
-        $this->disabled = $disabled;
     }
 
     /**

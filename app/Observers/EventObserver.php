@@ -53,12 +53,22 @@ class EventObserver
      */
     public function updated(Event $event)
     {
+
+
+        // In single event case, only update the starting_at and ending at of the relationships
+        if (! $event->recurring) {
+            $event->calendarEvents[0]->update([
+                'starting_at' => $event->starting_at,
+                'ending_at' => $event->ending_at
+            ]);
+
+            return;
+        }
+
         dd('continue here to handle observer on update');
 
-        /**
-         * IMPORTANT: For proper testing and to avoid testing it again, we can't start this until we have Groups and Calendar
-         * overrides created and working.
-         */
+        // First check recurring_until
+        dd($event->isDirty(['recurring_until']));
 
         /**
          * Edit to cover

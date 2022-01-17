@@ -1,4 +1,4 @@
-@props(['options', 'value', 'disabled'])
+@props(['options', 'value'])
 
 <x-admin.form.select
     class="admin-form-event__recurring"
@@ -6,6 +6,5 @@
     :value="(int)old('recurring', $value)"
     :label="__('Recurring')"
     :options="$options"
-    :disabled="$disabled"
     :required="true"
 />

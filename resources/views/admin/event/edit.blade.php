@@ -4,8 +4,13 @@
     </x-admin.header>
 
     <x-admin.main>
-        <div class="flex justify-end">
+        <div class="flex mb-4">
             <x-admin.redirect-link href="{{ route('admin.events.index') }}" :title="__('Back to all!')" />
+        </div>
+
+        <div class="flex justify-end mb-4 px-4">
+            <x-admin.action-link-button href="{{ route('admin.events.show', $event) }}" title="{{ __('Preview') }}" />
+            <x-admin.action-delete-button action="{{ route('admin.courses.destroy', $event) }}" />
         </div>
 
         <x-admin.form.wrapper
@@ -46,7 +51,6 @@
 
             <x-admin.form.event.recurring
                 :value="$event->recurring"
-                :disabled="true"
             />
 
             <x-admin.form.event.days

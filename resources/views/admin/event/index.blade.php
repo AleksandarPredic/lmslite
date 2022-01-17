@@ -5,7 +5,7 @@
 
     <x-admin.main>
         <div class="flex justify-end mb-4 px-4">
-            <x-admin.action-link-button href="{{ route('admin.events.create') }}" title="Create" />
+            <x-admin.action-link-button href="{{ route('admin.events.create') }}" title="{{ __('Create') }}" />
         </div>
 
         <x-admin.data-cards.wrapper>

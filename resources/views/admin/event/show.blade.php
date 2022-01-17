@@ -15,7 +15,7 @@
         </div>
 
         <div class="flex justify-end mb-4 px-4">
-            <x-admin.action-link-button href="{{ route('admin.events.edit', $event) }}" title="Edit" />
+            <x-admin.action-link-button href="{{ route('admin.events.edit', $event) }}" title="{{ __('Edit') }}" />
             <x-admin.action-delete-button action="{{ route('admin.courses.destroy', $event) }}" />
         </div>
 

@@ -4,7 +4,7 @@
     </x-admin.header>
 
     <x-admin.main>
-        <div class="flex justify-end">
+        <div class="flex mb-4">
             <x-admin.redirect-link href="{{ route('admin.events.index') }}" :title="__('Back to all!')" />
         </div>
 

@@ -103,8 +103,7 @@ class EventController extends Controller
             return redirect()->back()->with(
                 'admin.message.error',
                 sprintf(
-                    '[ERROR] Event, <a href="%1$s">%2$s</a> could not be updated!',
-                    route('admin.events.show', $event),
+                    '[ERROR] Event, %s could not be updated!',
                     $event->name
                 )
             );
@@ -113,8 +112,7 @@ class EventController extends Controller
         return redirect()->back()->with(
             'admin.message.success',
             sprintf(
-                'Event, <a href="%1$s">%2$s</a> updated!',
-                route('admin.events.edit', $event),
+                'Event, %s updated!',
                 $event->name
             )
         );
@@ -144,29 +142,12 @@ class EventController extends Controller
         $attributes = request()->validate([
             'name' => ['required', 'min:3', 'max:255'],
             'recurring' => ['required', 'boolean'],
-            'days' => ['nullable', 'array', Rule::in(Days::getDaysOptions(true))],
+            'days' => ['exclude_if:recurring,false', 'required', 'array', Rule::in(Days::getDaysOptions(true))],
             'starting_at' => ['required', 'date', 'after:today'],
-            'ending_at' => ['required', 'date', 'after:today'],
-            'recurring_until' => ['nullable', 'date', 'after:tomorrow'],
+            'ending_at' => ['required', 'date', 'after:starting_at'],
+            'recurring_until' => ['exclude_if:recurring,false', 'required', 'date', 'after_or_equal:+6 day'],
             'note' => ['nullable', 'min:3', 'max:255'],
         ]);
-
-        // Additional validation for recurring events
-        if ($attributes['recurring']) {
-            // If we selected recurring event, we need days date as required field
-            if (! isset($attributes['days'])) {
-                throw ValidationException::withMessages(
-                    ['days' => 'Please select days!']
-                );
-            }
-
-            // If we selected recurring event, we need recurring_until date as required field
-            if (! isset($attributes['recurring_until'])) {
-                throw ValidationException::withMessages(
-                    ['recurring_until' => 'Please select until date!']
-                );
-            }
-        }
 
         // additional sanitization
         $attributes['name'] = strip_tags($attributes['name']);

@@ -13,21 +13,14 @@ class Days extends Component implements DaysContract
     public $value;
 
     /**
-     * Component prop
-     * @var bool
-     */
-    public $disabled;
-
-    /**
      * Create a new component instance.
      *
      * @param array|null $value
      * @param bool $disabled
      */
-    public function __construct($value = null, bool $disabled = false)
+    public function __construct($value = null)
     {
         $this->value = $value;
-        $this->disabled = $disabled;
     }
 
     /**

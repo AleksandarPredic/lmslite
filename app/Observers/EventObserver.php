@@ -25,20 +25,16 @@ class EventObserver
             return;
         }
 
-        // Recurring event mapping: daily, weekly
+        // Recurring event mapping
 
-        // If no occurrence provided, we will create daily event as a default
         $durationInSeconds = $event->ending_at->diffInSeconds($event->starting_at);
         $period = CarbonPeriod::create($event->starting_at, $event->recurring_until);
 
         foreach ($period as $date) {
-            // For daily event just create event every day
-            if ('weekly' === $event->occurrence) {
-                // Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday - $date->dayName
-                // 0, 1, 2, 3, 4, 5, 6 - $date->dayOfWeek starting from Monday as 0
-                if (! in_array($date->dayOfWeek, $event->days)) {
-                    continue;
-                }
+            // Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday - $date->dayName
+            // 0, 1, 2, 3, 4, 5, 6 - $date->dayOfWeek starting from Monday as 0
+            if (! in_array($date->dayOfWeek, $event->days)) {
+                continue;
             }
 
             $event->calendarEvents()->create([
@@ -74,17 +70,19 @@ class EventObserver
          * COMPARING IF EVENT EXISTS
          * - Compare Carbon objects but set seconds to 00, to avoid new events accidentally scheduled
          *
-         * WHEN NEW START AT is later than the old start at (can't be smaller by validation)
-         * - Delete all calendar events from now in the future
-         * - Do not delete old calendar events until now, we need them for the history and statistics
-         * - Schedule new calendar events from new start at until recurring until
+         * WHEN START AT OR END AT HOURS CHANGE
+         * - just update existing events with new datetime
          *
-         * WHEN OCCURRENCE CHANGE
-         * - Occurrence change not allowed to keep the logic as simple as possible, as this will not be used in this
-         * project. The user will delete the current event and schedule a new one. This can be implemented in the future
-         * if we see this case start happening.
+         * WHEN NEW START AT is later than the old start at (can't be smaller by validation)
+         * - Update existing ones with new datetime Schedule
+         * - Delete all calendar events from now and up to Start at, now < start_at
+         * - If recurring_until change perform the step above for recurring_until
+         * - Do not delete old calendar events until now, we need them for the history and statistics
          *
          * WHEN DAYS CHANGE
+         * - If I decide to allow this change then we need to run creation logic again but create new events only if
+         * we don't have existing one at the same time with the same Event->id, and opposite, delete unselected days.
+         * This can be added in some next versions.
          * - Occurrence change not allowed to keep the logic as simple as possible, as this will not be used in this
          * project. The user will delete the current event and schedule a new one. This can be implemented in the future
          * if we see this case start happening.

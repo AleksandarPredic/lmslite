@@ -25,7 +25,6 @@ Features
   * Starting and ending date and time
   * Note
   * Select group attached to this event
-  * Occurrence
   * Days
   * Recurring until
 

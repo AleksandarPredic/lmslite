@@ -81,7 +81,6 @@
     display: none;
 }
 
-/* Hide days selection fields if the user selec daily recurring event */
-.admin-form-event__occurrence[data-selected='daily'] + .admin-form__field {
-    display: none;
+.admin-form__field :disabled {
+    opacity: 0.3;
 }

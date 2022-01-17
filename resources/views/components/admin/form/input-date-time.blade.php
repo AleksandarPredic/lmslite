@@ -1,4 +1,4 @@
-@props(['name', 'value' => Carbon\Carbon::now(), 'label', 'required' => false])
+@props(['name', 'value', 'label', 'required' => false])
 
 {{--
 # Wrapper so we can change date time if needed in the future

@@ -1,4 +1,4 @@
-@props(['name', 'value', 'label', 'options'])
+@props(['name', 'value', 'label', 'options', 'disabled' => false])
 
 <x-admin.form.field>
     <h5 class="mb-4">{{ $label }}</h5>
@@ -6,6 +6,7 @@
     <div class="admin-form__inner-field admin-form__inner-field--flex sm:flex">
         @foreach($options as $checkboxValue => $checkboxName)
             @php
+                $disabled = $disabled ? 'disabled' : '';
                 $checked = is_array($value) && in_array($checkboxValue, $value) ? 'checked' : '';
                 $nameAttr = sprintf('%s[]', $name);
                 $idAttr = sprintf('%s-%s', $name, $checkboxValue);
@@ -22,6 +23,7 @@
                     name="{{ $nameAttr }}"
                     value="{{ $checkboxValue }}"
                     {{ $checked }}
+                    {{ $disabled }}
                 />
             </div>
         @endforeach

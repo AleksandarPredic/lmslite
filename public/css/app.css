@@ -910,10 +910,6 @@ select {
   padding-top: 1rem;
   padding-bottom: 1rem;
 }
-.py-12 {
-  padding-top: 3rem;
-  padding-bottom: 3rem;
-}
 .pt-2 {
   padding-top: 0.5rem;
 }
@@ -1187,9 +1183,8 @@ select {
 .admin-form-event__recurring[data-selected='0'] ~ .admin-form__field {
     display: none;
 }
-/* Hide days selection fields if the user selec daily recurring event */
-.admin-form-event__occurrence[data-selected='daily'] + .admin-form__field {
-    display: none;
+.admin-form__field :disabled {
+    opacity: 0.3;
 }
 .hover\:border-gray-300:hover {
   --tw-border-opacity: 1;

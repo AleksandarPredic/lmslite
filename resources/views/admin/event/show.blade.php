@@ -59,14 +59,6 @@
                         </div>
                         <div class="bg-white px-4 py-2">
                             <dt class="text-sm font-medium text-gray-500">
-                                {{ __('Occurrence') }}
-                            </dt>
-                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                {{ $event->occurrence }}
-                            </dd>
-                        </div>
-                        <div class="bg-white px-4 py-2">
-                            <dt class="text-sm font-medium text-gray-500">
                                 {{ __('Days') }}
                             </dt>
                             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">

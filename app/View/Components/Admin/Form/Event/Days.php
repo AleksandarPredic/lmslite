@@ -13,13 +13,21 @@ class Days extends Component implements DaysContract
     public $value;
 
     /**
+     * Component prop
+     * @var bool
+     */
+    public $disabled;
+
+    /**
      * Create a new component instance.
      *
      * @param array|null $value
+     * @param bool $disabled
      */
-    public function __construct($value = null)
+    public function __construct($value = null, bool $disabled = false)
     {
         $this->value = $value;
+        $this->disabled = $disabled;
     }
 
     /**
@@ -32,13 +40,13 @@ class Days extends Component implements DaysContract
     public static function getDaysOptions(bool $returnKeys = false): array
     {
         $options = [
-            0 => __('Monday'),
-            1 => __('Tuesday'),
+            1 => __('Monday'),
+            2 => __('Tuesday'),
             3 => __('Wednesday'),
             4 => __('Thursday'),
             5 => __('Friday'),
             6 => __('Saturday'),
-            7 => __('Sunday')
+            0 => __('Sunday')
         ];
 
         if ($returnKeys) {

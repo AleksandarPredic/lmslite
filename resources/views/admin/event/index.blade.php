@@ -28,9 +28,6 @@
 
                             @if($event->recurring)
                                 <x-admin.data-property>
-                                    {{ __('Occurrence') }}: {{ $event->occurrence }}
-                                </x-admin.data-property>
-                                <x-admin.data-property>
                                     {{ __('Recurring until') }}: {{ lmsCarbonPublicFormat($event->recurring_until) }}
                                 </x-admin.data-property>
                             @endif

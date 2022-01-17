@@ -62,7 +62,6 @@ namespace App\Models{
  * @property string $name
  * @property bool $recurring
  * @property array|null $days
- * @property string|null $occurrence
  * @property \Illuminate\Support\Carbon $starting_at
  * @property \Illuminate\Support\Carbon $ending_at
  * @property \Illuminate\Support\Carbon|null $recurring_until
@@ -81,12 +80,10 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereNote($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Event whereOccurrence($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereRecurring($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereRecurringUntil($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereStartingAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Event withAll()
  */
 	class Event extends \Eloquent {}
 }

@@ -1,4 +1,4 @@
-@props(['name', 'value', 'label', 'options', 'required' => false, 'class' => ''])
+@props(['name', 'value', 'label', 'options', 'required' => false, 'disabled' => false, 'class' => ''])
 
 <x-admin.form.field
     class="{{ $class }}"
@@ -7,7 +7,8 @@
     <x-label for="{{ $name }}" :value="$label" />
 
     @php
-        $required = $required? 'required' : '';
+        $required = $required ? 'required' : '';
+        $disabled = $disabled ? 'disabled' : '';
     @endphp
 
     <select
@@ -16,6 +17,7 @@
         id="{{ $name }}"
         onchange="this.parentElement.dataset.selected = this.value;"
         {{ $required }}
+        {{ $disabled }}
     >
         @foreach($options as $optionValue => $optionName)
             @php

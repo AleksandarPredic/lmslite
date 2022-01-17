@@ -19,7 +19,6 @@ class CreateEventsTable extends Migration
             $table->string('name');
             $table->boolean('recurring');
             $table->json('days')->nullable();
-            $table->enum('occurrence', ['daily', 'weekly'])->nullable(); // TODO: add more options later
             $table->timestamp('starting_at');
             $table->timestamp('ending_at');
             $table->timestamp('recurring_until')->nullable();

@@ -33,9 +33,7 @@ class EventController extends Controller
      */
     public function create()
     {
-        return view('admin.event.create', [
-            'occurrenceDefault' => 'weekly'
-        ]);
+        return view('admin.event.create');
     }
 
     /**
@@ -69,7 +67,6 @@ class EventController extends Controller
      */
     public function show(Event $event)
     {
-        // TODO: Lazy load relationships with Event::WithAll()
        return view('admin.event.show', [
            'event' => $event->load('calendarEvents')
        ]);
@@ -148,7 +145,6 @@ class EventController extends Controller
         $attributes = request()->validate([
             'name' => ['required', 'min:3', 'max:255'],
             'recurring' => ['required', 'boolean'],
-            'occurrence' => ['nullable', Rule::in(Event::getOccurrenceOptions(true))],
             'days' => ['nullable', 'array', Rule::in(Days::getDaysOptions(true))],
             'starting_at' => ['required', 'date', 'after:today'],
             'ending_at' => ['required', 'date', 'after:today'],
@@ -158,17 +154,8 @@ class EventController extends Controller
 
         // Additional validation for recurring events
         if ($attributes['recurring']) {
-            // If occurrence is daily we should not pass any selected days
-            if (isset($attributes['occurrence']) && 'daily' === $attributes['occurrence'] && isset($attributes['days'])) {
-                // Show message on occurrence as days will not be visible in the form
-                throw ValidationException::withMessages(
-                    ['occurrence' => 'Please deselect days! We can\'t assign days for daily occurrence.']
-                );
-
-            }
-
-            // If occurrence is weekly we must pass any selected days
-            if (isset($attributes['occurrence']) && 'weekly' === $attributes['occurrence'] && ! isset($attributes['days'])) {
+            // If we selected recurring event, we need days date as required field
+            if (! isset($attributes['days'])) {
                 throw ValidationException::withMessages(
                     ['days' => 'Please select days!']
                 );

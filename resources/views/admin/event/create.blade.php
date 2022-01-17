@@ -37,14 +37,12 @@
 
             <x-admin.form.textarea
                 name="note"
-                :label="__('Ending at')"
+                :label="__('Note')"
             >{{ old('note') }}</x-admin.form.textarea>
 
             {{-- TODO: Add group select field here --}}
 
             <x-admin.form.event.recurring :value="0" />
-
-            <x-admin.form.event.occurrence :value="$occurrenceDefault" />
 
             <x-admin.form.event.days />
 

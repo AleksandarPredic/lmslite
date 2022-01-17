@@ -48,11 +48,10 @@ class EventController extends Controller
         // Create event
         $event = Event::create($attributes);
 
-        return redirect(route('admin.events.index'))->with(
+        return redirect(route('admin.events.show', $event))->with(
             'admin.message.success',
             sprintf(
-                'Event, <a href="%1$s">%2$s</a> created!',
-                route('admin.events.show', $event),
+                'Event, %s created!',
                 $event->name
             )
         );
@@ -115,7 +114,7 @@ class EventController extends Controller
             'admin.message.success',
             sprintf(
                 'Event, <a href="%1$s">%2$s</a> updated!',
-                route('admin.events.show', $event),
+                route('admin.events.edit', $event),
                 $event->name
             )
         );

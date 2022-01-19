@@ -55,9 +55,6 @@ class EventObserver
          * 3. Do not modify CalendarEvent models before starting_at, so we can keep them for the history and stats
          */
 
-        // da li mi je ovaj korak visak
-        //
-
         // 1. Check if recurring_until is earlier to remove extra event after, new ones will be created below
         if ($event->isDirty(['recurring_until'])) {
             if ($event->recurring_until < $event->getOriginal('recurring_until')) {

@@ -55,18 +55,17 @@ class EventObserver
          * 3. Do not modify CalendarEvent models before starting_at, so we can keep them for the history and stats
          */
 
-        // 1. Check recurring_until changes
+        // da li mi je ovaj korak visak
+        //
+
+        // 1. Check if recurring_until is earlier to remove extra event after, new ones will be created below
         if ($event->isDirty(['recurring_until'])) {
-            if ($event->recurring_until > $event->getOriginal('recurring_until')) {
-                // Create new calendar events
-                $this->createCalendarEventsUntil($event);
-            } else {
+            if ($event->recurring_until < $event->getOriginal('recurring_until')) {
                 foreach ($event->calendarEvents as $calendarEvent) {
                     if ($calendarEvent->starting_at <= $event->recurring_until) {
                         continue;
                     }
 
-                    // Remove extra calendar events
                     $calendarEvent->delete();
                 }
 
@@ -75,8 +74,8 @@ class EventObserver
         }
 
         /**
-         *  2. Check each day from new starting_at until recurring_until
-         *  - If CalendarEvent is not in new days array, delete it
+         * 2. Check each day from new starting_at until recurring_until
+         * - If CalendarEvent is not in new days array, delete it
          * - If we have any CalendarEvent in new days array, update starting_at and ending_at
          * - If we don't have CalendarEvent in new days array, create new CalendarEvent
          *
@@ -84,7 +83,12 @@ class EventObserver
          * - It can happen that the starting_at is the same as before, but we run the process fully for checks
          */
         // If any of the recurring fields change, run through check all dates again and update data
-        if ($event->isDirty(['starting_at']) || $event->isDirty(['ending_at']) || $event->isDirty(['days'])) {
+        if (
+            $event->isDirty(['starting_at'])
+            || $event->isDirty(['ending_at'])
+            || $event->isDirty(['days'])
+            || $event->isDirty(['recurring_until'])
+        ) {
 
             // Prepare existing CalendarEvent models for check
             $existingCalendarEvents = [];

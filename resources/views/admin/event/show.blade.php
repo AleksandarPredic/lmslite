@@ -84,7 +84,17 @@
 
                 <ul role="list" class="border border-gray-200 rounded-md">
 
+                    @php($separatedOld = false)
                     @foreach($calendarEvents as $calendarEvent)
+
+                        {{-- # Mark where active CalendarEvent starts, from Event start_at. We may have old ones for history. --}}
+                        @if($calendarEvent->starting_at >= $event->starting_at && ! $separatedOld)
+                            <li class="pl-3 pr-4 py-2 flex items-center justify-between text-sm border-b border-gray-200 bg-gray-100">
+                                {{ __('Current events') }} <small>{{ __('If there are events before this line, those are for history keeping') }}</small>
+                            </li>
+                            @php($separatedOld = true)
+                        @endif
+
                         <li class="pl-3 pr-4 py-2 flex items-center justify-between text-sm border-b border-gray-200">
                             <div class="w-0 flex-1 flex items-center">
                                 <span class="ml-2 flex-1 w-0 truncate">

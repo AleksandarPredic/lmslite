@@ -49,20 +49,26 @@
 
             {{-- TODO: Add group select field here --}}
 
-            <x-admin.form.event.recurring
-                :value="$event->recurring"
+            {{-- # we are hiding recurring fields and setting recurring to input hidden, as conversion is not allowed --}}
+            <x-admin.form.input
+                name="recurring"
+                type="hidden"
+                :value="(int)$event->recurring"
+                :label=false
             />
 
-            <x-admin.form.event.days
-                :value="$event->days"
-            />
+            @if($event->recurring)
+                <x-admin.form.event.days
+                    :value="$event->days"
+                />
 
-            <x-admin.form.input-date-time
-                name="recurring_until"
-                :value="old('recurring_until', $event->recurring_until)"
-                :label="__('Recurrng until')"
-                :required="false"
-            />
+                <x-admin.form.input-date-time
+                    name="recurring_until"
+                    :value="old('recurring_until', $event->recurring_until)"
+                    :label="__('Recurrng until')"
+                    :required="false"
+                />
+            @endif
         </x-admin.form.wrapper>
     </x-admin.main>
 </x-app-layout>

@@ -20,7 +20,7 @@
         </div>
 
         {{-- # https://tailwindui.com/components/application-ui/data-display/description-lists --}}
-        <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+        <div class="bg-white shadow overflow-hidden sm:rounded-lg event-preview">
             <div class="px-4 py-6 sm:px-6">
                 <h3 class="text-lg leading-6 font-medium text-gray-900">
                     {{ $event->name }}
@@ -79,12 +79,12 @@
             </div>
 
             @if ($event->calendarEvents)
-            <div class="border-t border-gray-200 py-6 px-4">
+            <div class="border-t border-gray-200 py-6 px-4 event-preview__calendar_events">
                 <h3 class="mb-4">{{ __('Calendar events') }}</h3>
 
                 <ul role="list" class="border border-gray-200 rounded-md">
 
-                    @foreach($event->calendarEvents as $calendarEvent)
+                    @foreach($calendarEvents as $calendarEvent)
                         <li class="pl-3 pr-4 py-2 flex items-center justify-between text-sm border-b border-gray-200">
                             <div class="w-0 flex-1 flex items-center">
                                 <span class="ml-2 flex-1 w-0 truncate">

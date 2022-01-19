@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use App\View\Components\Admin\Form\Event\Days;
-use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Validation\Rule;
@@ -68,7 +67,8 @@ class EventController extends Controller
     public function show(Event $event)
     {
        return view('admin.event.show', [
-           'event' => $event->load('calendarEvents')
+           'event' => $event->load('calendarEvents'),
+           'calendarEvents' => $event->calendarEvents->sortBy('starting_at')
        ]);
     }
 
@@ -98,6 +98,8 @@ class EventController extends Controller
     public function update(Event $event)
     {
         $attributes = $this->validateSanitizeRequest($event);
+
+
 
         // Update observer will only be fired if the model is dirty
         $updated = $event->update($attributes);
@@ -155,14 +157,9 @@ class EventController extends Controller
 
         // Additional validation rules for update action
         if ($event->exists) {
-            $newStartingAt = Carbon::parse($attributes['starting_at']);
-            // Allow change of time, only if starting_at remains the same day, but not in the past
-            if (
-                ! $newStartingAt->isSameDay($event->starting_at)
-                && $event->starting_at > $newStartingAt
-            ) {
+            if ((bool)$attributes['recurring'] !== $event->recurring) {
                 throw ValidationException::withMessages(
-                    ['starting_at' => 'Start at field can not be set to past.']
+                    ['recurring' => 'Change is not allowed. Please create a new event.']
                 );
             }
         }

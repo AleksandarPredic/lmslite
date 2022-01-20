@@ -5,7 +5,7 @@ namespace Database\Factories;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class EventFactory extends Factory
+class GroupFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -14,16 +14,12 @@ class EventFactory extends Factory
      */
     public function definition()
     {
-        $starting = Carbon::now()->addWeek(rand(1, 3))->addHours(3)->addMinutes(45);
+        $starting = Carbon::now()->addWeek(rand(1, 3))->setHours(0)->setMinutes(0)->setSeconds(0);
 
         return [
-            'group_id' => 0,
             'name' => $this->faker->sentence(),
-            'recurring' => rand(0, 1),
-            'days' => [1, 3],
             'starting_at' => $starting,
-            'ending_at' => (clone $starting)->addHours(1)->setSecond(0),
-            'recurring_until' => (clone $starting)->addMonths(2)->setSecond(0),
+            'ending_at' => (clone $starting)->addMonths(6),
             'note' => $this->faker->paragraph()
         ];
     }

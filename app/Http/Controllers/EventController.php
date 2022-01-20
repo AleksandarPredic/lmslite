@@ -18,7 +18,7 @@ class EventController extends Controller
      */
     public function index()
     {
-        //return Event::latest()->with('calendarEvents')->first(); // TODO: delete this
+        //return Event::latest()->with(['calendarEvents', 'group'])->get(); // TODO: delete this
         //return CalendarEvent::latest()->with('event')->get(); // TODO: delete this
         return view('admin.event.index', [
             //'events' => Event::orderBy('starting_at', 'asc')->paginate(10)->withQueryString() // TODO: restore this
@@ -81,8 +81,6 @@ class EventController extends Controller
      */
     public function edit(Event $event)
     {
-       /* $newStartingAt = ($event->ending_at)->addHours(5);
-        dd($event->starting_at, $newStartingAt, $event->starting_at->isSameDay($newStartingAt));*/
         return view('admin.event.edit', [
             'event' => $event
         ]);
@@ -98,8 +96,6 @@ class EventController extends Controller
     public function update(Event $event)
     {
         $attributes = $this->validateSanitizeRequest($event);
-
-
 
         // Update observer will only be fired if the model is dirty
         $updated = $event->update($attributes);
@@ -147,6 +143,7 @@ class EventController extends Controller
     {
         $attributes = request()->validate([
             'name' => ['required', 'min:3', 'max:255'],
+            'group_id' => ['nullable', 'numeric'],
             'recurring' => ['required', 'boolean'],
             'days' => ['exclude_if:recurring,false', 'required', 'array', Rule::in(Days::getDaysOptions(true))],
             'starting_at' => ['required', 'date', 'after:today'],

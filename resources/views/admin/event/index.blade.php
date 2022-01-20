@@ -31,6 +31,10 @@
                                     {{ __('Recurring until') }}: {{ lmsCarbonPublicFormat($event->recurring_until) }}
                                 </x-admin.data-property>
                             @endif
+
+                            <x-admin.data-property>
+                                {{ __('Group') }}: {{ $event->group ? $event->group->name : 'None' }}
+                            </x-admin.data-property>
                         </x-slot>
 
                         {{-- Event action links --}}

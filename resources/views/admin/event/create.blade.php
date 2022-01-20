@@ -35,6 +35,8 @@
                 :required="true"
             />
 
+            <x-admin.form.group />
+
             <x-admin.form.textarea
                 name="note"
                 :label="__('Note')"

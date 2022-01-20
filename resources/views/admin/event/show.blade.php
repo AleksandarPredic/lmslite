@@ -28,6 +28,9 @@
                 <p class="mt-1 max-w-2xl text-sm text-gray-500">
                     {{ __('Recurring') }}: {{ $event->recurring ? __('Yes') : __('No') }}
                 </p>
+                <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                    {{ __('Group') }}: {{ $event->group ? $event->group->name : __('none') }}
+                </p>
             </div>
             <div class="border-t border-gray-200 pb-3">
                 <dl>

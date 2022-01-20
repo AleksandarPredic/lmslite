@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\GroupController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,7 +26,8 @@ Route::get('/dashboard', function () {
 
 Route::name('admin.')->middleware('can:admin')->group(function () {
     Route::resource('/admin/courses', CourseController::class)->except(['show']);
-    Route::resource('admin/events', EventController::class);
+    Route::resource('/admin/events', EventController::class);
+    Route::resource('/admin/groups', GroupController::class);
 });
 
 require __DIR__.'/auth.php';

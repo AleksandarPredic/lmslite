@@ -55,12 +55,13 @@ class DatabaseSeeder extends Seeder
         }
 
         // Create a few courses
-        $courses = ['Slikanje', 'Programiranje', 'Tehnicko'];
+        $courses = ['Painting', 'Programming', 'Other'];
         foreach ($courses as $course) {
             Course::factory()->create(['name' => $course]);
         }
 
         $this->call([
+            GroupSeeder::class,
             EventSeeder::class,
         ]);
     }

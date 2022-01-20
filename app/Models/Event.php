@@ -5,14 +5,14 @@ namespace App\Models;
 use App\View\Components\Admin\Form\Event\Days;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Event extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'recurring', 'days', 'occurrence', 'starting_at', 'ending_at', 'recurring_until', 'note'];
+    protected $fillable = ['group_id', 'name', 'recurring', 'days', 'occurrence', 'starting_at', 'ending_at', 'recurring_until', 'note'];
 
     /**
      * The attributes that should be cast.
@@ -21,6 +21,7 @@ class Event extends Model
      * @var array<string, string>
      */
     protected $casts = [
+        'group_id' => 'int',
         'recurring' => 'bool',
         'days' => 'array',
         'starting_at' => 'datetime',
@@ -31,6 +32,11 @@ class Event extends Model
     public function calendarEvents(): HasMany
     {
         return $this->hasMany(CalendarEvent::class);
+    }
+
+    public function group(): belongsTo
+    {
+        return $this->belongsTo(Group::class);
     }
 
     /**
@@ -50,5 +56,36 @@ class Event extends Model
             fn($key) => $days[$key],
             $this->days
         );
+    }
+
+    /**
+     * Convert 0 to null as this is a nullable foreign_id
+     * @param int $groupId
+     *
+     * @return void
+     */
+    public function setGroupIdAttribute(int $groupId)
+    {
+        if ($groupId) {
+            $this->attributes['group_id'] = $groupId;
+            return;
+        }
+
+        $this->attributes['group_id'] = null;
+    }
+
+    /**
+     * Return 0 if the value is null, or return the value
+     * @param int|null $groupId
+     *
+     * @return null|int
+     */
+    public function getGroupIdAttribute($groupId)
+    {
+        if (! $groupId) {
+            return 0;
+        }
+
+        return $groupId;
     }
 }

@@ -42,6 +42,8 @@
                 :required="true"
             />
 
+            <x-admin.form.group :value="$event->group_id" />
+
             <x-admin.form.textarea
                 name="note"
                 :label="__('Ending at')"

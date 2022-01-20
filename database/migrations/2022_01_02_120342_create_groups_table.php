@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateEventsTable extends Migration
+class CreateGroupsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,11 @@ class CreateEventsTable extends Migration
      */
     public function up()
     {
-        Schema::create('events', function (Blueprint $table) {
+        Schema::create('groups', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('group_id')->nullable()->constrained()->cascadeOnUpdate()->nullOnDelete();
             $table->string('name');
-            $table->boolean('recurring');
-            $table->json('days')->nullable();
             $table->timestamp('starting_at');
             $table->timestamp('ending_at');
-            $table->timestamp('recurring_until')->nullable();
             $table->text('note')->nullable();
             $table->timestamps();
         });
@@ -34,6 +30,6 @@ class CreateEventsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('events');
+        Schema::dropIfExists('groups');
     }
 }

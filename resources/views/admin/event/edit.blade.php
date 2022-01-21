@@ -10,7 +10,7 @@
 
         <div class="flex justify-end mb-4 px-4">
             <x-admin.action-link-button href="{{ route('admin.events.show', $event) }}" title="{{ __('Preview') }}" />
-            <x-admin.action-delete-button action="{{ route('admin.courses.destroy', $event) }}" />
+            <x-admin.action-delete-button action="{{ route('admin.events.destroy', $event) }}" />
         </div>
 
         <x-admin.form.wrapper
@@ -48,8 +48,6 @@
                 name="note"
                 :label="__('Ending at')"
             >{{ old('note', $event->note) }}</x-admin.form.textarea>
-
-            {{-- TODO: Add group select field here --}}
 
             {{-- # we are hiding recurring fields and setting recurring to input hidden, as conversion is not allowed --}}
             <x-admin.form.input

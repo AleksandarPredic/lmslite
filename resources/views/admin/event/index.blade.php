@@ -52,6 +52,7 @@
                     </x-admin.data-cards.card>
                 @endforeach
             </x-slot>
+
             <x-slot name="pagination">
                 {{ $events->links() }}
             </x-slot>

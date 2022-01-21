@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\RequestValidationRulesTrait;
 use App\Models\Event;
 use App\View\Components\Admin\Form\Event\Days;
 use Illuminate\Contracts\View\View;
@@ -11,6 +12,8 @@ use Illuminate\Validation\ValidationException;
 
 class EventController extends Controller
 {
+    use RequestValidationRulesTrait;
+
     /**
      * Display a listing of the resource.
      *
@@ -18,10 +21,8 @@ class EventController extends Controller
      */
     public function index()
     {
-        //return Event::latest()->with(['calendarEvents', 'group'])->get(); // TODO: delete this
-        //return CalendarEvent::latest()->with('event')->get(); // TODO: delete this
         return view('admin.event.index', [
-            //'events' => Event::orderBy('starting_at', 'asc')->paginate(10)->withQueryString() // TODO: restore this
+            //'events' => Event::orderBy('starting_at', 'asc')->paginate(10)->withQueryString() // TODO: restore this for production
             'events' => Event::latest()->paginate(10)->withQueryString()
         ]);
     }
@@ -132,7 +133,7 @@ class EventController extends Controller
     }
 
     /**
-     * Validate and sanatize request
+     * Validate and sanitize request
      *
      * @param Event $event
      *
@@ -142,14 +143,14 @@ class EventController extends Controller
     protected function validateSanitizeRequest(Event $event): array
     {
         $attributes = request()->validate([
-            'name' => ['required', 'min:3', 'max:255'],
+            'name' => array_merge(['required'], $this->getNameFieldRules()),
             'group_id' => ['nullable', 'numeric'],
             'recurring' => ['required', 'boolean'],
             'days' => ['exclude_if:recurring,false', 'required', 'array', Rule::in(Days::getDaysOptions(true))],
-            'starting_at' => ['required', 'date', 'after:today'],
-            'ending_at' => ['required', 'date', 'after:starting_at'],
+            'starting_at' => array_merge(['required'], $this->getStartingAtFieldRules()),
+            'ending_at' => array_merge(['required'], $this->getEndingAtFieldRules()),
             'recurring_until' => ['exclude_if:recurring,false', 'required', 'date', 'after_or_equal:+6 day'],
-            'note' => ['nullable', 'min:3', 'max:255'],
+            'note' => array_merge(['nullable'], $this->getNoteFieldRules()),
         ]);
 
         // Additional validation rules for update action

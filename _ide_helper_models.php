@@ -59,6 +59,7 @@ namespace App\Models{
  * App\Models\Event
  *
  * @property int $id
+ * @property int|null $group_id
  * @property string $name
  * @property bool $recurring
  * @property array|null $days
@@ -70,6 +71,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CalendarEvent[] $calendarEvents
  * @property-read int|null $calendar_events_count
+ * @property-read \App\Models\Group|null $group
  * @method static \Database\Factories\EventFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Event newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Event newQuery()
@@ -77,6 +79,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereDays($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereEndingAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereGroupId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereNote($value)
@@ -86,6 +89,35 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereUpdatedAt($value)
  */
 	class Event extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\Group
+ *
+ * @property int $id
+ * @property string $name
+ * @property \Illuminate\Support\Carbon $starting_at
+ * @property \Illuminate\Support\Carbon $ending_at
+ * @property string|null $note
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Event[] $events
+ * @property-read int|null $events_count
+ * @method static \Database\Factories\GroupFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|Group newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Group newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Group orderByName()
+ * @method static \Illuminate\Database\Eloquent\Builder|Group query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Group whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Group whereEndingAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Group whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Group whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Group whereNote($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Group whereStartingAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Group whereUpdatedAt($value)
+ */
+	class Group extends \Eloquent {}
 }
 
 namespace App\Models{

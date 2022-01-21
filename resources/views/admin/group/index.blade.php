@@ -12,6 +12,21 @@
             <x-slot name="cards">
                 @foreach($groups as $group)
                     <x-admin.data-cards.card :name="$group->name">
+                        <x-slot name="properties">
+                            <x-admin.data-property>
+                                {{ __('Starting') }}: {{ lmsCarbonPublicFormat($group->starting_at) }}
+                            </x-admin.data-property>
+
+                            <x-admin.data-property>
+                                {{ __('Ending') }}: {{ lmsCarbonPublicFormat($group->ending_at) }}
+                            </x-admin.data-property>
+                        </x-slot>
+
+                        {{-- Group action links --}}
+                        <x-admin.data-cards.link
+                            href="{{ route('admin.groups.show', [$group]) }}"
+                            title="Preview" />
+
                         <x-admin.data-cards.link
                             href="{{ route('admin.groups.edit', [$group]) }}"
                             title="Edit" />
@@ -20,6 +35,7 @@
                     </x-admin.data-cards.card>
                 @endforeach
             </x-slot>
+
             <x-slot name="pagination">
                 {{ $groups->links() }}
             </x-slot>

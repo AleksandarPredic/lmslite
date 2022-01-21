@@ -1,16 +1,16 @@
 <x-app-layout>
     <x-admin.header>
-        {{ __('Create event') }}
+        {{ __('Create group') }}
     </x-admin.header>
 
     <x-admin.main>
         <div class="flex mb-4">
-            <x-admin.redirect-link href="{{ route('admin.events.index') }}" :title="__('Back to all!')" />
+            <x-admin.redirect-link href="{{ route('admin.groups.index') }}" :title="__('Back to all!')" />
         </div>
 
         <x-admin.form.wrapper
             class="admin-form-event"
-            action="{{ route('admin.events.store') }}"
+            action="{{ route('admin.groups.store') }}"
             method="post"
             :buttonText="__('Create')"
         >
@@ -35,23 +35,10 @@
                 :required="true"
             />
 
-            <x-admin.form.group />
-
             <x-admin.form.textarea
                 name="note"
                 :label="__('Note')"
             >{{ old('note') }}</x-admin.form.textarea>
-
-            <x-admin.form.event.recurring :value="0" />
-
-            <x-admin.form.event.days />
-
-            <x-admin.form.input-date-time
-                name="recurring_until"
-                :value="old('recurring_until')"
-                :label="__('Recurrng until')"
-                :required="false"
-            />
         </x-admin.form.wrapper>
     </x-admin.main>
 </x-app-layout>

@@ -45,9 +45,9 @@ class User extends Authenticatable
 
     protected $with = ['role'];
 
-    public function role() : HasOne
+    public function role(): BelongsToMany
     {
-        return $this->hasOne(UserRole::class);
+        return $this->belongsToMany(Role::class, 'user_roles')->withPivot('id');
     }
 
     public function groups(): BelongsToMany

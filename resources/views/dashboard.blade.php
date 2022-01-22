@@ -4,16 +4,12 @@
     </x-admin.header>
 
     <x-admin.main>
-        @can('admin')
+        @if(Gate::allows('admin'))
             {{ __('Hellow admin') }}
-        @endcan
-
-        @can('student')
+        @elseif(Gate::allows('student'))
             {{ __('Hellow Student') }}
-        @endcan
-
-        @can('student-guest')
+        @elseif(Gate::allows('student-guest'))
             {{ __('Hellow student guest') }}
-        @endcan
+        @endif
     </x-admin.main>
 </x-app-layout>

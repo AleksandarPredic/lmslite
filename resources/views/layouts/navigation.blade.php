@@ -16,9 +16,13 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
 
-                    @can('admin')
+                    @if(Gate::allows('admin'))
                         <x-admin.navigation />
-                    @endcan
+                    @elseif(Gate::allows('student'))
+                        {{-- # TODO: add student navigation in future versions --}}
+                    @elseif(Gate::allows('student-guest'))
+                        {{-- # TODO: add student-guest navigation in future versions --}}
+                    @endif
                 </div>
             </div>
 
@@ -71,9 +75,13 @@
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
 
-            @can('admin')
+            @if(Gate::allows('admin'))
                 <x-admin.navigation-responsive />
-            @endcan
+            @elseif(Gate::allows('student'))
+                {{-- # TODO: add student navigation in future versions --}}
+            @elseif(Gate::allows('student-guest'))
+                {{-- # TODO: add student-guest navigation in future versions --}}
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->

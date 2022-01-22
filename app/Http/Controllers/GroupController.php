@@ -64,7 +64,6 @@ class GroupController extends Controller
      */
     public function show(Group $group)
     {
-        return User::find(3)->load('groups');
         return view('admin.group.show', [
             'group' => $group->load('users')
         ]);

@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
         ]);
 
-        // Create one admin and one guest student user
+        // Create one admin user with multiple roles
         $password = Hash::make('password');
         $user = User::factory()->create([
            'name' => 'Admin',
@@ -32,6 +32,11 @@ class DatabaseSeeder extends Seeder
 
         UserRole::create([
             'role_id' => 1,
+            'user_id' => $user->id
+        ]);
+
+        UserRole::create([
+            'role_id' => 2,
             'user_id' => $user->id
         ]);
 
@@ -56,7 +61,7 @@ class DatabaseSeeder extends Seeder
 
         UserRole::create([
             'role_id' => 2,
-            'user_id' => $user->id
+            'user_id' => $userMultiGroup->id
         ]);
 
         // Create some student users

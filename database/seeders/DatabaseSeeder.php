@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Course;
 use App\Models\User;
+use App\Models\UserGroup;
 use App\Models\UserRole;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -64,5 +65,12 @@ class DatabaseSeeder extends Seeder
             GroupSeeder::class,
             EventSeeder::class,
         ]);
+
+        foreach ($users as $user) {
+            UserGroup::create([
+                'group_id' => rand(1, 2),
+                'user_id' => $user->id
+            ]);
+        }
     }
 }

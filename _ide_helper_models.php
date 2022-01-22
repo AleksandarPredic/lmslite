@@ -59,7 +59,7 @@ namespace App\Models{
  * App\Models\Event
  *
  * @property int $id
- * @property int|null $group_id
+ * @property null|int $group_id
  * @property string $name
  * @property bool $recurring
  * @property array|null $days
@@ -104,6 +104,8 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Event[] $events
  * @property-read int|null $events_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
+ * @property-read int|null $users_count
  * @method static \Database\Factories\GroupFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Group newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Group newQuery()
@@ -151,6 +153,8 @@ namespace App\Models{
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Group[] $groups
+ * @property-read int|null $groups_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
  * @property-read int|null $notifications_count
  * @property-read \App\Models\UserRole|null $role
@@ -170,6 +174,27 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  */
 	class User extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\UserGroup
+ *
+ * @property int $id
+ * @property int $group_id
+ * @property int $user_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|UserGroup newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|UserGroup newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|UserGroup query()
+ * @method static \Illuminate\Database\Eloquent\Builder|UserGroup whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserGroup whereGroupId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserGroup whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserGroup whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserGroup whereUserId($value)
+ */
+	class UserGroup extends \Eloquent {}
 }
 
 namespace App\Models{

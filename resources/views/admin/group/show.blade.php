@@ -26,6 +26,11 @@
                 <x-admin.singular.name
                     name="{{ $group->name }}"
                 />
+
+                <x-admin.singular.info
+                    name="{{ __('Number of users') }}"
+                    value="{{ $group->users ? $group->users->count() : 0 }}"
+                />
             </x-slot>
 
             {{-- # Properties --}}
@@ -44,6 +49,21 @@
                     name="{{ __('Note') }}"
                     value="{{ $group->note }}"
                 />
+            </x-slot>
+
+            {{-- # Meta --}}
+            <x-slot name="metalist">
+                <x-slot name="metalistname">
+                    <x-admin.singular.meta.name
+                        name="{{ __('Users') }}"
+                    />
+                </x-slot>
+
+                @foreach($group->users as $user)
+                    <x-admin.singular.meta.item-user
+                        :user="$user"
+                    />
+                @endforeach
             </x-slot>
 
         </x-admin.singular.wrapper>

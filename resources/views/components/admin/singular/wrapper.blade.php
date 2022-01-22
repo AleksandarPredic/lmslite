@@ -15,6 +15,9 @@
         </div>
     @endif
 
+    {{-- # Anything else we need between --}}
+    {{ $slot }}
+
     {{-- # Meta --}}
     @if($metalist ?? null)
         <div class="border-t border-gray-200 py-6 px-4 event-preview__calendar_events">

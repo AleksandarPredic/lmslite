@@ -64,7 +64,7 @@ class GroupController extends Controller
     public function show(Group $group)
     {
         return view('admin.group.show', [
-            'group' => $group
+            'group' => $group->load('users')
         ]);
     }
 

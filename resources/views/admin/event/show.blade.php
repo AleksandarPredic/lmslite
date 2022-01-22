@@ -67,6 +67,7 @@
                 />
             </x-slot>
 
+            {{-- # Meta --}}
             <x-slot name="metalist">
                 <x-slot name="metalistname">
                     <x-admin.singular.meta.name

@@ -5,15 +5,16 @@
 
     <div class="admin-form__inner-field admin-form__inner-field--flex sm:flex">
         @foreach($options as $checkboxValue => $checkboxName)
-            @php
-                $disabled = $disabled ? 'disabled' : '';
-                $checked = is_array($value) && in_array($checkboxValue, $value) ? 'checked' : '';
-                $nameAttr = sprintf('%s[]', $name);
-                $idAttr = sprintf('%s-%s', $name, $checkboxValue);
-                // TODO: Add frontend js validation for this field
-            @endphp
 
             <div class="admin-form__checkbox">
+                @php
+                    $disabled = $disabled ? 'disabled' : '';
+                    $checked = is_array($value) && in_array($checkboxValue, $value) ? 'checked' : '';
+                    $nameAttr = sprintf('%s[]', $name);
+                    $idAttr = sprintf('%s-%s', $name, $checkboxValue);
+                    // TODO: Add frontend js validation for this field
+                @endphp
+
                 <x-admin.form.label for="{{ $idAttr }}" :value="$checkboxName" />
 
                 <input
@@ -26,6 +27,7 @@
                     {{ $disabled }}
                 />
             </div>
+
         @endforeach
     </div>
 

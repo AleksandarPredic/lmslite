@@ -1,3 +1,3 @@
 @props(['name'])
 
-<h3 class="mb-4 px-1">{{ $name }}</h3>
+<h3 class="mb-4 px-4">{{ $name }}</h3>

@@ -68,29 +68,31 @@
             </x-slot>
 
             {{-- # Meta --}}
-            <x-slot name="metalist">
-                <x-slot name="metalistname">
-                    <x-admin.singular.meta.name
-                        name="{{ __('Calendar events') }}"
-                    />
-                </x-slot>
+            <x-slot name="meta">
+                <x-admin.singular.meta.name
+                    name="{{ __('Calendar events') }}"
+                />
 
-                @php($separatedOld = false)
-                @foreach($calendarEvents as $calendarEvent)
+                <x-admin.singular.meta.list-wrapper>
 
-                    {{-- # Mark where active CalendarEvent starts, from Event start_at. We may have old ones for history. --}}
-                    @if($calendarEvent->starting_at >= $event->starting_at && ! $separatedOld)
-                        <x-admin.singular.meta.info
-                            name="{{ __('Current events') }}"
-                            value="{{ __('If there are events before this line, those are for history keeping') }}"
+                    @php($separatedOld = false)
+                    @foreach($calendarEvents as $calendarEvent)
+
+                        {{-- # Mark where active CalendarEvent starts, from Event start_at. We may have old ones for history. --}}
+                        @if($calendarEvent->starting_at >= $event->starting_at && ! $separatedOld)
+                            <x-admin.singular.meta.info
+                                name="{{ __('Current events') }}"
+                                value="{{ __('If there are events before this line, those are for history keeping') }}"
+                            />
+                            @php($separatedOld = true)
+                        @endif
+
+                        <x-admin.singular.meta.item-calendar-event
+                            :calendar-event="$calendarEvent"
                         />
-                        @php($separatedOld = true)
-                    @endif
+                    @endforeach
 
-                    <x-admin.singular.meta.item-calendar-event
-                        :calendar-event="$calendarEvent"
-                    />
-                @endforeach
+                </x-admin.singular.meta.list-wrapper>
             </x-slot>
 
         </x-admin.singular.wrapper>

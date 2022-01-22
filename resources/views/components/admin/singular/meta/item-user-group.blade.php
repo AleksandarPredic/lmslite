@@ -1,5 +1,12 @@
 {{-- # Used in admin.group.show --}}
-@props(['user'])
+@props(['group', 'user'])
+
+@php
+/**
+ * @var \App\Models\UserGroup $userGroup
+ * @var \App\Models\User $user
+ */
+@endphp
 
 <x-admin.singular.meta.item-wrapper>
     <div class="w-0 flex-1 flex items-center">
@@ -11,6 +18,10 @@
         <x-admin.data-property>
             {{ __('Name') }}: {{ $user->name }}
         </x-admin.data-property>
+
+        <x-admin.action-delete-button class="px-2 py-1"
+            action="{{ route('admin.user-group.destroy', [$group, $user]) }}"
+        />
 
         {{-- // TODO: Add remove user from gorup button --}}
         {{-- // TODO: Add show link to user profile --}}

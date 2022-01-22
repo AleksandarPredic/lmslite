@@ -19,13 +19,9 @@
     {{ $slot }}
 
     {{-- # Meta --}}
-    @if($metalist ?? null)
+    @if($meta ?? null)
         <div class="border-t border-gray-200 py-6 px-4 event-preview__calendar_events">
-            {{ $metalistname ?? null }}
-
-            <ul role="list" class="border border-gray-200 rounded-md">
-                {{ $metalist }}
-            </ul>
+            {{ $meta }}
         </div>
     @endif
 </div>

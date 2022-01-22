@@ -52,18 +52,21 @@
             </x-slot>
 
             {{-- # Meta --}}
-            <x-slot name="metalist">
-                <x-slot name="metalistname">
-                    <x-admin.singular.meta.name
-                        name="{{ __('Users') }}"
-                    />
-                </x-slot>
+            <x-slot name="meta">
+                <x-admin.singular.meta.name
+                    name="{{ __('Users') }}"
+                />
 
-                @foreach($group->users as $user)
-                    <x-admin.singular.meta.item-user
-                        :user="$user"
-                    />
-                @endforeach
+                <x-admin.singular.meta.list-wrapper>
+
+                    @foreach($group->users as $user)
+                        <x-admin.singular.meta.item-user-group
+                            :user="$user"
+                            :group="$group"
+                        />
+                    @endforeach
+
+                </x-admin.singular.meta.list-wrapper>
             </x-slot>
 
         </x-admin.singular.wrapper>

@@ -68,7 +68,7 @@ class EventController extends Controller
     public function show(Event $event)
     {
        return view('admin.event.show', [
-           'event' => $event->load('calendarEvents'),
+           'event' => $event->load(['calendarEvents', 'group']),
            'calendarEvents' => $event->calendarEvents->sortBy('starting_at')
        ]);
     }

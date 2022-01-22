@@ -63,8 +63,9 @@ class GroupController extends Controller
      */
     public function show(Group $group)
     {
-        dd($group);
-        // TODO: Show view
+        return view('admin.group.show', [
+            'group' => $group
+        ]);
     }
 
     /**

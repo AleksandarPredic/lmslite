@@ -20,7 +20,8 @@
         </x-admin.data-property>
 
         <x-admin.action-delete-button class="px-2 py-1"
-            action="{{ route('admin.user-group.destroy', [$group, $user]) }}"
+            action="{{ route('admin.user-group.destroy', [$user->pivot->id, $user]) }}"
+            button-text="{{ __('Remove')}}"
         />
 
         {{-- // TODO: Add remove user from gorup button --}}

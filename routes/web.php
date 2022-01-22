@@ -29,7 +29,7 @@ Route::name('admin.')->middleware('can:admin')->group(function () {
     Route::resource('/admin/courses', CourseController::class)->except(['show']);
     Route::resource('/admin/events', EventController::class);
     Route::resource('/admin/groups', GroupController::class);
-    Route::delete('/admin.user-groups/{group}/{user}', [UserGroupController::class, 'destroy'])
+    Route::delete('/admin/user-groups/{userGroup}/{user}', [UserGroupController::class, 'destroy'])
          ->name('user-group.destroy');
 });
 

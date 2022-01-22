@@ -35,6 +35,7 @@ class DatabaseSeeder extends Seeder
             'user_id' => $user->id
         ]);
 
+        // Create guest user
         $user = User::factory()->create([
             'name' => 'Guest student',
             'email' => 'guest@guest.local',
@@ -43,6 +44,18 @@ class DatabaseSeeder extends Seeder
 
         UserRole::create([
             'role_id' => 3,
+            'user_id' => $user->id
+        ]);
+
+        // Create multi groups user
+        $userMultiGroup = User::factory()->create([
+            'name' => 'Multi group user',
+            'email' => 'multi@group.local',
+            'password' => $password
+        ]);
+
+        UserRole::create([
+            'role_id' => 2,
             'user_id' => $user->id
         ]);
 
@@ -64,6 +77,17 @@ class DatabaseSeeder extends Seeder
         $this->call([
             GroupSeeder::class,
             EventSeeder::class,
+        ]);
+
+        // Add users to groups
+        UserGroup::create([
+            'group_id' => 1,
+            'user_id' => $userMultiGroup->id
+        ]);
+
+        UserGroup::create([
+            'group_id' => 2,
+            'user_id' => $userMultiGroup->id
         ]);
 
         foreach ($users as $user) {

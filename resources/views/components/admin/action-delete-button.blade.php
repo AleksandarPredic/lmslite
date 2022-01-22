@@ -1,4 +1,4 @@
-@props(['action'])
+@props(['action', 'buttonText' => __('Delete')])
 
 <form
     action="{{ $action }}"
@@ -16,6 +16,6 @@
         {!! $attributes->merge(['class' => 'border border-gray-400 text-gray-600 hover:bg-gray-100 hover:border-gray-300 hover:text-gray-400 px-6 py-2 rounded ml-4']) !!}
         type="submit"
     >
-        Delete
+        {{ $buttonText }}
     </button>
 </form>

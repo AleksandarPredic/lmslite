@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\RequestValidationRulesTrait;
 use App\Models\Group;
+use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 
@@ -63,6 +64,7 @@ class GroupController extends Controller
      */
     public function show(Group $group)
     {
+        return User::find(3)->load('groups');
         return view('admin.group.show', [
             'group' => $group->load('users')
         ]);

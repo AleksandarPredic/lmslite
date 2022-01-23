@@ -40,11 +40,11 @@
                         {{-- Event action links --}}
                         <x-admin.data-cards.link
                             href="{{ route('admin.events.show', [$event]) }}"
-                            title="Preview" />
+                            title="{{ __('Manage') }}" />
 
                         <x-admin.data-cards.link
                             href="{{ route('admin.events.edit', [$event]) }}"
-                            title="Edit" />
+                            title="{{ __('Edit') }}" />
 
                         <x-admin.form.delete-button
                             action="{{ route('admin.events.destroy', [$event]) }}"

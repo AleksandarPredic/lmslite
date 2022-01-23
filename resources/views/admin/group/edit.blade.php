@@ -9,7 +9,7 @@
         </div>
 
         <div class="flex justify-end mb-4 px-4">
-            <x-admin.action-link-button href="{{ route('admin.groups.show', $group) }}" title="{{ __('Preview') }}" />
+            <x-admin.action-link-button href="{{ route('admin.groups.show', $group) }}" title="{{ __('Manage') }}" />
             <x-admin.action-delete-button action="{{ route('admin.groups.destroy', $group) }}" />
         </div>
 

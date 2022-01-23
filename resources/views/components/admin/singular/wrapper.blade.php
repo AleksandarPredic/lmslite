@@ -16,7 +16,11 @@
     @endif
 
     {{-- # Anything else we need between --}}
-    {{ $slot }}
+    @if($slot)
+        <div class="border-t border-gray-200 py-6 px-6">
+            {{ $slot }}
+        </div>
+    @endif
 
     {{-- # Meta --}}
     @if($meta ?? null)

@@ -3,7 +3,7 @@
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\GroupController;
-use App\Http\Controllers\UserGroupController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,8 +29,9 @@ Route::name('admin.')->middleware('can:admin')->group(function () {
     Route::resource('/admin/courses', CourseController::class)->except(['show']);
     Route::resource('/admin/events', EventController::class);
     Route::resource('/admin/groups', GroupController::class);
-    Route::delete('/admin/user-groups/{userGroup}/{user}', [UserGroupController::class, 'destroy'])
-         ->name('user-group.destroy');
+    Route::post('admin/groups/users/{group}', [GroupController::class, 'addUser'])->name('groups.users.store');
+    Route::delete('/admin/groups/users/{userGroup}/{user}', [GroupController::class, 'removeUser'])->name('groups.users.destroy');
+    Route::post('admin/users/find', [UserController::class, 'findUsers'])->name('users.find');
 });
 
 require __DIR__.'/auth.php';

@@ -51,6 +51,12 @@
                 />
             </x-slot>
 
+            {{-- # Slot - add users form --}}
+            <x-admin.user.add-user
+                route="{{ route('admin.groups.users.store', $group) }}"
+                :exclude="$exclude"
+            />
+
             {{-- # Meta --}}
             <x-slot name="meta">
                 <x-admin.singular.meta.name
@@ -59,7 +65,7 @@
 
                 <x-admin.singular.meta.list-wrapper>
 
-                    @foreach($group->users as $user)
+                    @foreach($users as $user)
                         <x-admin.singular.meta.item-user-group
                             :user="$user"
                             :group="$group"

@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Traits\RequestValidationRulesTrait;
 use App\Models\Group;
 use App\Models\User;
+use App\Models\UserGroup;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Validation\ValidationException;
 
 class GroupController extends Controller
 {
@@ -17,7 +19,7 @@ class GroupController extends Controller
      *
      * @return View
      */
-    public function index()
+    public function index(): View
     {
         return view('admin.group.index', [
             'groups' => Group::orderBy('name', 'asc')->paginate(10)->withQueryString()
@@ -29,7 +31,7 @@ class GroupController extends Controller
      *
      * @return View
      */
-    public function create()
+    public function create(): View
     {
         return view('admin.group.create');
     }
@@ -39,7 +41,7 @@ class GroupController extends Controller
      *
      * @return RedirectResponse
      */
-    public function store()
+    public function store(): RedirectResponse
     {
         $attributes = $this->validateSanitizeRequest(new Group());
 
@@ -62,10 +64,12 @@ class GroupController extends Controller
      *
      * @return View
      */
-    public function show(Group $group)
+    public function show(Group $group): View
     {
         return view('admin.group.show', [
-            'group' => $group->load('users')
+            'group' => $group->load('users'),
+            'users' => $group->users->sortBy('name'),
+            'exclude' => $group->users ? $group->users->map(fn ($user) => $user->id) : []
         ]);
     }
 
@@ -76,7 +80,7 @@ class GroupController extends Controller
      *
      * @return View
      */
-    public function edit(Group $group)
+    public function edit(Group $group): View
     {
         return view('admin.group.edit', [
             'group' => $group
@@ -90,7 +94,7 @@ class GroupController extends Controller
      *
      * @return RedirectResponse
      */
-    public function update(Group $group)
+    public function update(Group $group): RedirectResponse
     {
         $attributes = $this->validateSanitizeRequest($group);
 
@@ -126,6 +130,74 @@ class GroupController extends Controller
     public function destroy(Group $group)
     {
         // TODO: Delete group + update event group_id to null
+    }
+
+    /**
+     * Add user to the Group relationship via pivot table
+     *
+     * @param Group $group
+     *
+     * @return RedirectResponse
+     */
+    public function addUser(Group $group): RedirectResponse
+    {
+        $attributes = \request()->validate([
+            'user_id' => ['required', 'numeric']
+        ]);
+
+        $userId = $attributes['user_id'];
+
+        // Check if we already have this user
+        if ($group->users()->find($userId)) {
+            throw ValidationException::withMessages(
+                ['user_id' => 'User is already in the group.']
+            );
+        }
+
+        UserGroup::create([
+            'group_id' => $group->id,
+            'user_id' => $userId
+        ]);
+
+        return back()->with(
+            'admin.message.success',
+            sprintf(
+                'User %s added to the group!',
+                User::find($userId)->name
+            )
+        );
+    }
+
+    /**
+     * Remove the user relationship via the pivot table
+     *
+     * @param  UserGroup $userGroup
+     * @param  User $user
+     *
+     * @return RedirectResponse
+     */
+    public function removeUser(UserGroup $userGroup, User $user): RedirectResponse
+    {
+        try {
+            $userGroup->deleteOrFail();
+            return redirect()->back()->with(
+                'admin.message.success',
+                sprintf(
+                    'User %s removed successfully from this group!',
+                    $user->name
+                )
+            );
+
+        } catch (\Throwable $exception) {
+            // TODO: Add logger here
+            return redirect()->back()->with(
+                'admin.message.error',
+                sprintf(
+                    '[ERROR] User with id %d could not be removed from this group!',
+                    $user->id
+                )
+            );
+        }
     }
 
     /**

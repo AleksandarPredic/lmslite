@@ -16,11 +16,11 @@
     </div>
     <div class="ml-4 flex-shrink-0 sm:flex">
         <x-admin.data-property>
-            {{ __('Name') }}: {{ $user->name }}
+            {{ $user->name }}
         </x-admin.data-property>
 
         <x-admin.action-delete-button class="px-2 py-1"
-            action="{{ route('admin.user-group.destroy', [$user->pivot->id, $user]) }}"
+            action="{{ route('admin.groups.users.destroy', [$user->pivot->id, $user]) }}"
             button-text="{{ __('Remove')}}"
         />
 

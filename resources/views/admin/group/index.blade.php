@@ -23,11 +23,11 @@
                         </x-slot>
 
                         {{-- Group action links --}}
-                        <x-admin.data-cards.link
+                        <x-admin.action-link
                             href="{{ route('admin.groups.show', [$group]) }}"
                             title="{{ __('Manage') }}" />
 
-                        <x-admin.data-cards.link
+                        <x-admin.action-link
                             href="{{ route('admin.groups.edit', [$group]) }}"
                             title="{{ __('Edit') }}" />
 

@@ -10,7 +10,7 @@ class CalendarEvent extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['event_id', 'starting_at', 'ending_at'];
+    protected $fillable = ['event_id', 'starting_at', 'ending_at', 'note'];
 
     /**
      * The attributes that should be cast.
@@ -22,6 +22,8 @@ class CalendarEvent extends Model
         'starting_at' => 'datetime',
         'ending_at' => 'datetime',
     ];
+
+    protected $with = ['event'];
 
     public function event(): BelongsTo
     {

@@ -602,11 +602,11 @@ select {
 .mt-3 {
   margin-top: 0.75rem;
 }
-.mt-2 {
-  margin-top: 0.5rem;
-}
 .mb-4 {
   margin-bottom: 1rem;
+}
+.mt-2 {
+  margin-top: 0.5rem;
 }
 .ml-1 {
   margin-left: 0.25rem;
@@ -890,13 +890,13 @@ select {
   padding-left: 0.5rem;
   padding-right: 0.5rem;
 }
-.py-6 {
-  padding-top: 1.5rem;
-  padding-bottom: 1.5rem;
-}
 .py-1 {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
+}
+.py-6 {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
 }
 .px-1 {
   padding-left: 0.25rem;
@@ -1198,10 +1198,9 @@ select {
 /**
  Show view
  */
-/*.singular-meta .singular-meta__item:nth-child(odd) {
-    --tw-bg-opacity: 1;
-    background-color: rgb(243 244 246 / var(--tw-bg-opacity));
-}*/
+.singular-meta header a {
+    text-decoration: underline;
+}
 .singular-meta .singular-meta__item {
     padding-top: 1rem;
     padding-bottom: 2rem;

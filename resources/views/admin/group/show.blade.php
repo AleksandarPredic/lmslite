@@ -21,7 +21,6 @@
 
         <x-admin.singular.wrapper>
             {{-- # Header --}}
-
             <x-slot name="info">
                 <x-admin.singular.name
                     name="{{ $group->name }}"
@@ -68,8 +67,14 @@
                     @foreach($users as $user)
                         <x-admin.singular.meta.item-user
                             :user="$user"
-                            remove-route="{{ route('admin.groups.users.destroy', [$user->pivot->id, $user]) }}"
-                        />
+                        >
+                            <x-admin.action-delete-button class="px-2 py-1"
+                                  action="{{ route('admin.groups.users.destroy', [$user->pivot->id, $user]) }}"
+                                  button-text="{{ __('Remove')}}"
+                            />
+
+                            {{-- // TODO: Add show link to user profile --}}
+                        </x-admin.singular.meta.item-user>
                     @endforeach
 
                 </x-admin.singular.meta.list-wrapper>

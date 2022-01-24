@@ -18,6 +18,11 @@
     </x-admin.singular.meta.item-properties-wrapper>
 
     <x-admin.singular.meta.item-links-wrapper>
+        <x-admin.action-link
+            href="{{ route('admin.calendar-events.show', $calendarEvent) }}"
+            title="{{ __('Manage') }}"
+        />
+
         {{-- // TODO: Add delete button for single calendar event as a way to cancel only one and remove it from calendar + this must cascade delete overrides --}}
     </x-admin.singular.meta.item-links-wrapper>
 </x-admin.singular.meta.item-wrapper>

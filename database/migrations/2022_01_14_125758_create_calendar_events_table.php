@@ -18,6 +18,7 @@ class CreateCalendarEventsTable extends Migration
             $table->foreignId('event_id')->constrained()->cascadeOnDelete();
             $table->timestamp('starting_at');
             $table->timestamp('ending_at');
+            $table->longText('note')->nullable();
             $table->timestamps();
         });
     }

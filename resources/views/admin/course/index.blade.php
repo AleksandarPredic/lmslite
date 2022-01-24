@@ -12,7 +12,7 @@
             <x-slot name="cards">
                 @foreach($courses as $course)
                     <x-admin.data-cards.card :name="$course->name">
-                        <x-admin.data-cards.link
+                        <x-admin.action-link
                             href="{{ route('admin.courses.edit', [$course]) }}"
                             title="Edit" />
 

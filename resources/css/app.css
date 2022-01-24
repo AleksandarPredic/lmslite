@@ -99,10 +99,10 @@
 /**
  Show view
  */
-/*.singular-meta .singular-meta__item:nth-child(odd) {
-    --tw-bg-opacity: 1;
-    background-color: rgb(243 244 246 / var(--tw-bg-opacity));
-}*/
+.singular-meta header a {
+    text-decoration: underline;
+}
+
 .singular-meta .singular-meta__item {
     padding-top: 1rem;
     padding-bottom: 2rem;

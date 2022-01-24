@@ -2,21 +2,21 @@
 <div class="singular-meta bg-white shadow overflow-hidden sm:rounded-lg event-preview">
 
     {{-- # Header --}}
-    <div class="px-4 py-6 sm:px-6">
+    <header class="px-4 py-6 sm:px-6">
         {{ $info ?? null }}
-    </div>
+    </header>
 
     {{-- # Properties --}}
     @if($properties ?? null)
-        <div class="border-t border-gray-200 pb-3 px-2">
+        <main class="border-t border-gray-200 pb-3 px-2">
             <dl>
                 {{ $properties }}
             </dl>
-        </div>
+        </main>
     @endif
 
     {{-- # Anything else we need between --}}
-    @if($slot)
+    @if($slot->isNotEmpty())
         <div class="border-t border-gray-200 py-6 px-6">
             {{ $slot }}
         </div>
@@ -24,7 +24,7 @@
 
     {{-- # Meta --}}
     @if($meta ?? null)
-        <div class="border-t border-gray-200 py-6 px-4 event-preview__calendar_events">
+        <div class="py-6 px-4">
             {{ $meta }}
         </div>
     @endif

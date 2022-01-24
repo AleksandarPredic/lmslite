@@ -1,5 +1,5 @@
-{{-- # Use in any show model view to display list of users and a button to perform some destroy model action --}}
-@props(['user', 'removeRoute' => false])
+{{-- # Use in any show model view to display list of users and any additiona action button in the slot --}}
+@props(['user'])
 
 @php
 /**
@@ -19,13 +19,6 @@
     </x-admin.singular.meta.item-properties-wrapper>
 
     <x-admin.singular.meta.item-links-wrapper>
-        @if ($removeRoute)
-            <x-admin.action-delete-button class="px-2 py-1"
-              action="{{ route('admin.groups.users.destroy', [$user->pivot->id, $user]) }}"
-              button-text="{{ __('Remove')}}"
-            />
-        @endif
-
-            {{-- // TODO: Add show link to user profile --}}
+        {{ $slot }}
     </x-admin.singular.meta.item-links-wrapper>
 </x-admin.singular.meta.item-wrapper>

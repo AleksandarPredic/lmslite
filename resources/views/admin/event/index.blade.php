@@ -38,11 +38,11 @@
                         </x-slot>
 
                         {{-- Event action links --}}
-                        <x-admin.data-cards.link
+                        <x-admin.action-link
                             href="{{ route('admin.events.show', [$event]) }}"
                             title="{{ __('Manage') }}" />
 
-                        <x-admin.data-cards.link
+                        <x-admin.action-link
                             href="{{ route('admin.events.edit', [$event]) }}"
                             title="{{ __('Edit') }}" />
 

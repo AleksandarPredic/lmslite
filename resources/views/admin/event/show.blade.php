@@ -16,12 +16,11 @@
 
         <div class="flex justify-end mb-4 px-4">
             <x-admin.action-link-button href="{{ route('admin.events.edit', $event) }}" title="{{ __('Edit') }}" />
-            <x-admin.action-delete-button action="{{ route('admin.courses.destroy', $event) }}" />
+            <x-admin.action-delete-button action="{{ route('admin.events.destroy', $event) }}" />
         </div>
 
         <x-admin.singular.wrapper>
             {{-- # Header --}}
-
             <x-slot name="info">
                 <x-admin.singular.name
                     name="{{ $event->name }}"
@@ -31,9 +30,10 @@
                     value="{{ $event->recurring ? __('Yes') : __('No') }}"
                 />
 
+                @php($grupLink = $event->group ? sprintf('<a href="%2$s">%1$s</a>', $event->group->name, route('admin.groups.show', $event->group)) : __('none'))
                 <x-admin.singular.info
                     name="{{ __('Group') }}"
-                    value="{{ $event->group ? $event->group->name : __('none') }}"
+                    :value="$grupLink"
                 />
             </x-slot>
 

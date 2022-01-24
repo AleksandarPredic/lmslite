@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CalendarEvent as CalendarEventModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\View;
 
 class CalendarEvent extends Controller
 {
@@ -40,12 +42,15 @@ class CalendarEvent extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  CalendarEventModel  $calendarEvent
      */
-    public function show($id)
+    public function show(CalendarEventModel $calendarEvent)
     {
-        //
+        return view('admin.calendar-event.show', [
+            'calendarEvent' => $calendarEvent,
+            'event' => $calendarEvent->event,
+            'group' => $calendarEvent->event->group
+        ]);
     }
 
     /**

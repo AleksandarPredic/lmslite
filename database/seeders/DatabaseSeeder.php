@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\CalendarEventUser;
 use App\Models\Course;
+use App\Models\Event;
 use App\Models\User;
 use App\Models\UserGroup;
 use App\Models\UserRole;
@@ -52,7 +54,7 @@ class DatabaseSeeder extends Seeder
             'user_id' => $user->id
         ]);
 
-        // Create multi groups user
+        // Create multi groups user - used below for calendar overrides
         $userMultiGroup = User::factory()->create([
             'name' => 'Multi group user',
             'email' => 'multi@group.local',
@@ -81,7 +83,6 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             GroupSeeder::class,
-            EventSeeder::class,
         ]);
 
         // Add users to groups
@@ -101,5 +102,52 @@ class DatabaseSeeder extends Seeder
                 'user_id' => $user->id
             ]);
         }
+
+        // Create one single and one recurring event and assign groups
+        Event::factory()->create([
+            'group_id' => 1,
+            'recurring' => false,
+            'days' => null,
+            'recurring_until' => null,
+        ]);
+
+        Event::factory()->create([
+            'recurring' => false,
+            'days' => null,
+            'recurring_until' => null,
+        ]);
+
+        $event = Event::factory()->create([
+            'group_id' => 2,
+            'recurring' => true,
+        ]);
+
+        // Add some seeds for calendar event overrides: add and remove users
+        $firstCalendarEvent = $event->calendarEvents()->first();
+
+        // Mark the event group user as removed
+        CalendarEventUser::create([
+            'calendar_event_id' => $firstCalendarEvent->id,
+            'user_id' => $userMultiGroup->id,
+            'operation' => 'remove',
+            'reason' => 'canceled',
+            'note' => 'The user has canceled attendance.'
+        ]);
+
+        // Add new user to the calendar event
+        $addedCalendarEventUser = User::factory()->create();
+
+        UserRole::create([
+            'role_id' => 2,
+            'user_id' => $addedCalendarEventUser->id
+        ]);
+
+        CalendarEventUser::create([
+            'calendar_event_id' => $firstCalendarEvent->id,
+            'user_id' => $addedCalendarEventUser->id,
+            'operation' => 'add',
+            'reason' => 'canceled',
+            'note' => 'The user has canceled attendance.'
+        ]);
     }
 }

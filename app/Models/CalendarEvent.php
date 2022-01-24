@@ -29,4 +29,10 @@ class CalendarEvent extends Model
     {
         return $this->belongsTo(Event::class);
     }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'calendar_event_users')
+                    ->withPivot(['operation', 'reason', 'note', 'created_at', 'updated_at']);
+    }
 }

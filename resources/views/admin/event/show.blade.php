@@ -81,7 +81,7 @@
                         {{-- # Mark where active CalendarEvent starts, from Event start_at. We may have old ones for history. --}}
                         @if($calendarEvent->starting_at >= $event->starting_at && ! $separatedOld)
                             <x-admin.singular.meta.info
-                                name="{{ __('Current events') }}"
+                                name=""
                                 value="{{ __('If there are events before this line, those are for history keeping') }}"
                             />
                             @php($separatedOld = true)

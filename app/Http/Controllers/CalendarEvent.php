@@ -46,10 +46,23 @@ class CalendarEvent extends Controller
      */
     public function show(CalendarEventModel $calendarEvent)
     {
+        $calendarEvent = $calendarEvent->load('users');
+        $event = $calendarEvent->event->load('group');
+        $group = $event->group;
+        // Users added independently to this calendar event
+        $usersAdded = $calendarEvent->users->filter(fn ($user) => $user->pivot->operation === 'add');
+        // Users marked as not attending. Using the same calendar_event_users table. If in table, group user is not attending
+        $usersRemoved = $calendarEvent->users->filter(fn ($user) => $user->pivot->operation === 'remove');
+        // Remove users which are marked as not attending
+        $groupUsers = $group->load('users')->users->filter(fn ($user) => ! $usersRemoved->find($user));
+
         return view('admin.calendar-event.show', [
             'calendarEvent' => $calendarEvent,
-            'event' => $calendarEvent->event,
-            'group' => $calendarEvent->event->group
+            'usersAdded' => $usersAdded,
+            'usersRemoved' => $usersRemoved,
+            'event' => $event,
+            'group' => $group,
+            'groupUsers' => $groupUsers,
         ]);
     }
 

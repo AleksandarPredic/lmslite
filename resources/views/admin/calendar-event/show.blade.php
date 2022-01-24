@@ -2,6 +2,14 @@
 /**
  * Enable autocomplete in blade file
  * @var \App\Models\CalendarEvent $calendarEvent
+ * @var \Illuminate\Database\Eloquent\Collection $usersAdded
+ * @var \App\Models\User $userAdded
+ * @var \Illuminate\Database\Eloquent\Collection $usersRemoved
+ * @var \App\Models\User $userRemoved
+ * @var \App\Models\Event $event
+ * @var \App\Models\Group $group
+ * @var \Illuminate\Database\Eloquent\Collection $groupUsers
+ * @var \App\Models\User $groupUser
  */
 @endphp
 <x-app-layout>
@@ -51,25 +59,83 @@
                 />
             </x-slot>
 
-            {{-- # TODO: add add/remove users here using add-user.blade.php + add another select to add/remove operation --}}
-
             {{-- # Meta --}}
-            @if($group && $group->users)
+            @if(($groupUsers->isNotEmpty()) || $usersAdded->isNotEmpty() || $usersRemoved->isNotEmpty())
                 <x-slot name="meta">
-                    <x-admin.singular.meta.name
-                        name="{{ __('Users attending') }}"
-                    />
 
-                    <x-admin.singular.meta.list-wrapper>
-
-                        @foreach($group->users as $user)
-                            <x-admin.singular.meta.item-user
-                                :user="$user"
-                                remove-route="{{ route('admin.groups.users.destroy', [$user->pivot->id, $user]) }}"
+                    {{-- # Added users --}}
+                    @if($usersAdded->isNotEmpty())
+                        <div class="mb-4 pb-3">
+                            <x-admin.singular.meta.name
+                                name="{{ __('Calendar event users attending') }}"
                             />
-                        @endforeach
 
-                    </x-admin.singular.meta.list-wrapper>
+                            <x-admin.singular.meta.list-wrapper>
+                                @foreach($usersAdded as $userAdded)
+                                    <x-admin.singular.meta.item-user
+                                        :user="$userAdded"
+                                    >
+                                        <x-admin.action-delete-button
+                                            class="px-2 py-1"
+                                            action="{{-- route('admin.groups.users.destroy', [$user->pivot->id, $user]) --}}"
+                                            button-text="{{ __('Remove')}}"
+                                        />
+                                    </x-admin.singular.meta.item-user>
+                                @endforeach
+
+                            </x-admin.singular.meta.list-wrapper>
+                        </div>
+                    @endif
+
+                    {{-- # Removed users --}}
+                    @if($usersRemoved->isNotEmpty())
+                        <div class="mb-4 pb-3">
+                            <x-admin.singular.meta.name
+                                name="{{ $group->name }} {{ __('group users not attending') }}"
+                            />
+
+                            <x-admin.singular.meta.list-wrapper>
+                                @foreach($usersRemoved as $userRemoved)
+                                    <x-admin.singular.meta.item-user
+                                        :user="$userRemoved"
+                                    >
+                                        <x-admin.action-delete-button
+                                            class="px-2 py-1"
+                                            action="{{-- route('admin.groups.users.destroy', [$user->pivot->id, $user]) --}}"
+                                            button-text="{{ __('Add user back')}}"
+                                        />
+                                    </x-admin.singular.meta.item-user>
+                                @endforeach
+
+                            </x-admin.singular.meta.list-wrapper>
+                        </div>
+                    @endif
+
+                    {{-- # Group users --}}
+                    @if($groupUsers->isNotEmpty())
+                        <x-admin.singular.meta.name
+                            name="{{ $group->name }} {{ __('group users attending') }}"
+                        />
+
+                        <x-admin.singular.meta.list-wrapper>
+
+                            @foreach($groupUsers as $groupUser)
+                                <x-admin.singular.meta.item-user
+                                    :user="$groupUser"
+                                >
+                                    <x-admin.action-delete-button
+                                        class="px-2 py-1"
+                                        action="{{-- route('admin.groups.users.destroy', [$user->pivot->id, $user]) --}}"
+                                        button-text="{{ __('Remove')}}"
+                                    />
+
+                                    {{-- // TODO: Add show link to user profile --}}
+                                </x-admin.singular.meta.item-user>
+                            @endforeach
+
+                        </x-admin.singular.meta.list-wrapper>
+                    @endif
+
                 </x-slot>
             @endif
 

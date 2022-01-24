@@ -18,9 +18,12 @@ namespace App\Models{
  * @property int $event_id
  * @property \Illuminate\Support\Carbon $starting_at
  * @property \Illuminate\Support\Carbon $ending_at
+ * @property string|null $note
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Event $event
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
+ * @property-read int|null $users_count
  * @method static \Illuminate\Database\Eloquent\Builder|CalendarEvent newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CalendarEvent newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CalendarEvent query()
@@ -28,10 +31,38 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|CalendarEvent whereEndingAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CalendarEvent whereEventId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CalendarEvent whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CalendarEvent whereNote($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CalendarEvent whereStartingAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CalendarEvent whereUpdatedAt($value)
  */
 	class CalendarEvent extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\CalendarEventUser
+ *
+ * @property int $id
+ * @property int $calendar_event_id
+ * @property int $user_id
+ * @property string $operation
+ * @property string $reason
+ * @property string|null $note
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|CalendarEventUser newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CalendarEventUser newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CalendarEventUser query()
+ * @method static \Illuminate\Database\Eloquent\Builder|CalendarEventUser whereCalendarEventId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CalendarEventUser whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CalendarEventUser whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CalendarEventUser whereNote($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CalendarEventUser whereOperation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CalendarEventUser whereReason($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CalendarEventUser whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CalendarEventUser whereUserId($value)
+ */
+	class CalendarEventUser extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -157,7 +188,8 @@ namespace App\Models{
  * @property-read int|null $groups_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
  * @property-read int|null $notifications_count
- * @property-read \App\Models\UserRole|null $role
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Role[] $role
+ * @property-read int|null $role_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Sanctum\PersonalAccessToken[] $tokens
  * @property-read int|null $tokens_count
  * @method static \Database\Factories\UserFactory factory(...$parameters)

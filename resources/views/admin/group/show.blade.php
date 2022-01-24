@@ -68,9 +68,10 @@
                         <x-admin.singular.meta.item-user
                             :user="$user"
                         >
-                            <x-admin.action-delete-button class="px-2 py-1"
-                                  action="{{ route('admin.groups.users.destroy', [$user->pivot->id, $user]) }}"
-                                  button-text="{{ __('Remove')}}"
+                            <x-admin.action-delete-button
+                                class="px-2 py-1"
+                                action="{{ route('admin.groups.users.destroy', [$user->pivot->id, $user]) }}"
+                                button-text="{{ __('Remove')}}"
                             />
 
                             {{-- // TODO: Add show link to user profile --}}

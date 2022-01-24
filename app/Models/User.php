@@ -43,8 +43,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    protected $with = ['role'];
-
     public function role(): BelongsToMany
     {
         return $this->belongsToMany(Role::class, 'user_roles')->withPivot('id');

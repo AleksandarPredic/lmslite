@@ -9,6 +9,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\Rules;
 
 class RegisteredUserController extends Controller
@@ -33,12 +34,20 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request)
     {
+        if (! Route::has('register')) {
+            abort(
+                403,
+                __('You should not be here :)')
+            );
+        }
+
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        // TODO: add new user columns when you enable registration
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,

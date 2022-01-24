@@ -1,6 +1,9 @@
+{{--
+# Search users via Alpine js x-on https://alpinejs.dev/directives/on
+# Use in any blade file
+--}}
 @props(['route', 'exclude' => []])
 
-{{-- # Search users via Alpine js x-on https://alpinejs.dev/directives/on --}}
 <div x-data="searchUsers({url: '{{ route('admin.users.find') }}'})">
     <x-admin.form.field>
         <x-admin.form.label for="find-user" :value="__('Type user name')" />

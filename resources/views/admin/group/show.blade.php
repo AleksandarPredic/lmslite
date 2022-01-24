@@ -66,9 +66,9 @@
                 <x-admin.singular.meta.list-wrapper>
 
                     @foreach($users as $user)
-                        <x-admin.singular.meta.item-user-group
+                        <x-admin.singular.meta.item-user
                             :user="$user"
-                            :group="$group"
+                            remove-route="{{ route('admin.groups.users.destroy', [$user->pivot->id, $user]) }}"
                         />
                     @endforeach
 

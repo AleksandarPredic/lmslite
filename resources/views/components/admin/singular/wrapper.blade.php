@@ -1,5 +1,5 @@
 {{-- # https://tailwindui.com/components/application-ui/data-display/description-lists --}}
-<div class="bg-white shadow overflow-hidden sm:rounded-lg event-preview">
+<div class="singular-meta bg-white shadow overflow-hidden sm:rounded-lg event-preview">
 
     {{-- # Header --}}
     <div class="px-4 py-6 sm:px-6">

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CalendarEvent;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\GroupController;
@@ -26,12 +27,22 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 Route::name('admin.')->middleware('can:admin')->group(function () {
+    // Course
     Route::resource('/admin/courses', CourseController::class)->except(['show']);
+
+    // Event
     Route::resource('/admin/events', EventController::class);
+
+    // Calendar event
+    Route::resource('/admin/calendar-events', CalendarEvent::class);
+
+    // Group
     Route::resource('/admin/groups', GroupController::class);
-    Route::post('admin/groups/users/{group}', [GroupController::class, 'addUser'])->name('groups.users.store');
+    Route::post('/admin/groups/users/{group}', [GroupController::class, 'addUser'])->name('groups.users.store');
     Route::delete('/admin/groups/users/{userGroup}/{user}', [GroupController::class, 'removeUser'])->name('groups.users.destroy');
-    Route::post('admin/users/find', [UserController::class, 'findUsers'])->name('users.find');
+
+    // User
+    Route::post('/admin/users/find', [UserController::class, 'findUsers'])->name('users.find');
 });
 
 require __DIR__.'/auth.php';

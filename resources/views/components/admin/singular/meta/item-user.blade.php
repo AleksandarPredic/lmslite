@@ -1,5 +1,4 @@
 {{-- # Use in any show model view to display list of users and any additiona action button in the slot --}}
-@props(['user'])
 
 @php
 /**
@@ -13,9 +12,7 @@
     </x-admin.singular.meta.item-icon>
 
     <x-admin.singular.meta.item-properties-wrapper>
-        <x-admin.data-property>
-            {{ $user->name }}
-        </x-admin.data-property>
+        {{ $properties ?? null }}
     </x-admin.singular.meta.item-properties-wrapper>
 
     <x-admin.singular.meta.item-links-wrapper>

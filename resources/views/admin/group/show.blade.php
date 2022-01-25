@@ -68,6 +68,14 @@
                         <x-admin.singular.meta.item-user
                             :user="$user"
                         >
+                            {{-- # Properties --}}
+                            <x-slot name="properties">
+                                <x-admin.data-property>
+                                    {{ $user->name }}
+                                </x-admin.data-property>
+                            </x-slot>
+
+                            {{-- # Links --}}
                             <x-admin.action-delete-button
                                 class="px-2 py-1"
                                 action="{{ route('admin.groups.users.destroy', [$user->pivot->id, $user]) }}"

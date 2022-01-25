@@ -122,32 +122,20 @@ class DatabaseSeeder extends Seeder
             'recurring' => true,
         ]);
 
-        // Add some seeds for calendar event overrides: add and remove users
+        // Add some seeds for calendar event users for the first recurring event calendar event
         $firstCalendarEvent = $event->calendarEvents()->first();
 
-        // Mark the event group user as removed
-        CalendarEventUser::create([
-            'calendar_event_id' => $firstCalendarEvent->id,
-            'user_id' => $userMultiGroup->id,
-            'operation' => 'remove',
-            'reason' => 'canceled',
-            'note' => 'The user has canceled attendance.'
-        ]);
+        $addedCalendarEventUsers = User::factory(3)->create();
+        foreach ($addedCalendarEventUsers as $addedCalendarEventUser) {
+            UserRole::create([
+                'role_id' => 2,
+                'user_id' => $addedCalendarEventUser->id
+            ]);
 
-        // Add new user to the calendar event
-        $addedCalendarEventUser = User::factory()->create();
-
-        UserRole::create([
-            'role_id' => 2,
-            'user_id' => $addedCalendarEventUser->id
-        ]);
-
-        CalendarEventUser::create([
-            'calendar_event_id' => $firstCalendarEvent->id,
-            'user_id' => $addedCalendarEventUser->id,
-            'operation' => 'add',
-            'reason' => 'canceled',
-            'note' => 'The user has canceled attendance.'
-        ]);
+            CalendarEventUser::create([
+                'calendar_event_id' => $firstCalendarEvent->id,
+                'user_id' => $addedCalendarEventUser->id,
+            ]);
+        }
     }
 }

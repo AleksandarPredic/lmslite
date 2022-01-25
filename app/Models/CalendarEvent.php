@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class CalendarEvent extends Model
 {
@@ -30,9 +31,9 @@ class CalendarEvent extends Model
         return $this->belongsTo(Event::class);
     }
 
-    public function users()
+    public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'calendar_event_users')
-                    ->withPivot(['operation', 'reason', 'note', 'created_at', 'updated_at']);
+                    ->withPivot(['id', 'created_at', 'updated_at']);
     }
 }

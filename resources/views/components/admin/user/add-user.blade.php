@@ -39,12 +39,13 @@
     <p class="mb-4 mt-4 py-1 text" x-text="message"></p>
 
     <script>
+        // TODO: Rewrite this in plan JS or move it to js file, currently using ES6 but this is fine as we will use only supported browsers
         function searchUsers(routeUrl) {
             return {
                 routeUrl: routeUrl.url,
                 message: '',
                 name: '',
-                options: '<option>{{ __('loading...') }}</option>',
+                options: '<option value="">{{ __('loading...') }}</option>',
                 exclude: JSON.parse('{{ json_encode($exclude) }}'),
 
                 getResults(event) {
@@ -64,7 +65,7 @@
                     })
                         .then(function (response) {
                             if (response.data.length > 0) {
-                                that.options = [`<option value="0">{{ __('Click here to select user...') }}</option>`]
+                                that.options = [`<option value="">{{ __('Click here to select user...') }}</option>`]
                                     .concat(
                                         response.data
                                             .map((user) => `<option value="${user.id}">${user.name}</option>`)

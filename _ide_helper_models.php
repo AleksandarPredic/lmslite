@@ -45,9 +45,6 @@ namespace App\Models{
  * @property int $id
  * @property int $calendar_event_id
  * @property int $user_id
- * @property string $operation
- * @property string $reason
- * @property string|null $note
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|CalendarEventUser newModelQuery()
@@ -56,9 +53,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|CalendarEventUser whereCalendarEventId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CalendarEventUser whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CalendarEventUser whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|CalendarEventUser whereNote($value)
- * @method static \Illuminate\Database\Eloquent\Builder|CalendarEventUser whereOperation($value)
- * @method static \Illuminate\Database\Eloquent\Builder|CalendarEventUser whereReason($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CalendarEventUser whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CalendarEventUser whereUserId($value)
  */
@@ -184,6 +178,8 @@ namespace App\Models{
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CalendarEvent[] $calendarEvents
+ * @property-read int|null $calendar_events_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Group[] $groups
  * @property-read int|null $groups_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications

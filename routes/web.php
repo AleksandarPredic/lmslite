@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\CalendarEvent;
+use App\Http\Controllers\CalendarEventController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\GroupController;
@@ -34,7 +34,11 @@ Route::name('admin.')->middleware('can:admin')->group(function () {
     Route::resource('/admin/events', EventController::class);
 
     // Calendar event
-    Route::resource('/admin/calendar-events', CalendarEvent::class);
+    Route::resource('/admin/calendar-events', CalendarEventController::class);
+    Route::post('/admin/calendar-events/users/{calendarEvent}/{group?}', [CalendarEventController::class, 'addUser'])
+         ->name('calendar-events.users.store');
+    Route::delete('/admin/calendar-events/users/{user}/{calendarEventUser}', [CalendarEventController::class, 'removeUser'])
+         ->name('calendar-events.users.destroy');
 
     // Group
     Route::resource('/admin/groups', GroupController::class);

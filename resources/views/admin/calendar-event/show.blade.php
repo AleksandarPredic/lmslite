@@ -59,51 +59,47 @@
                 />
             </x-slot>
 
+            {{-- # Slot - add users form --}}
+            <x-admin.user.add-user
+                route="{{ route('admin.calendar-events.users.store', [$calendarEvent, $group]) }}"
+                :exclude="$exclude"
+            />
+
             {{-- # Meta --}}
-            @if(($groupUsers->isNotEmpty()) || $usersAdded->isNotEmpty() || $usersRemoved->isNotEmpty())
+            @if(($groupUsers) || $users->isNotEmpty())
                 <x-slot name="meta">
 
-                    {{-- # Added users --}}
-                    @if($usersAdded->isNotEmpty())
+                    {{-- # Calendar event users --}}
+                    @if($users->isNotEmpty())
                         <div class="mb-4 pb-3">
                             <x-admin.singular.meta.name
-                                name="{{ __('Calendar event users attending') }}"
+                                name="{{ __('Event users') }}"
                             />
 
                             <x-admin.singular.meta.list-wrapper>
-                                @foreach($usersAdded as $userAdded)
+                                @foreach($users as $user)
                                     <x-admin.singular.meta.item-user
-                                        :user="$userAdded"
+                                        :user="$user"
                                     >
+                                        {{-- # Properties --}}
+                                        <x-slot name="properties">
+                                            <x-admin.data-property>
+                                                {{ $user->name }}
+                                            </x-admin.data-property>
+
+                                            <x-admin.data-property>
+                                                {{ __('Added') }}: {{ lmsCarbonDefaultFormat($user->created_at) }}
+                                            </x-admin.data-property>
+                                        </x-slot>
+
+                                        {{-- # Links --}}
                                         <x-admin.action-delete-button
                                             class="px-2 py-1"
-                                            action="{{-- route('admin.groups.users.destroy', [$user->pivot->id, $user]) --}}"
+                                            action="{{ route('admin.calendar-events.users.destroy', [$user, $user->pivot->id]) }}"
                                             button-text="{{ __('Remove')}}"
                                         />
-                                    </x-admin.singular.meta.item-user>
-                                @endforeach
 
-                            </x-admin.singular.meta.list-wrapper>
-                        </div>
-                    @endif
-
-                    {{-- # Removed users --}}
-                    @if($usersRemoved->isNotEmpty())
-                        <div class="mb-4 pb-3">
-                            <x-admin.singular.meta.name
-                                name="{{ $group->name }} {{ __('group users not attending') }}"
-                            />
-
-                            <x-admin.singular.meta.list-wrapper>
-                                @foreach($usersRemoved as $userRemoved)
-                                    <x-admin.singular.meta.item-user
-                                        :user="$userRemoved"
-                                    >
-                                        <x-admin.action-delete-button
-                                            class="px-2 py-1"
-                                            action="{{-- route('admin.groups.users.destroy', [$user->pivot->id, $user]) --}}"
-                                            button-text="{{ __('Add user back')}}"
-                                        />
+                                        {{-- // TODO: Add show link to user profile --}}
                                     </x-admin.singular.meta.item-user>
                                 @endforeach
 
@@ -112,9 +108,9 @@
                     @endif
 
                     {{-- # Group users --}}
-                    @if($groupUsers->isNotEmpty())
+                    @if($groupUsers)
                         <x-admin.singular.meta.name
-                            name="{{ $group->name }} {{ __('group users attending') }}"
+                            name="{{ $group->name }} {{ __('group users') }}"
                         />
 
                         <x-admin.singular.meta.list-wrapper>
@@ -123,11 +119,12 @@
                                 <x-admin.singular.meta.item-user
                                     :user="$groupUser"
                                 >
-                                    <x-admin.action-delete-button
-                                        class="px-2 py-1"
-                                        action="{{-- route('admin.groups.users.destroy', [$user->pivot->id, $user]) --}}"
-                                        button-text="{{ __('Remove')}}"
-                                    />
+                                    {{-- # Properties --}}
+                                    <x-slot name="properties">
+                                        <x-admin.data-property>
+                                            {{ $groupUser->name }}
+                                        </x-admin.data-property>
+                                    </x-slot>
 
                                     {{-- // TODO: Add show link to user profile --}}
                                 </x-admin.singular.meta.item-user>

@@ -69,7 +69,7 @@ class GroupController extends Controller
         return view('admin.group.show', [
             'group' => $group->load('users'),
             'users' => $group->users->sortBy('name'),
-            'exclude' => $group->users ? $group->users->map(fn ($user) => $user->id) : []
+            'exclude' => $group->users ? $group->users->pluck('id')->toArray() : []
         ]);
     }
 
@@ -142,12 +142,12 @@ class GroupController extends Controller
     public function addUser(Group $group): RedirectResponse
     {
         $attributes = \request()->validate([
-            'user_id' => ['required', 'numeric']
+            'user_id' => ['required', 'numeric', 'min:1']
         ]);
 
         $userId = $attributes['user_id'];
 
-        // Check if we already have this user
+        // Check if we already have this user, we will also exclude ids in resources/views/components/admin/user/add-user.blade.php
         if ($group->users()->find($userId)) {
             throw ValidationException::withMessages(
                 ['user_id' => 'User is already in the group.']

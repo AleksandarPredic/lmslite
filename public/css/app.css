@@ -916,11 +916,11 @@ select {
 .pr-4 {
   padding-right: 1rem;
 }
-.pt-2 {
-  padding-top: 0.5rem;
-}
 .pb-3 {
   padding-bottom: 0.75rem;
+}
+.pt-2 {
+  padding-top: 0.5rem;
 }
 .pt-4 {
   padding-top: 1rem;
@@ -1220,6 +1220,10 @@ select {
     .singular-meta .singular-meta__item-icon {
         width: auto;
         margin-bottom: 0;
+    }
+
+    .singular-meta__item-properties .data-cards_property:not(:last-child) {
+        margin-right: 0.5rem;
     }
 
     .singular-meta .singular-meta__item .data-cards_property {

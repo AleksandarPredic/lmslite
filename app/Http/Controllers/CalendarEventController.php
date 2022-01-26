@@ -2,51 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\RequestValidationRulesTrait;
 use App\Models\CalendarEvent;
 use App\Models\CalendarEventUser;
 use App\Models\Group;
 use App\Models\User;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
 class CalendarEventController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+    use RequestValidationRulesTrait;
 
     /**
      * Display the specified resource.
      *
-     * @param  CalendarEvent  $calendarEvent
+     * @param CalendarEvent $calendarEvent
+     *
+     * @return View
      */
     public function show(CalendarEvent $calendarEvent)
     {
@@ -70,24 +45,44 @@ class CalendarEventController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  CalendarEvent  $calendarEvent
+     * @return View
      */
-    public function edit($id)
+    public function edit(CalendarEvent $calendarEvent)
     {
-        //
+        return view('admin.calendar-event.edit', [
+            'calendarEvent' => $calendarEvent->load('event')
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  CalendarEvent  $calendarEvent
+     * @return RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(CalendarEvent $calendarEvent)
     {
-        //
+        $attributes = $this->validateSanitizeRequest();
+
+        // Update observer will only be fired if the model is dirty
+        $updated = $calendarEvent->update($attributes);
+
+        if (! $updated) {
+            // TODO: Add logger here
+            return redirect()->back()->with(
+                'admin.message.error',
+                sprintf(
+                    '[ERROR] Calendar event with id, %s could not be updated!',
+                    $calendarEvent->id
+                )
+            );
+        }
+
+        return redirect()->back()->with(
+            'admin.message.success',
+            'Calendar event, updated!'
+        );
     }
 
     /**
@@ -98,7 +93,7 @@ class CalendarEventController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // TODO: create delete one calendar event and test all cascade delete from DB
     }
 
     /**
@@ -168,5 +163,27 @@ class CalendarEventController extends Controller
                 )
             );
         }
+    }
+
+    /**
+     * Validate and sanitize request
+     *
+     * @return array
+     *
+     */
+    protected function validateSanitizeRequest(): array
+    {
+        $attributes = request()->validate([
+            'starting_at' => array_merge(['required'], $this->getStartingAtFieldRules()),
+            'ending_at' => array_merge(['required'], $this->getEndingAtFieldRules()),
+            'note' => array_merge(['nullable'], $this->getNoteFieldRules()),
+        ]);
+
+        // additional sanitization
+        if (isset($attributes['note'])) {
+            $attributes['note'] = strip_tags($attributes['note']);
+        }
+
+        return $attributes;
     }
 }

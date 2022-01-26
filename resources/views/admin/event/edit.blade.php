@@ -46,7 +46,7 @@
 
             <x-admin.form.textarea
                 name="note"
-                :label="__('Ending at')"
+                :label="__('Note')"
             >{{ old('note', $event->note) }}</x-admin.form.textarea>
 
             {{-- # we are hiding recurring fields and setting recurring to input hidden, as conversion is not allowed --}}

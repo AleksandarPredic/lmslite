@@ -44,7 +44,7 @@
 
             <x-admin.form.textarea
                 name="note"
-                :label="__('Ending at')"
+                :label="__('Note')"
             >{{ old('note', $group->note) }}</x-admin.form.textarea>
         </x-admin.form.wrapper>
     </x-admin.main>

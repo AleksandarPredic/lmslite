@@ -64,12 +64,14 @@ class GroupController extends Controller
      *
      * @return View
      */
-    public function show(Group $group): View
+    public function show(Group $group)
     {
+        $users = $group->load('users')->users()->userDefaultSorting()->get();
+
         return view('admin.group.show', [
-            'group' => $group->load('users'),
-            'users' => $group->users->sortBy('name'),
-            'exclude' => $group->users ? $group->users->pluck('id')->toArray() : []
+            'group' => $group,
+            'users' => $users,
+            'exclude' => $users ? $users->pluck('id')->toArray() : []
         ]);
     }
 
@@ -147,17 +149,23 @@ class GroupController extends Controller
 
         $userId = $attributes['user_id'];
 
-        // Check if we already have this user, we will also exclude ids in resources/views/components/admin/user/add-user.blade.php
-        if ($group->users()->find($userId)) {
-            throw ValidationException::withMessages(
-                ['user_id' => 'User is already in the group.']
+        $user = User::find($userId);
+
+        if (! $user) {
+            return redirect()->back()->with(
+                'admin.message.error',
+                '[ERROR] User you are trying to add doesn\'t exists in our records!'
             );
         }
 
-        UserGroup::create([
-            'group_id' => $group->id,
-            'user_id' => $userId
-        ]);
+        $userGroup = $group->addUser($user);
+
+        // Prevent adding the same user in the group
+        if (! $userGroup->wasRecentlyCreated) {
+            throw ValidationException::withMessages(
+                ['user_id' => 'User is already in the Group.']
+            );
+        }
 
         return back()->with(
             'admin.message.success',
@@ -171,15 +179,15 @@ class GroupController extends Controller
     /**
      * Remove the user relationship via the pivot table
      *
-     * @param  UserGroup $userGroup
+     * @param  Group $group
      * @param  User $user
      *
      * @return RedirectResponse
      */
-    public function removeUser(UserGroup $userGroup, User $user): RedirectResponse
+    public function removeUser(Group $group, User $user): RedirectResponse
     {
         try {
-            $userGroup->deleteOrFail();
+            $group->removeUser($user);
             return redirect()->back()->with(
                 'admin.message.success',
                 sprintf(

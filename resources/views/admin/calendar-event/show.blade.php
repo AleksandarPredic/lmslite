@@ -95,7 +95,7 @@
                                         {{-- # Links --}}
                                         <x-admin.action-delete-button
                                             class="px-2 py-1"
-                                            action="{{ route('admin.calendar-events.users.destroy', [$user, $user->pivot->id]) }}"
+                                            action="{{ route('admin.calendar-events.users.destroy', [$user, $calendarEvent]) }}"
                                             button-text="{{ __('Remove')}}"
                                         />
 

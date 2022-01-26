@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -56,5 +56,18 @@ class User extends Authenticatable
     public function calendarEvents(): BelongsToMany
     {
         return $this->belongsToMany(CalendarEvent::class, 'calendar_event_users')->withPivot('id');
+    }
+
+    /**
+     * Sort users on many screens: group.show, calendarEvent.show, any other screen that displays user collection.
+     * So using this we will always keep the same sorting on the whole app as the app user will have better experience.
+     *
+     * @param Builder $builder
+     *
+     * @return void
+     */
+    public function scopeUserDefaultSorting(Builder $builder)
+    {
+        $builder->orderBy('name', 'asc');
     }
 }

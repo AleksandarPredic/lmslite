@@ -78,7 +78,7 @@
                             {{-- # Links --}}
                             <x-admin.action-delete-button
                                 class="px-2 py-1"
-                                action="{{ route('admin.groups.users.destroy', [$user->pivot->id, $user]) }}"
+                                action="{{ route('admin.groups.users.destroy', [$group, $user]) }}"
                                 button-text="{{ __('Remove')}}"
                             />
 

@@ -38,13 +38,13 @@ Route::name('admin.')->middleware('can:admin')->group(function () {
          ->except(['index', 'store', 'create']);
     Route::post('/admin/calendar-events/users/{calendarEvent}/{group?}', [CalendarEventController::class, 'addUser'])
          ->name('calendar-events.users.store');
-    Route::delete('/admin/calendar-events/users/{user}/{calendarEventUser}', [CalendarEventController::class, 'removeUser'])
+    Route::delete('/admin/calendar-events/users/{user}/{calendarEvent}', [CalendarEventController::class, 'removeUser'])
          ->name('calendar-events.users.destroy');
 
     // Group
     Route::resource('/admin/groups', GroupController::class);
     Route::post('/admin/groups/users/{group}', [GroupController::class, 'addUser'])->name('groups.users.store');
-    Route::delete('/admin/groups/users/{userGroup}/{user}', [GroupController::class, 'removeUser'])->name('groups.users.destroy');
+    Route::delete('/admin/groups/users/{group}/{user}', [GroupController::class, 'removeUser'])->name('groups.users.destroy');
 
     // User
     Route::post('/admin/users/find', [UserController::class, 'findUsers'])->name('users.find');

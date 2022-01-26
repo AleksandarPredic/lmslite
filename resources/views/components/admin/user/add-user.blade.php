@@ -75,7 +75,7 @@
                                 return;
                             }
 
-                            that.message = '{{ __('No users found or user is already in the group. Please try another name.') }}';
+                            that.message = '{{ __('No users found or user is already added. Please try another name.') }}';
                         })
                         .catch(function (error) {
                             // Check if we failed validation

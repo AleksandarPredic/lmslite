@@ -4,12 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\RequestValidationRulesTrait;
 use App\Models\CalendarEvent;
-use App\Models\CalendarEventUser;
 use App\Models\Group;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
 class CalendarEventController extends Controller
@@ -25,12 +23,14 @@ class CalendarEventController extends Controller
      */
     public function show(CalendarEvent $calendarEvent)
     {
-        $calendarEvent = $calendarEvent->load('users');
-        $users = $calendarEvent->users;
-        $event = $calendarEvent->event->load('group');
-        $group = $event->group ? $event->group->load('users') : null;
-        $groupUsers = $group ? $group->users : null;
-        $exclude = $groupUsers ? $groupUsers->pluck('id')->toArray() : null;
+        $users = $calendarEvent->load('users')->users()->userDefaultSorting()->get();
+        $event = $calendarEvent->event;
+        // This relationship cam be null as it is nullable in migration
+        $group = $event->group ? $event->load('group')->group : null;
+        $groupUsers = $group ? $group->load('users')->users()->userDefaultSorting()->get() : null;
+        // Collect all user ids to exclude form search, group and event users
+        $exclude = $groupUsers ? $groupUsers->pluck('id')->toArray() : [];
+        $exclude = $users->isNotEmpty() ? array_merge($exclude, $users->pluck('id')->toArray()) : $exclude;
 
         return view('admin.calendar-event.show', [
             'calendarEvent' => $calendarEvent,
@@ -112,6 +112,15 @@ class CalendarEventController extends Controller
 
         $userId = $attributes['user_id'];
 
+        $user = User::find($userId);
+
+        if (! $user) {
+            return redirect()->back()->with(
+                'admin.message.error',
+                '[ERROR] User you are trying to add doesn\'t exists in our records!'
+            );
+        }
+
         // Check if we already have this user to this event group, we will also exclude ids in resources/views/components/admin/user/add-user.blade.php
         if ($group->users()->find($userId)) {
             throw ValidationException::withMessages(
@@ -119,16 +128,19 @@ class CalendarEventController extends Controller
             );
         }
 
-        CalendarEventUser::create([
-            'calendar_event_id' => $calendarEvent->id,
-            'user_id' => $userId
-        ]);
+        $calendarEventUser = $calendarEvent->addUser($user);
+
+        if (! $calendarEventUser->wasRecentlyCreated) {
+            throw ValidationException::withMessages(
+                ['user_id' => 'User is already in the Event.']
+            );
+        }
 
         return back()->with(
             'admin.message.success',
             sprintf(
                 'User %s added to the calendar event!',
-                User::find($userId)->name
+                $user->name
             )
         );
     }
@@ -136,30 +148,32 @@ class CalendarEventController extends Controller
     /**
      * Remove the user relationship via the pivot table
      *
-     * @param  CalendarEventUser $calendarEventUser
+     * @param  CalendarEvent $calendarEvent
      * @param  User $user
      *
      * @return RedirectResponse
      */
-    public function removeUser(User $user, CalendarEventUser $calendarEventUser): RedirectResponse
+    public function removeUser(User $user, CalendarEvent $calendarEvent): RedirectResponse
     {
         try {
-            $calendarEventUser->deleteOrFail();
+            $calendarEvent->removeUser($user);
+
             return redirect()->back()->with(
                 'admin.message.success',
                 sprintf(
-                    'User %s removed successfully from this group!',
+                    'User %s removed from this calendar event!',
                     $user->name
                 )
             );
 
         } catch (\Throwable $exception) {
-            // TODO: Add logger here
+            // TODO: Add logger here with id of the user
+
             return redirect()->back()->with(
                 'admin.message.error',
                 sprintf(
-                    '[ERROR] User with id %d could not be removed from this group!',
-                    $user->id
+                    '[ERROR] User %s could not be removed from this calendar event!',
+                    $user->name
                 )
             );
         }

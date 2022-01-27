@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\CalendarEventUser;
+use App\Models\CalendarEventUserStatus;
 use App\Models\Course;
 use App\Models\Event;
 use App\Models\User;
@@ -126,7 +127,27 @@ class DatabaseSeeder extends Seeder
         $firstCalendarEvent = $event->calendarEvents()->first();
 
         $addedCalendarEventUsers = User::factory(3)->create();
-        foreach ($addedCalendarEventUsers as $addedCalendarEventUser) {
+        $calendarUserStatus = function($key) {
+            switch ($key) {
+                case 0:
+                    return "canceled";
+                case 1:
+                    return "no-show";
+                default:
+                    return "attended";
+            }
+        };
+        $calendarUserStatusInfo = function($key) {
+            switch ($key) {
+                case 0:
+                    return "trial";
+                case 1:
+                    return "compensation";
+                default:
+                    return "regular";
+            }
+        };
+        foreach ($addedCalendarEventUsers as $key => $addedCalendarEventUser) {
             UserRole::create([
                 'role_id' => 2,
                 'user_id' => $addedCalendarEventUser->id
@@ -135,6 +156,13 @@ class DatabaseSeeder extends Seeder
             CalendarEventUser::create([
                 'calendar_event_id' => $firstCalendarEvent->id,
                 'user_id' => $addedCalendarEventUser->id,
+            ]);
+
+            CalendarEventUserStatus::create([
+                'calendar_event_id' => $firstCalendarEvent->id,
+                'user_id' => $addedCalendarEventUser->id,
+                'status' => $calendarUserStatus($key),
+                'info' => $calendarUserStatusInfo($key)
             ]);
         }
     }

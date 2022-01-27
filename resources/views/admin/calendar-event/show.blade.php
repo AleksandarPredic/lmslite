@@ -93,6 +93,13 @@
                                         </x-slot>
 
                                         {{-- # Links --}}
+                                        <x-admin.form.select
+                                            name="status"
+                                            :value="old('group_id', 'status')"
+                                            :label="__('Status')"
+                                            :options="$statusOptions"
+                                        />
+
                                         <x-admin.action-delete-button
                                             class="px-2 py-1"
                                             action="{{ route('admin.calendar-events.users.destroy', [$user, $calendarEvent]) }}"

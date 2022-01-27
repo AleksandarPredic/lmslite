@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\RequestValidationRulesTrait;
 use App\Models\CalendarEvent;
+use App\Models\CalendarEventUserStatus;
 use App\Models\Group;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
@@ -39,6 +40,8 @@ class CalendarEventController extends Controller
             'group' => $group,
             'groupUsers' => $groupUsers,
             'exclude' => $exclude,
+            'statusOptions' => CalendarEventUserStatus::getStatusEnumValues(),
+            'infoOptions' => CalendarEventUserStatus::getInfoEnumValues()
         ]);
     }
 

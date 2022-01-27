@@ -61,6 +61,32 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\CalendarEventUserStatus
+ *
+ * @property int $id
+ * @property int $calendar_event_id
+ * @property int $user_id
+ * @property string $status
+ * @property string $info
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|CalendarEventUserStatus getStatusValues()
+ * @method static \Illuminate\Database\Eloquent\Builder|CalendarEventUserStatus newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CalendarEventUserStatus newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CalendarEventUserStatus query()
+ * @method static \Illuminate\Database\Eloquent\Builder|CalendarEventUserStatus whereCalendarEventId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CalendarEventUserStatus whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CalendarEventUserStatus whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CalendarEventUserStatus whereInfo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CalendarEventUserStatus whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CalendarEventUserStatus whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CalendarEventUserStatus whereUserId($value)
+ */
+	class CalendarEventUserStatus extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\Course
  *
  * @property int $id

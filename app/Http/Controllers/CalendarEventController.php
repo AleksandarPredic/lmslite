@@ -196,8 +196,8 @@ class CalendarEventController extends Controller
     public function updateUserStatus(CalendarEvent $calendarEvent, User $user)
     {
         $attributes = \request()->validate([
-            'status' => ['nullable', Rule::in(CalendarEventUserStatus::getStatusEnumValues())],
-            'info' => ['nullable', Rule::in(CalendarEventUserStatus::getInfoEnumValues())]
+            'status' => [Rule::in(CalendarEventUserStatus::getStatusEnumValues())],
+            'info' => [Rule::in(CalendarEventUserStatus::getInfoEnumValues())]
         ]);
 
         $status = $attributes['status'] ?? null;

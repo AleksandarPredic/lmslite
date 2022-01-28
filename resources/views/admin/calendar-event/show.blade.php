@@ -93,16 +93,15 @@
                                         </x-slot>
 
                                         {{-- # Links --}}
-                                        <x-admin.form.select
-                                            name="status"
-                                            :value="old('group_id', 'status')"
-                                            :label="__('Status')"
-                                            :options="$statusOptions"
+                                        <x-admin.calendar-event.user.status
+                                            :calendarEvent="$calendarEvent"
+                                            :user="$user"
+                                            :userStatuses="$usersStatuses"
                                         />
 
                                         <x-admin.action-delete-button
                                             class="px-2 py-1"
-                                            action="{{ route('admin.calendar-events.users.destroy', [$user, $calendarEvent]) }}"
+                                            action="{{ route('admin.calendar-events.users.destroy', [$calendarEvent, $user]) }}"
                                             button-text="{{ __('Remove')}}"
                                         />
 
@@ -132,6 +131,13 @@
                                             {{ $groupUser->name }}
                                         </x-admin.data-property>
                                     </x-slot>
+
+                                    {{-- # Links --}}
+                                    <x-admin.calendar-event.user.status
+                                        :calendarEvent="$calendarEvent"
+                                        :user="$groupUser"
+                                        :userStatuses="$groupUsersStatuses"
+                                    />
 
                                     {{-- // TODO: Add show link to user profile --}}
                                 </x-admin.singular.meta.item-user>

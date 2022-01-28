@@ -22,6 +22,8 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Event $event
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $userStatuses
+ * @property-read int|null $user_statuses_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
  * @property-read int|null $users_count
  * @method static \Illuminate\Database\Eloquent\Builder|CalendarEvent newModelQuery()
@@ -66,11 +68,10 @@ namespace App\Models{
  * @property int $id
  * @property int $calendar_event_id
  * @property int $user_id
- * @property string $status
- * @property string $info
+ * @property string|null $status
+ * @property string|null $info
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder|CalendarEventUserStatus getStatusValues()
  * @method static \Illuminate\Database\Eloquent\Builder|CalendarEventUserStatus newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CalendarEventUserStatus newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CalendarEventUserStatus query()
@@ -204,6 +205,8 @@ namespace App\Models{
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CalendarEvent[] $calendarEventUserStatuses
+ * @property-read int|null $calendar_event_user_statuses_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CalendarEvent[] $calendarEvents
  * @property-read int|null $calendar_events_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Group[] $groups

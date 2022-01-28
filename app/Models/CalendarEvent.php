@@ -79,6 +79,44 @@ class CalendarEvent extends Model
     }
 
     /**
+     * Update calendar event user status, either user from parent event group or newly added user
+     * Adds a record in the pivot table
+     *
+     * @param User $user
+     * @param string $status
+     * @param string $info
+     *
+     * @return CalendarEventUserStatus
+     */
+    public function updateUserStatus(User $user, ?string $status, ?string $info)
+    {
+        $UserStatus = CalendarEventUserStatus::whereUserId($user->id)
+                         ->whereCalendarEventId($this->id)
+                         ->first();
+
+        $attributes = [
+            'calendar_event_id' => $this->id,
+            'user_id' => $user->id,
+        ];
+
+        // Add only if we need to update it, if we add null it will overwrite existing value
+        if (! empty($status)) {
+            $attributes['status'] = $status;
+        }
+
+        if (! empty($info)) {
+            $attributes['info'] = $info;
+        }
+
+        if ($UserStatus) {
+            $UserStatus->update($attributes);
+            return $UserStatus;
+        }
+
+        return CalendarEventUserStatus::create($attributes);
+    }
+
+    /**
      * Get calendar event user pivot table record
      *
      * @param $id

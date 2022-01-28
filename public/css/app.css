@@ -1167,6 +1167,12 @@ select {
     margin-left: 1rem;
 }
 /**
+ * CalendarEventUser StatusInfo component
+ */
+.cal-event-user-status-info select {
+    padding: 0.2rem 2rem 0.2rem 0.7rem;
+}
+/**
  Forms
  */
 .admin-form__inner-field {
@@ -1226,8 +1232,16 @@ select {
         margin-right: 0.5rem;
     }
 
-    .singular-meta .singular-meta__item .data-cards_property {
+    .singular-meta__item .data-cards_property {
         margin-bottom: 0;
+    }
+
+    .singular-meta__item-links {
+        flex-wrap: wrap;
+    }
+
+    .singular-meta__item-links .cal-event-user-status-info:not(:last-child) {
+        margin-right: 1rem;
     }
 }
 /** SCREENS **/

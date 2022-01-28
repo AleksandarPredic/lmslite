@@ -9,6 +9,7 @@ use App\Models\Group;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class CalendarEventController extends Controller
@@ -25,10 +26,12 @@ class CalendarEventController extends Controller
     public function show(CalendarEvent $calendarEvent)
     {
         $users = $calendarEvent->load('users')->users()->userDefaultSorting()->get();
+        $userStatuses = $users->load('calendarEventStatuses')->map(fn($user) => $user->calendarEventStatuses->first())->toArray();
         $event = $calendarEvent->event;
         // This relationship cam be null as it is nullable in migration
         $group = $event->group ? $event->load('group')->group : null;
         $groupUsers = $group ? $group->load('users')->users()->userDefaultSorting()->get() : null;
+        $groupUsersStatuses = $groupUsers->load('calendarEventStatuses')->map(fn($user) => $user->calendarEventStatuses->first())->toArray();
         // Collect all user ids to exclude form search, group and event users
         $exclude = $groupUsers ? $groupUsers->pluck('id')->toArray() : [];
         $exclude = $users->isNotEmpty() ? array_merge($exclude, $users->pluck('id')->toArray()) : $exclude;
@@ -36,12 +39,12 @@ class CalendarEventController extends Controller
         return view('admin.calendar-event.show', [
             'calendarEvent' => $calendarEvent,
             'users' => $users,
+            'usersStatuses' => $userStatuses,
             'event' => $event,
             'group' => $group,
             'groupUsers' => $groupUsers,
+            'groupUsersStatuses' => $groupUsersStatuses,
             'exclude' => $exclude,
-            'statusOptions' => CalendarEventUserStatus::getStatusEnumValues(),
-            'infoOptions' => CalendarEventUserStatus::getInfoEnumValues()
         ]);
     }
 
@@ -151,12 +154,12 @@ class CalendarEventController extends Controller
     /**
      * Remove the user relationship via the pivot table
      *
-     * @param  CalendarEvent $calendarEvent
      * @param  User $user
+     * @param  CalendarEvent $calendarEvent
      *
      * @return RedirectResponse
      */
-    public function removeUser(User $user, CalendarEvent $calendarEvent): RedirectResponse
+    public function removeUser(CalendarEvent $calendarEvent, User $user): RedirectResponse
     {
         try {
             $calendarEvent->removeUser($user);
@@ -180,6 +183,35 @@ class CalendarEventController extends Controller
                 )
             );
         }
+    }
+
+    /**
+     * Add user status for this calendar event.
+     *
+     * @param CalendarEvent $calendarEvent
+     * @param User $user
+     *
+     * @return RedirectResponse
+     */
+    public function updateUserStatus(CalendarEvent $calendarEvent, User $user)
+    {
+        $attributes = \request()->validate([
+            'status' => ['nullable', Rule::in(CalendarEventUserStatus::getStatusEnumValues())],
+            'info' => ['nullable', Rule::in(CalendarEventUserStatus::getInfoEnumValues())]
+        ]);
+
+        $status = $attributes['status'] ?? null;
+        $info = $attributes['info'] ?? null;
+
+        $calendarEvent->updateUserStatus($user, $status, $info);
+
+        return redirect()->back()->with(
+            'admin.message.success',
+            sprintf(
+                'User %s status changed!',
+                $user->name
+            )
+        );
     }
 
     /**

@@ -21,9 +21,9 @@ trait ModelEnumTrait
         return cache()->remember(
             'getEnumColumnDBValues.enum.' . $column,
             now()->addSeconds($cacheTTL),
-            function () {
+            function () use ($column) {
                 $table = Str::snake(Str::pluralStudly(class_basename(__CLASS__)));
-                $type = DB::select( DB::raw("SHOW COLUMNS FROM {$table} WHERE Field = 'status'") )[0]->Type;
+                $type = DB::select( DB::raw("SHOW COLUMNS FROM {$table} WHERE Field = '{$column}'") )[0]->Type;
 
                 preg_match('/^enum\((.*)\)$/', $type, $matches);
 

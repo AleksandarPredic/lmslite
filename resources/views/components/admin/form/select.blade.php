@@ -27,9 +27,7 @@
             <option
                 value="{{ $optionValue }}"
                 {{ $selected }}
-            >
-                {{ $optionName }}
-            </option>
+            >{{ $optionName }}</option>
         @endforeach
     </select>
 

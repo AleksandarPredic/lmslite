@@ -12,16 +12,26 @@ class CalendarEventUserStatus extends Model
 
     protected const CACHE_TTL = 86400;
 
-    protected $with = ['calendar_event_id', 'user_id', 'status', 'info'];
+    protected $fillable = ['calendar_event_id', 'user_id', 'status', 'info'];
 
-    public static function getStatuses()
+    public static function getStatuses(): array
     {
-        // TODO: continue here to crete VO for status and for INFO and return it here, then use it in select
-        // https://dev.to/bdelespierre/using-value-objects-in-laravel-models-44la
         $statuses = [];
         foreach (self::getStatusEnumValues() as $status) {
-
+            $statuses[$status] = ucfirst(str_replace('-', ' ', $status));
         }
+
+        return $statuses;
+    }
+
+    public static function getInfoOptions(): array
+    {
+        $options = [];
+        foreach (self::getInfoEnumValues() as $info) {
+            $options[$info] = ucfirst(str_replace('-', ' ', $info));
+        }
+
+        return $options;
     }
 
     public static function getStatusEnumValues(): array
@@ -39,7 +49,7 @@ class CalendarEventUserStatus extends Model
     public static function getInfoEnumValues(): array
     {
         try {
-            $values = self::getEnumValues('status', self::CACHE_TTL);
+            $values = self::getEnumValues('info', self::CACHE_TTL);
         } catch (\Exception $exception) {
             report($exception);
             return [];

@@ -996,11 +996,11 @@ select {
 .tracking-widest {
   letter-spacing: 0.1em;
 }
-.tracking-tight {
-  letter-spacing: -0.025em;
-}
 .tracking-wider {
   letter-spacing: 0.05em;
+}
+.tracking-tight {
+  letter-spacing: -0.025em;
 }
 .text-gray-500 {
   --tw-text-opacity: 1;
@@ -1302,6 +1302,15 @@ select {
 .singular-meta .singular-meta__item .data-cards_property {
     margin-bottom: 0.5rem;
 }
+.singular-meta__item-links {
+    margin-top: 1rem;
+    flex-direction: column;
+    align-items: flex-end;
+}
+.singular-meta__item-links > *,
+.singular-meta__item-links > form > button {
+    margin: 0 0 15px 0;
+}
 @media screen and (min-width: 1025px){
     .singular-meta .singular-meta__item {
         padding-bottom: 1rem;
@@ -1322,10 +1331,18 @@ select {
 
     .singular-meta__item-links {
         flex-wrap: wrap;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-end;
+        margin-top: 0;
     }
 
-    .singular-meta__item-links .cal-event-user-status:not(:last-of-type) {
-        margin-right: 1rem;
+    .singular-meta__item-links > * {
+        margin: 0 1rem 0 0;
+    }
+
+    .singular-meta__item-links > form > button {
+        margin: 0;
     }
 }
 .hover\:border-gray-300:hover {
@@ -1551,12 +1568,6 @@ select {
   .lg\:px-8 {
     padding-left: 2rem;
     padding-right: 2rem;
-  }
-}
-@media (min-width: 1280px) {
-
-  .xl\:inline {
-    display: inline;
   }
 }
 

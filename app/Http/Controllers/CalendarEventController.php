@@ -45,6 +45,7 @@ class CalendarEventController extends Controller
             'groupUsers' => $groupUsers,
             'groupUsersStatuses' => $groupUsersStatuses,
             'exclude' => $exclude,
+            'numberOfusers' => count($exclude)
         ]);
     }
 

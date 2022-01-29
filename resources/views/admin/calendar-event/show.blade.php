@@ -39,6 +39,10 @@
                     name="{{ __('Group') }}"
                     :value="$grupLink"
                 />
+                <x-admin.singular.info
+                    name="{{ __('Number of attendees') }}"
+                    :value="$numberOfusers"
+                />
             </x-slot>
 
             {{-- # Properties --}}

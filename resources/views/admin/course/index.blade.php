@@ -8,21 +8,21 @@
             <x-admin.action-link-button href="{{ route('admin.courses.create') }}" title="{{ __('Create') }}" />
         </div>
 
-        <x-admin.data-cards.wrapper>
+        <x-data-cards.wrapper>
             <x-slot name="cards">
                 @foreach($courses as $course)
-                    <x-admin.data-cards.card :name="$course->name">
-                        <x-admin.action-link
+                    <x-data-cards.card :name="$course->name">
+                        <x-link
                             href="{{ route('admin.courses.edit', [$course]) }}"
                             title="Edit" />
 
                         <x-admin.form.delete-button action="{{ route('admin.courses.destroy', [$course]) }}" />
-                    </x-admin.data-cards.card>
+                    </x-data-cards.card>
                 @endforeach
             </x-slot>
             <x-slot name="pagination">
                 {{ $courses->links() }}
             </x-slot>
-        </x-admin.data-cards.wrapper>
+        </x-data-cards.wrapper>
     </x-admin.main>
 </x-app-layout>

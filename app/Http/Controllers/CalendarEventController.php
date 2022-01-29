@@ -26,12 +26,12 @@ class CalendarEventController extends Controller
     public function show(CalendarEvent $calendarEvent)
     {
         $users = $calendarEvent->load('users')->users()->userDefaultSorting()->get();
-        $userStatuses = $users->load('calendarEventStatuses')->map(fn($user) => $user->calendarEventStatuses->first())->toArray();
+        $userStatuses = $users ? $users->load('calendarEventStatuses')->map(fn($user) => $user->calendarEventStatuses->first())->toArray() : [];
         $event = $calendarEvent->event;
         // This relationship cam be null as it is nullable in migration
         $group = $event->group ? $event->load('group')->group : null;
         $groupUsers = $group ? $group->load('users')->users()->userDefaultSorting()->get() : null;
-        $groupUsersStatuses = $groupUsers->load('calendarEventStatuses')->map(fn($user) => $user->calendarEventStatuses->first())->toArray();
+        $groupUsersStatuses = $groupUsers ? $groupUsers->load('calendarEventStatuses')->map(fn($user) => $user->calendarEventStatuses->first())->toArray() : [];
         // Collect all user ids to exclude form search, group and event users
         $exclude = $groupUsers ? $groupUsers->pluck('id')->toArray() : [];
         $exclude = $users->isNotEmpty() ? array_merge($exclude, $users->pluck('id')->toArray()) : $exclude;

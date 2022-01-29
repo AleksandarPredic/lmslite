@@ -1,0 +1,26 @@
+/**
+ Data cards component
+ */
+.data-cards_card__name {
+    margin-bottom: 0.5rem;
+}
+
+.data-cards_properties {
+    flex-wrap: wrap;
+}
+
+.data-cards_properties .data-cards_property:not(:last-child) {
+    margin-right: 1rem;
+}
+
+.data-cards_properties .data-cards_property {
+    margin-bottom: 0.5rem;
+}
+
+.data-cards_card-links a {
+    margin-right: 2rem;
+}
+
+.data-cards_card .delete-model-form {
+    margin-left: 1rem;
+}

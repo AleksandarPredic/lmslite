@@ -1,0 +1,73 @@
+/**
+ * Calendar week component
+ */
+.calendar-week__title {
+    font-size: 1.7rem;
+    margin-bottom: 2.5rem;
+}
+
+.calendar-week__title svg {
+    height: 3rem;
+    width: auto;
+    fill: currentColor;
+    margin-right: 1rem;
+}
+
+.calendar-week__title span span:first-child {
+    margin-bottom: 5px;
+}
+
+.calendar-week__filter {
+    margin-bottom: 3.5rem;
+}
+
+.calendar-week__filter form button {
+    margin-top: 20px;
+}
+
+.calendar-week__week {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.calendar-week__week-icon {
+    margin-right: 1rem;
+}
+
+.calendar-week__week-icon svg {
+    fill: currentColor;
+}
+
+.calendar-week__week-dates span {
+    display: block;
+}
+
+@media screen and (min-width: 768px){
+    .calendar-week__filter form {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .calendar-week__filter-date {
+        margin-right: 20px;
+    }
+
+    .calendar-week__week-dates span {
+        display: inline;
+    }
+
+    .calendar-week__week-dates span:first-child {
+        margin-right: 1rem;
+    }
+}
+
+@media screen and (min-width: 1025px){
+    .calendar-week__title {
+        font-size: 2.5rem;
+    }
+
+    .calendar-week__filter {
+        margin-bottom: 5.5rem;
+    }
+}

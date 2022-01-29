@@ -1,0 +1,35 @@
+/**
+ Forms
+ */
+.admin-form__inner-field {
+    position: relative;
+    display: block;
+}
+
+.admin-form__inner-field--flex {
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.admin-form__checkbox {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.admin-form__inner-field .admin-form__checkbox:not(:last-child) {
+    margin-right: 1rem;
+}
+
+/**
+ Forms: Event form
+ */
+
+/* Hide fields that are not for single event */
+.admin-form-event__recurring[data-selected='0'] ~ .admin-form__field {
+    display: none;
+}
+
+.admin-form__field :disabled {
+    opacity: 0.3;
+}

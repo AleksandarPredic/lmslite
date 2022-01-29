@@ -564,6 +564,16 @@ select {
   --tw-ring-shadow: 0 0 #0000;
   --tw-shadow: 0 0 #0000;
   --tw-shadow-colored: 0 0 #0000;
+  --tw-blur: var(--tw-empty,/*!*/ /*!*/);
+  --tw-brightness: var(--tw-empty,/*!*/ /*!*/);
+  --tw-contrast: var(--tw-empty,/*!*/ /*!*/);
+  --tw-grayscale: var(--tw-empty,/*!*/ /*!*/);
+  --tw-hue-rotate: var(--tw-empty,/*!*/ /*!*/);
+  --tw-invert: var(--tw-empty,/*!*/ /*!*/);
+  --tw-saturate: var(--tw-empty,/*!*/ /*!*/);
+  --tw-sepia: var(--tw-empty,/*!*/ /*!*/);
+  --tw-drop-shadow: var(--tw-empty,/*!*/ /*!*/);
+  --tw-filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
 .fixed {
   position: fixed;
@@ -605,9 +615,6 @@ select {
 .mb-4 {
   margin-bottom: 1rem;
 }
-.mt-2 {
-  margin-top: 0.5rem;
-}
 .ml-1 {
   margin-left: 0.25rem;
 }
@@ -622,6 +629,9 @@ select {
 }
 .ml-2 {
   margin-left: 0.5rem;
+}
+.mt-2 {
+  margin-top: 0.5rem;
 }
 .ml-4 {
   margin-left: 1rem;
@@ -640,6 +650,9 @@ select {
 }
 .-mt-px {
   margin-top: -1px;
+}
+.mb-2 {
+  margin-bottom: 0.5rem;
 }
 .block {
   display: block;
@@ -692,14 +705,11 @@ select {
 .w-6 {
   width: 1.5rem;
 }
-.w-0 {
-  width: 0px;
+.w-48 {
+  width: 12rem;
 }
 .w-full {
   width: 100%;
-}
-.w-48 {
-  width: 12rem;
 }
 .w-8 {
   width: 2rem;
@@ -721,9 +731,6 @@ select {
 }
 .flex-1 {
   flex: 1 1 0%;
-}
-.flex-shrink-0 {
-  flex-shrink: 0;
 }
 .shrink-0 {
   flex-shrink: 0;
@@ -789,11 +796,6 @@ select {
 }
 .overflow-hidden {
   overflow: hidden;
-}
-.truncate {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 .whitespace-nowrap {
   white-space: nowrap;
@@ -869,6 +871,10 @@ select {
   --tw-bg-opacity: 1;
   background-color: rgb(31 41 55 / var(--tw-bg-opacity));
 }
+.bg-indigo-100 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(224 231 255 / var(--tw-bg-opacity));
+}
 .fill-current {
   fill: currentColor;
 }
@@ -894,14 +900,6 @@ select {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
 }
-.py-6 {
-  padding-top: 1.5rem;
-  padding-bottom: 1.5rem;
-}
-.px-1 {
-  padding-left: 0.25rem;
-  padding-right: 0.25rem;
-}
 .px-6 {
   padding-left: 1.5rem;
   padding-right: 1.5rem;
@@ -909,6 +907,14 @@ select {
 .py-4 {
   padding-top: 1rem;
   padding-bottom: 1rem;
+}
+.py-6 {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+.px-1 {
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
 }
 .pl-3 {
   padding-left: 0.75rem;
@@ -990,6 +996,9 @@ select {
 .tracking-widest {
   letter-spacing: 0.1em;
 }
+.tracking-tight {
+  letter-spacing: -0.025em;
+}
 .tracking-wider {
   letter-spacing: 0.05em;
 }
@@ -1045,6 +1054,10 @@ select {
   --tw-text-opacity: 1;
   color: rgb(209 213 219 / var(--tw-text-opacity));
 }
+.text-indigo-400 {
+  --tw-text-opacity: 1;
+  color: rgb(129 140 248 / var(--tw-text-opacity));
+}
 .underline {
   -webkit-text-decoration-line: underline;
           text-decoration-line: underline;
@@ -1095,6 +1108,9 @@ select {
 .ring-opacity-5 {
   --tw-ring-opacity: 0.05;
 }
+.filter {
+  filter: var(--tw-filter);
+}
 .transition {
   transition-property: color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
@@ -1121,6 +1137,9 @@ select {
   transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
 }
 /*******************
+ * COMMON
+ *******************/
+/*******************
  * GLOBAL
  *******************/
 .welcome-logo h1 {
@@ -1132,9 +1151,8 @@ select {
     margin: 0 auto;
 }
 /*******************
- * ADMIN
+ * COMPONENTS
  *******************/
-/** COMPONENTS **/
 /*
  Flash admin messages
  */
@@ -1167,11 +1185,77 @@ select {
     margin-left: 1rem;
 }
 /**
- * CalendarEventUser StatusInfo component
+ * CalendarEventUser Status component
  */
-.cal-event-user-status-info select {
+.cal-event-user-status select {
     padding: 0.2rem 2rem 0.2rem 0.7rem;
 }
+/**
+ * Calendar week component
+ */
+.calendar-week__title {
+    font-size: 1.7rem;
+    margin-bottom: 2.5rem;
+}
+.calendar-week__title svg {
+    height: 3rem;
+    width: auto;
+    fill: currentColor;
+    margin-right: 1rem;
+}
+.calendar-week__title span span:first-child {
+    margin-bottom: 5px;
+}
+.calendar-week__filter {
+    margin-bottom: 3.5rem;
+}
+.calendar-week__filter form button {
+    margin-top: 20px;
+}
+.calendar-week__week {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.calendar-week__week-icon {
+    margin-right: 1rem;
+}
+.calendar-week__week-icon svg {
+    fill: currentColor;
+}
+.calendar-week__week-dates span {
+    display: block;
+}
+@media screen and (min-width: 768px){
+    .calendar-week__filter form {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .calendar-week__filter-date {
+        margin-right: 20px;
+    }
+
+    .calendar-week__week-dates span {
+        display: inline;
+    }
+
+    .calendar-week__week-dates span:first-child {
+        margin-right: 1rem;
+    }
+}
+@media screen and (min-width: 1025px){
+    .calendar-week__title {
+        font-size: 2.5rem;
+    }
+
+    .calendar-week__filter {
+        margin-bottom: 5.5rem;
+    }
+}
+/*******************
+ * ADMIN
+ *******************/
 /**
  Forms
  */
@@ -1240,11 +1324,10 @@ select {
         flex-wrap: wrap;
     }
 
-    .singular-meta__item-links .cal-event-user-status-info:not(:last-child) {
+    .singular-meta__item-links .cal-event-user-status:not(:last-of-type) {
         margin-right: 1rem;
     }
 }
-/** SCREENS **/
 .hover\:border-gray-300:hover {
   --tw-border-opacity: 1;
   border-color: rgb(209 213 219 / var(--tw-border-opacity));
@@ -1273,13 +1356,13 @@ select {
   --tw-text-opacity: 1;
   color: rgb(55 65 81 / var(--tw-text-opacity));
 }
-.hover\:text-gray-900:hover {
-  --tw-text-opacity: 1;
-  color: rgb(17 24 39 / var(--tw-text-opacity));
-}
 .hover\:text-gray-800:hover {
   --tw-text-opacity: 1;
   color: rgb(31 41 55 / var(--tw-text-opacity));
+}
+.hover\:text-gray-900:hover {
+  --tw-text-opacity: 1;
+  color: rgb(17 24 39 / var(--tw-text-opacity));
 }
 .hover\:text-indigo-900:hover {
   --tw-text-opacity: 1;
@@ -1296,13 +1379,13 @@ select {
   --tw-border-opacity: 1;
   border-color: rgb(209 213 219 / var(--tw-border-opacity));
 }
-.focus\:border-indigo-300:focus {
-  --tw-border-opacity: 1;
-  border-color: rgb(165 180 252 / var(--tw-border-opacity));
-}
 .focus\:border-indigo-700:focus {
   --tw-border-opacity: 1;
   border-color: rgb(67 56 202 / var(--tw-border-opacity));
+}
+.focus\:border-indigo-300:focus {
+  --tw-border-opacity: 1;
+  border-color: rgb(165 180 252 / var(--tw-border-opacity));
 }
 .focus\:border-gray-900:focus {
   --tw-border-opacity: 1;
@@ -1468,6 +1551,12 @@ select {
   .lg\:px-8 {
     padding-left: 2rem;
     padding-right: 2rem;
+  }
+}
+@media (min-width: 1280px) {
+
+  .xl\:inline {
+    display: inline;
   }
 }
 

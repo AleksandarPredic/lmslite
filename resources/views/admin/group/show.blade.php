@@ -70,9 +70,9 @@
                         >
                             {{-- # Properties --}}
                             <x-slot name="properties">
-                                <x-admin.data-property>
+                                <x-data-property>
                                     {{ $user->name }}
-                                </x-admin.data-property>
+                                </x-data-property>
                             </x-slot>
 
                             {{-- # Links --}}

@@ -8,17 +8,17 @@
     </x-admin.singular.meta.item-icon>
 
     <x-admin.singular.meta.item-properties-wrapper>
-        <x-admin.data-property>
+        <x-data-property>
             {{ __('Starting') }}: {{ lmsCarbonPublicFormat($calendarEvent->starting_at) }}
-        </x-admin.data-property>
+        </x-data-property>
 
-        <x-admin.data-property class="lg:ml-6">
+        <x-data-property class="lg:ml-6">
             {{ __('Ending') }}: {{ lmsCarbonPublicFormat($calendarEvent->ending_at) }}
-        </x-admin.data-property>
+        </x-data-property>
     </x-admin.singular.meta.item-properties-wrapper>
 
     <x-admin.singular.meta.item-links-wrapper>
-        <x-admin.action-link
+        <x-link
             href="{{ route('admin.calendar-events.show', $calendarEvent) }}"
             title="{{ __('Manage') }}"
         />

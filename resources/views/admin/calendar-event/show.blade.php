@@ -19,7 +19,7 @@
 
     <x-admin.main>
         <div class="flex mb-4">
-            <x-admin.redirect-link href="{{ route('admin.events.show', $event) }}" :title="__('Back to all!')" />
+            <x-admin.redirect-link href="{{ url()->previous() }}" :title="__('Back to all!')" />
         </div>
 
         <div class="flex justify-end mb-4 px-4">
@@ -83,13 +83,13 @@
                                     >
                                         {{-- # Properties --}}
                                         <x-slot name="properties">
-                                            <x-admin.data-property>
+                                            <x-data-property>
                                                 {{ $user->name }}
-                                            </x-admin.data-property>
+                                            </x-data-property>
 
-                                            <x-admin.data-property>
+                                            <x-data-property>
                                                 {{ __('Added') }}: {{ lmsCarbonDefaultFormat($user->created_at) }}
-                                            </x-admin.data-property>
+                                            </x-data-property>
                                         </x-slot>
 
                                         {{-- # Links --}}
@@ -127,9 +127,9 @@
                                 >
                                     {{-- # Properties --}}
                                     <x-slot name="properties">
-                                        <x-admin.data-property>
+                                        <x-data-property>
                                             {{ $groupUser->name }}
-                                        </x-admin.data-property>
+                                        </x-data-property>
                                     </x-slot>
 
                                     {{-- # Links --}}

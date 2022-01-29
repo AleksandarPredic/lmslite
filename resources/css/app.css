@@ -3,152 +3,20 @@
 @import 'tailwindcss/utilities';
 
 /*******************
- * GLOBAL
+ * COMMON
  *******************/
-.welcome-logo h1 {
-    text-align: center;
-}
+@import "_common.css";
 
-.welcome-logo svg {
-    height: auto;
-    width: 5rem;
-    margin: 0 auto;
-}
+/*******************
+ * COMPONENTS
+ *******************/
+@import "components/_flash-message.css";
+@import "components/_data-cards.css";
+@import "components/_cal-event-user-status.css";
+@import "components/calendar/_week.css";
 
 /*******************
  * ADMIN
  *******************/
-
-/** COMPONENTS **/
-
-/*
- Flash admin messages
- */
-.flash-message-admin a {
-    text-decoration: underline;
-}
-
-.flash-message-admin--error {
-    color: white;
-    font-weight: bold;
-}
-
-/**
- Data cards component
- */
-.data-cards_card__name {
-    margin-bottom: 0.5rem;
-}
-
-.data-cards_properties {
-    flex-wrap: wrap;
-}
-
-.data-cards_properties .data-cards_property:not(:last-child) {
-    margin-right: 1rem;
-}
-
-.data-cards_properties .data-cards_property {
-    margin-bottom: 0.5rem;
-}
-
-.data-cards_card-links a {
-    margin-right: 2rem;
-}
-
-.data-cards_card .delete-model-form {
-    margin-left: 1rem;
-}
-
-/**
- * CalendarEventUser StatusInfo component
- */
-.cal-event-user-status-info select {
-    padding: 0.2rem 2rem 0.2rem 0.7rem;
-}
-
-/**
- Forms
- */
-.admin-form__inner-field {
-    position: relative;
-    display: block;
-}
-
-.admin-form__inner-field--flex {
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-.admin-form__checkbox {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1rem;
-}
-
-.admin-form__inner-field .admin-form__checkbox:not(:last-child) {
-    margin-right: 1rem;
-}
-
-/**
- Forms: Event form
- */
-
-/* Hide fields that are not for single event */
-.admin-form-event__recurring[data-selected='0'] ~ .admin-form__field {
-    display: none;
-}
-
-.admin-form__field :disabled {
-    opacity: 0.3;
-}
-
-/**
- Show view
- */
-.singular-meta header a {
-    text-decoration: underline;
-}
-
-.singular-meta .singular-meta__item {
-    padding-top: 1rem;
-    padding-bottom: 2rem;
-}
-
-.singular-meta .singular-meta__item-icon {
-    width: 100%;
-    margin-bottom: 1rem;
-}
-
-.singular-meta .singular-meta__item .data-cards_property {
-    margin-bottom: 0.5rem;
-}
-
-@media screen and (min-width: 1025px){
-    .singular-meta .singular-meta__item {
-        padding-bottom: 1rem;
-    }
-
-    .singular-meta .singular-meta__item-icon {
-        width: auto;
-        margin-bottom: 0;
-    }
-
-    .singular-meta__item-properties .data-cards_property:not(:last-child) {
-        margin-right: 0.5rem;
-    }
-
-    .singular-meta__item .data-cards_property {
-        margin-bottom: 0;
-    }
-
-    .singular-meta__item-links {
-        flex-wrap: wrap;
-    }
-
-    .singular-meta__item-links .cal-event-user-status-info:not(:last-child) {
-        margin-right: 1rem;
-    }
-}
-
-/** SCREENS **/
+@import "admin/_forms.css";
+@import "admin/view/_show.css";

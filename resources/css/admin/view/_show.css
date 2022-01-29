@@ -1,0 +1,47 @@
+/**
+ Show view
+ */
+.singular-meta header a {
+    text-decoration: underline;
+}
+
+.singular-meta .singular-meta__item {
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+}
+
+.singular-meta .singular-meta__item-icon {
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.singular-meta .singular-meta__item .data-cards_property {
+    margin-bottom: 0.5rem;
+}
+
+@media screen and (min-width: 1025px){
+    .singular-meta .singular-meta__item {
+        padding-bottom: 1rem;
+    }
+
+    .singular-meta .singular-meta__item-icon {
+        width: auto;
+        margin-bottom: 0;
+    }
+
+    .singular-meta__item-properties .data-cards_property:not(:last-child) {
+        margin-right: 0.5rem;
+    }
+
+    .singular-meta__item .data-cards_property {
+        margin-bottom: 0;
+    }
+
+    .singular-meta__item-links {
+        flex-wrap: wrap;
+    }
+
+    .singular-meta__item-links .cal-event-user-status:not(:last-of-type) {
+        margin-right: 1rem;
+    }
+}

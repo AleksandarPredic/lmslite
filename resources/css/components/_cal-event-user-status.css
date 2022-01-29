@@ -1,0 +1,6 @@
+/**
+ * CalendarEventUser Status component
+ */
+.cal-event-user-status select {
+    padding: 0.2rem 2rem 0.2rem 0.7rem;
+}

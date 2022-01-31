@@ -78,4 +78,5 @@ Testing steps to make sure we update CalendarModel relationship correctly after 
 
 ### Seed UserType data
 `php artisan db:seed --class=RoleSeeder`
+`php artisan db:seed --class=ProdSeeder`
 

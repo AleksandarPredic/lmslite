@@ -95,12 +95,15 @@ class CalendarEventController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  CalendarEvent  $calendarEvent
+     * @return RedirectResponse
      */
-    public function destroy($id)
+    public function destroy(CalendarEvent $calendarEvent)
     {
-        // TODO: create delete one calendar event and test all cascade delete from DB
+        $calendarEvent->delete();
+
+        return redirect(route('admin.events.show', $calendarEvent->event->id))
+            ->with('admin.message.success', "Calendar event deleted!");
     }
 
     /**

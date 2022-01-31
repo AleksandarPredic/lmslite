@@ -133,7 +133,7 @@ class EventController extends Controller
         $event->delete();
 
         return redirect(route('admin.events.index'))
-            ->with('admin.message.success', "Group, {$event->name}, deleted!");
+            ->with('admin.message.success', "Event, {$event->name}, deleted!");
     }
 
     /**

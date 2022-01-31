@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Simple LMS</title>
+        <title>{{ config('app.name') }}</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
@@ -40,6 +40,10 @@
                 <h1>Simple LMS</h1>
                 <br />
                 <x-application-logo style="height: auto; width: 5rem; margin: 0 auto;" />
+                <br />
+                @if (Route::has('login'))
+                    <a href="{{ route('login') }}" class="text-gray-100 dark:text-gray-500 underline">Log in</a>
+                @endif
             </div>
         </div>
     </body>

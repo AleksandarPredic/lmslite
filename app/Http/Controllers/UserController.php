@@ -88,7 +88,6 @@ class UserController extends Controller
      */
     public function findUsers(): array
     {
-
         $attributes = request()->validate([
             'name' => ['required', 'min:3'],
             'exclude' => ['nullable', 'array']

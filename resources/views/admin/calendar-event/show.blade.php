@@ -19,10 +19,11 @@
 
     <x-admin.main>
         <div class="flex mb-4">
-            <x-admin.redirect-link href="{{ url()->previous() }}" :title="__('Back to all!')" />
+            <x-admin.redirect-link href="{{ url()->previous() }}" :title="__('Back')" />
         </div>
 
         <div class="flex justify-end mb-4 px-4">
+            <x-admin.action-link-button href="{{ route('admin.events.show', $calendarEvent->event->id) }}" title="{{ __('Parent event') }}" />
             <x-admin.action-link-button href="{{ route('admin.calendar-events.edit', $calendarEvent) }}" title="{{ __('Edit') }}" />
             <x-admin.action-delete-button action="{{ route('admin.calendar-events.destroy', $calendarEvent) }}" />
         </div>

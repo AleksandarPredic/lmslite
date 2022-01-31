@@ -86,7 +86,7 @@ class CalendarEventController extends Controller
             );
         }
 
-        return redirect(route('admin.events.show', $calendarEvent->event->id))->with(
+        return redirect()->back()->with(
             'admin.message.success',
             'Calendar event, updated!'
         );

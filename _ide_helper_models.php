@@ -16,14 +16,12 @@ namespace App\Models{
  *
  * @property int $id
  * @property int $event_id
- * @property \Illuminate\Support\Carbon $starting_at
- * @property \Illuminate\Support\Carbon $ending_at
+ * @property \Illuminate\Support\Carbon|null $starting_at
+ * @property \Illuminate\Support\Carbon|null $ending_at
  * @property string|null $note
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Event $event
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $userStatuses
- * @property-read int|null $user_statuses_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
  * @property-read int|null $users_count
  * @method static \Illuminate\Database\Eloquent\Builder|CalendarEvent newModelQuery()
@@ -97,6 +95,7 @@ namespace App\Models{
  * @method static \Database\Factories\CourseFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Course newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Course newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Course orderByName()
  * @method static \Illuminate\Database\Eloquent\Builder|Course query()
  * @method static \Illuminate\Database\Eloquent\Builder|Course whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Course whereId($value)
@@ -115,8 +114,8 @@ namespace App\Models{
  * @property string $name
  * @property bool $recurring
  * @property array|null $days
- * @property \Illuminate\Support\Carbon $starting_at
- * @property \Illuminate\Support\Carbon $ending_at
+ * @property \Illuminate\Support\Carbon|null $starting_at
+ * @property \Illuminate\Support\Carbon|null $ending_at
  * @property \Illuminate\Support\Carbon|null $recurring_until
  * @property string|null $note
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -148,12 +147,14 @@ namespace App\Models{
  * App\Models\Group
  *
  * @property int $id
+ * @property null|int $course_id
  * @property string $name
- * @property \Illuminate\Support\Carbon $starting_at
- * @property \Illuminate\Support\Carbon $ending_at
+ * @property \Illuminate\Support\Carbon|null $starting_at
+ * @property \Illuminate\Support\Carbon|null $ending_at
  * @property string|null $note
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Course|null $course
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Event[] $events
  * @property-read int|null $events_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
@@ -163,6 +164,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Group newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Group orderByName()
  * @method static \Illuminate\Database\Eloquent\Builder|Group query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Group whereCourseId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Group whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Group whereEndingAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Group whereId($value)
@@ -205,8 +207,8 @@ namespace App\Models{
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CalendarEvent[] $calendarEventUserStatuses
- * @property-read int|null $calendar_event_user_statuses_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CalendarEventUserStatus[] $calendarEventStatuses
+ * @property-read int|null $calendar_event_statuses_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CalendarEvent[] $calendarEvents
  * @property-read int|null $calendar_events_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Group[] $groups

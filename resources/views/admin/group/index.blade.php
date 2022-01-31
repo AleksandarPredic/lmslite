@@ -20,6 +20,10 @@
                             <x-data-property>
                                 {{ __('Ending') }}: {{ lmsCarbonPublicFormat($group->ending_at) }}
                             </x-data-property>
+
+                            <x-data-property>
+                                {{ __('Course') }}: {{ $group->course ? $group->course->name : 'None' }}
+                            </x-data-property>
                         </x-slot>
 
                         {{-- Group action links --}}

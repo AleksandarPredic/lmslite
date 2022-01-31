@@ -127,11 +127,14 @@ class GroupController extends Controller
      *
      * @param  Group  $group
      *
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse
      */
     public function destroy(Group $group)
     {
-        // TODO: Delete group + update event group_id to null
+        $group->delete();
+
+        return redirect(route('admin.groups.index'))
+            ->with('admin.message.success', "Group, {$group->name}, deleted!");
     }
 
     /**

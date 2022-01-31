@@ -16,8 +16,8 @@ class CreateGroupsTable extends Migration
         Schema::create('groups', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->timestamp('starting_at');
-            $table->timestamp('ending_at');
+            $table->timestamp('starting_at')->nullable();
+            $table->timestamp('ending_at')->nullable();
             $table->text('note')->nullable();
             $table->timestamps();
         });

@@ -19,8 +19,8 @@ class CreateEventsTable extends Migration
             $table->string('name');
             $table->boolean('recurring');
             $table->json('days')->nullable();
-            $table->timestamp('starting_at');
-            $table->timestamp('ending_at');
+            $table->timestamp('starting_at')->nullable();
+            $table->timestamp('ending_at')->nullable();
             $table->timestamp('recurring_until')->nullable();
             $table->text('note')->nullable();
             $table->timestamps();

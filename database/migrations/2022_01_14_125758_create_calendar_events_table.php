@@ -16,8 +16,8 @@ class CreateCalendarEventsTable extends Migration
         Schema::create('calendar_events', function (Blueprint $table) {
             $table->id();
             $table->foreignId('event_id')->constrained()->cascadeOnDelete();
-            $table->timestamp('starting_at');
-            $table->timestamp('ending_at');
+            $table->timestamp('starting_at')->nullable();
+            $table->timestamp('ending_at')->nullable();
             $table->longText('note')->nullable();
             $table->timestamps();
         });

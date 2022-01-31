@@ -17,7 +17,7 @@ class ProdSeeder extends Seeder
     public function run()
     {
         $user = User::factory()->create([
-            'name' => 'Admin',
+            'name' => 'Ivan',
             'email' => config('app.users.admin.email'),
             'password' => Hash::make(config('app.users.admin.password'))
         ]);

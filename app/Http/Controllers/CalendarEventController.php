@@ -77,7 +77,7 @@ class CalendarEventController extends Controller
 
         if (! $updated) {
             // TODO: Add logger here
-            return redirect(route('admin.events.show', $calendarEvent->event->id))->with(
+            return redirect()->back()->with(
                 'admin.message.error',
                 sprintf(
                     '[ERROR] Calendar event with id, %s could not be updated!',
@@ -86,7 +86,7 @@ class CalendarEventController extends Controller
             );
         }
 
-        return redirect()->back()->with(
+        return redirect(route('admin.events.show', $calendarEvent->event->id))->with(
             'admin.message.success',
             'Calendar event, updated!'
         );

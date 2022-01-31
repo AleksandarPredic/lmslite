@@ -10,7 +10,7 @@ class Group extends Component
 {
     /**
      * Component prop
-     * @var bool
+     * @var int
      */
     public $value;
 

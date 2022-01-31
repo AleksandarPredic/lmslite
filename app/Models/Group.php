@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -14,7 +15,7 @@ class Group extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'starting_at', 'ending_at', 'note'];
+    protected $fillable = ['name', 'starting_at', 'ending_at', 'course_id', 'note'];
 
     /**
      * The attributes that should be cast.
@@ -35,6 +36,11 @@ class Group extends Model
     public function events(): HasMany
     {
         return $this->hasMany(Event::class);
+    }
+
+    public function course(): BelongsTo
+    {
+        return $this->belongsTo(Course::class);
     }
 
     public function users(): BelongsToMany
@@ -83,5 +89,36 @@ class Group extends Model
         return UserGroup::whereUserId($id)
                     ->whereGroupId($this->id)
                     ->firstOrFail();
+    }
+
+    /**
+     * Convert 0 to null as this is a nullable foreign_id
+     * @param int $courseId
+     *
+     * @return void
+     */
+    public function setCourseIdAttribute(int $courseId)
+    {
+        if ($courseId) {
+            $this->attributes['course_id'] = $courseId;
+            return;
+        }
+
+        $this->attributes['course_id'] = null;
+    }
+
+    /**
+     * Return 0 if the value is null, or return the value
+     * @param int|null $courseId
+     *
+     * @return null|int
+     */
+    public function getCourseIdAttribute($courseId)
+    {
+        if (! $courseId) {
+            return 0;
+        }
+
+        return $courseId;
     }
 }

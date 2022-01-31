@@ -41,6 +41,7 @@
                 :label="__('Ending at')"
                 :required="true"
             />
+            <x-admin.form.course :value="$group->course->id ?? 0" />
 
             <x-admin.form.textarea
                 name="note"

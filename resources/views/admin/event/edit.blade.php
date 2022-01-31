@@ -42,7 +42,7 @@
                 :required="true"
             />
 
-            <x-admin.form.group :value="$event->group_id" />
+            <x-admin.form.group :value="$event->group_id ?? 0" />
 
             <x-admin.form.textarea
                 name="note"

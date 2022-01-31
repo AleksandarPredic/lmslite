@@ -15,6 +15,7 @@ class CreateGroupsTable extends Migration
     {
         Schema::create('groups', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('course_id')->nullable()->constrained()->cascadeOnUpdate()->nullOnDelete();
             $table->string('name');
             $table->timestamp('starting_at')->nullable();
             $table->timestamp('ending_at')->nullable();

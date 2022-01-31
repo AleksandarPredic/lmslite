@@ -85,7 +85,7 @@ class GroupController extends Controller
     public function edit(Group $group): View
     {
         return view('admin.group.edit', [
-            'group' => $group
+            'group' => $group->load('course')
         ]);
     }
 
@@ -222,6 +222,7 @@ class GroupController extends Controller
             'name' => array_merge(['required'], $this->getNameFieldRules()),
             'starting_at' => array_merge(['required'], $this->getStartingAtFieldRules()),
             'ending_at' => array_merge(['required'], $this->getEndingAtFieldRules()),
+            'course_id' => ['nullable', 'numeric'],
             'note' => array_merge(['nullable'], $this->getNoteFieldRules()),
         ]);
 

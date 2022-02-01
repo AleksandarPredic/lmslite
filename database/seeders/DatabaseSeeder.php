@@ -145,7 +145,7 @@ class DatabaseSeeder extends Seeder
                 case 1:
                     return "compensation";
                 default:
-                    return "regular";
+                    return null;
             }
         };
         foreach ($addedCalendarEventUsers as $key => $addedCalendarEventUser) {

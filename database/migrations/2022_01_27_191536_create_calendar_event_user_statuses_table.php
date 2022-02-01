@@ -18,7 +18,7 @@ class CreateCalendarEventUserStatusesTable extends Migration
             $table->foreignId('calendar_event_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->enum('status', ['none', 'attended', 'no-show', 'canceled'])->nullable();
-            $table->enum('info', ['none', 'regular', 'compensation', 'trial', 'non-regular'])->nullable();
+            $table->enum('info', ['none', 'compensation', 'trial', 'non-regular'])->nullable();
             $table->timestamps();
         });
     }

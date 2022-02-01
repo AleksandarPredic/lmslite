@@ -8,7 +8,7 @@
  * @var \App\Models\User $userRemoved
  * @var \App\Models\Event $event
  * @var \App\Models\Group $group
- * @var \Illuminate\Database\Eloquent\Collection $groupUsers
+ * @var \Illuminate\Database\Eloquent\Collection $usersStatuses
  * @var \App\Models\User $groupUser
  */
 @endphp
@@ -141,7 +141,7 @@
                                     <x-admin.calendar-event.user.status
                                         :calendarEvent="$calendarEvent"
                                         :user="$groupUser"
-                                        :userStatuses="$groupUsersStatuses"
+                                        :userStatuses="$usersStatuses"
                                     />
 
                                     {{-- // TODO: Add show link to user profile --}}

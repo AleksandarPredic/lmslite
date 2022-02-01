@@ -14,7 +14,7 @@ class Status extends Component
     private User $user;
 
     /**
-     * Collection from array that is created from CalendarEventStatuses model collection
+     * Collection created from array that is created from CalendarEventStatuses model collection
      * As we can't pass here the reference to this object, as it is done in the new requests.
      *
      * To avoid having multiple DB queries for every calendar status, we get the array with data
@@ -46,7 +46,9 @@ class Status extends Component
     public function render()
     {
         $calendarEventUserStatusArray = $this->userStatuses->isNotEmpty()
-            ? $this->userStatuses->where('user_id', $this->user->id)->first()
+            ? $this->userStatuses
+                ->where('user_id', $this->user->id)
+                ->first()
             : null;
         $status = $calendarEventUserStatusArray ? $calendarEventUserStatusArray['status'] : null;
         $info = $calendarEventUserStatusArray ? $calendarEventUserStatusArray['info'] : null;

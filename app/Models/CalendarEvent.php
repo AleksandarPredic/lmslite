@@ -49,6 +49,12 @@ class CalendarEvent extends Model
                     ->withPivot(['id', 'created_at', 'updated_at']);
     }
 
+    public function userStatuses(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'calendar_event_user_statuses')
+                    ->withPivot(['id', 'status', 'info']);
+    }
+
     /**
      * Add the user to the calendar event.
      * Adds a record in the pivot table

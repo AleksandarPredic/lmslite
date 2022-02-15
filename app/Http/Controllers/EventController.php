@@ -161,7 +161,14 @@ class EventController extends Controller
         if ($event->exists) {
             if ((bool)$attributes['recurring'] !== $event->recurring) {
                 throw ValidationException::withMessages(
-                    ['recurring' => 'Change is not allowed. Please create a new event.']
+                    ['recurring' => 'Recurring change is not allowed. Please create a new event.']
+                );
+            }
+
+            // Prevent attempt to change event group
+            if ($attributes['group_id']) {
+                throw ValidationException::withMessages(
+                    ['group_id' => 'Group change is not allowed. Please create a new event.']
                 );
             }
         }

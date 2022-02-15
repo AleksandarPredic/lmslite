@@ -23,10 +23,9 @@ Event will display this information:
 ### Event form fields
 * Single event fields
   * Name
-  * Group
   * Starting and ending date and time
+  * Group attached to this event
   * Note
-  * Select group attached to this event
 
 * Recurring event fields
   * Name
@@ -36,6 +35,12 @@ Event will display this information:
   * Select group attached to this event
   * Days
   * Recurring until
+
+These fields can't be changed via the Event edit screen:
+* Group attached to this event. In this case you can create a new event with 
+different group.
+* Can not convert single event to the recurring one
+
 
 ## Calendar events features
 Calendar event is a child object of event, which represents event occurrence in calendar.

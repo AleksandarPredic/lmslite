@@ -15,13 +15,20 @@ class Group extends Component
     public $value;
 
     /**
+     * Component prop
+     * @var bool
+     */
+    public $disabled;
+
+    /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct(int $value = 0)
+    public function __construct(int $value = 0, bool $disabled = false)
     {
         $this->value = $value;
+        $this->disabled = $disabled;
     }
 
     /**

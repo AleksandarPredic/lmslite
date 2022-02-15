@@ -23,8 +23,6 @@ class Week extends Component
      */
     public function __construct()
     {
-       // dd(htmlspecialchars_decode(urldecode(request()->fullUrl())));
-
         $url = parse_url(
             request()->fullUrl()
         );
@@ -50,8 +48,12 @@ class Week extends Component
             'calendar_end' => ['required', 'date'],
         ]);
 
-        $this->startDate = $calendarStart->passes() ? Carbon::parse($calendarStart->getData()['calendar_start']) : Carbon::now();
-        $this->endDate = $calendarEnd->passes() ?? null ? Carbon::parse($calendarEnd->getData()['calendar_end']) : Carbon::now()->addDays(6);
+        $this->startDate = $calendarStart->passes()
+            ? Carbon::parse($calendarStart->getData()['calendar_start'])
+            : Carbon::now()->setHours(8)->setMinutes(0);
+        $this->endDate = $calendarEnd->passes() ?? null
+                ? Carbon::parse($calendarEnd->getData()['calendar_end'])
+                : Carbon::now()->addDays(6);
     }
 
     /**

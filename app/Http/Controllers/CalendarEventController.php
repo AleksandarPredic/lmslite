@@ -7,6 +7,7 @@ use App\Models\CalendarEvent;
 use App\Models\CalendarEventUserStatus;
 use App\Models\Group;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Validation\Rule;
@@ -69,7 +70,7 @@ class CalendarEventController extends Controller
      */
     public function update(CalendarEvent $calendarEvent)
     {
-        $attributes = $this->validateSanitizeRequest();
+        $attributes = $this->validateSanitizeRequest($calendarEvent);
 
         // Update observer will only be fired if the model is dirty
         $updated = $calendarEvent->update($attributes);
@@ -223,7 +224,7 @@ class CalendarEventController extends Controller
      * @return array
      *
      */
-    protected function validateSanitizeRequest(): array
+    protected function validateSanitizeRequest(CalendarEvent $calendarEvent): array
     {
         $attributes = request()->validate([
             'starting_at' => array_merge(['required'], $this->getStartingAtFieldRules()),
@@ -234,6 +235,12 @@ class CalendarEventController extends Controller
         // additional sanitization
         if (isset($attributes['note'])) {
             $attributes['note'] = strip_tags($attributes['note']);
+        }
+
+        if ((new Carbon($attributes['starting_at'])) < $calendarEvent->event->starting_at) {
+            throw ValidationException::withMessages(
+                ['starting_at' => 'Please chose date and time after the parent event start.']
+            );
         }
 
         return $attributes;

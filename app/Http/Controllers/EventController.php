@@ -166,7 +166,7 @@ class EventController extends Controller
             }
 
             // Prevent attempt to change event group
-            if ($attributes['group_id']) {
+            if ($attributes['group_id'] ?? null) {
                 throw ValidationException::withMessages(
                     ['group_id' => 'Group change is not allowed. Please create a new event.']
                 );

@@ -6,7 +6,11 @@
 <x-app-layout>
     <x-admin.header>
         {{ __('Edit calendar event') }}
-        <p class="text-sm">{{ 'Parent event' }}: {{ $calendarEvent->event->name }}</p>
+        <div class="mt-4">
+            <p class="text-sm"><strong>Parent event</strong></p>
+            <p class="text-sm">{{ 'Name' }}: {{ $calendarEvent->event->name }}</p>
+            <p class="text-sm">{{ 'Starting at' }}: {{ lmsCarbonDefaultFormat($calendarEvent->event->starting_at) }}</p>
+        </div>
     </x-admin.header>
 
     <x-admin.main>

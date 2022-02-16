@@ -81,7 +81,16 @@ class CalendarEvent extends Model
      */
     public function removeUser(User $user)
     {
+        // Remove user from the event
         $this->getCalendarUser($user->id)->deleteOrFail();
+
+        // Also remove user status as when we removed it, we don't need it anymore
+        try {
+            $UserStatus = $this->getCalendarUserStatus($user->id);
+            $UserStatus->delete();
+        } catch (ModelNotFoundException $exception) {
+            // No action needed
+        }
     }
 
     /**
@@ -96,9 +105,11 @@ class CalendarEvent extends Model
      */
     public function updateUserStatus(User $user, ?string $status, ?string $info)
     {
-        $UserStatus = CalendarEventUserStatus::whereUserId($user->id)
-                         ->whereCalendarEventId($this->id)
-                         ->first();
+        try {
+            $UserStatus = $this->getCalendarUserStatus($user->id);
+        } catch (ModelNotFoundException $exception) {
+            $UserStatus = null;
+        }
 
         $attributes = [
             'calendar_event_id' => $this->id,
@@ -123,9 +134,22 @@ class CalendarEvent extends Model
     }
 
     /**
+     * @param $id
+     *
+     * @return CalendarEventUserStatus
+     * @throws ModelNotFoundException
+     */
+    protected function getCalendarUserStatus($id)
+    {
+        return CalendarEventUserStatus::whereUserId($id)
+                         ->whereCalendarEventId($this->id)
+                         ->firstOrFail();
+    }
+
+    /**
      * Get calendar event user pivot table record
      *
-     * @param $id
+     * @param int $id User id
      *
      * @return CalendarEventUser
      * @throws ModelNotFoundException

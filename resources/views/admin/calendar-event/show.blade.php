@@ -71,7 +71,7 @@
             />
 
             {{-- # Meta --}}
-            @if(($groupUsers) || $users->isNotEmpty())
+            @if(($groupUsers) || $users->isNotEmpty() || $legacyUsers->isNotEmpty())
                 <x-slot name="meta">
 
                     {{-- # Calendar event users --}}
@@ -141,6 +141,39 @@
                                     <x-admin.calendar-event.user.status
                                         :calendarEvent="$calendarEvent"
                                         :user="$groupUser"
+                                        :userStatuses="$usersStatuses"
+                                    />
+
+                                    {{-- // TODO: Add show link to user profile --}}
+                                </x-admin.singular.meta.item-user>
+                            @endforeach
+
+                        </x-admin.singular.meta.list-wrapper>
+                    @endif
+
+                    {{-- # Legacy users - users that have calendar event user status but were removed from the group --}}
+                    @if($legacyUsers->isNotEmpty())
+                        <x-admin.singular.meta.name
+                            name="{{ __('Users removed from group meanwhile') }}"
+                        />
+
+                        <x-admin.singular.meta.list-wrapper>
+
+                            @foreach($legacyUsers as $legacyUser)
+                                <x-admin.singular.meta.item-user
+                                    :user="$legacyUser"
+                                >
+                                    {{-- # Properties --}}
+                                    <x-slot name="properties">
+                                        <x-data-property>
+                                            {{ $legacyUser->name }}
+                                        </x-data-property>
+                                    </x-slot>
+
+                                    {{-- # Links --}}
+                                    <x-admin.calendar-event.user.status
+                                        :calendarEvent="$calendarEvent"
+                                        :user="$legacyUser"
                                         :userStatuses="$usersStatuses"
                                     />
 

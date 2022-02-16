@@ -9,6 +9,7 @@ use App\Models\Group;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -37,12 +38,32 @@ class CalendarEventController extends Controller
         $exclude = $groupUsers ? $groupUsers->pluck('id')->toArray() : [];
         $exclude = $users->isNotEmpty() ? array_merge($exclude, $users->pluck('id')->toArray()) : $exclude;
 
+        /**
+         * Users that were in the group, have calendar event user status, but were removed from the group later.
+         * We should display them as legacy users so the admin can see that this user attended this calendar event
+         */
+        $legacyUsers = new Collection();
+        if ($calendarEvent->userStatuses->isNotEmpty()) {
+            // First remove all user statusses that belong to the group current users
+            if ($group && $group->users->isNotEmpty()) {
+                $legacyUsers = $calendarEvent->userStatuses->filter(fn($user) => ! $group->users->find($user));
+            }
+
+            // Then remove all statuses that belong to the calendar event users
+            if ($users->isNotEmpty()) {
+                $legacyUsers = $legacyUsers->filter(fn($user) => ! $users->find($user));
+            }
+
+            // After this we have our legacy group users that had on the calendar event user status but were removed form the group later
+        }
+
         return view('admin.calendar-event.show', [
             'calendarEvent' => $calendarEvent,
             'users' => $users,
             'event' => $event,
             'group' => $group,
             'groupUsers' => $groupUsers,
+            'legacyUsers' => $legacyUsers,
             'usersStatuses' => $usersStatuses,
             'exclude' => $exclude,
             'numberOfusers' => count($exclude)

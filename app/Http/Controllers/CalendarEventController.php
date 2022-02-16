@@ -34,10 +34,6 @@ class CalendarEventController extends Controller
         $groupUsers = $group ? $group->users()->userDefaultSorting()->get() : null;
         $usersStatuses = $calendarEvent->userStatuses ? $calendarEvent->userStatuses->map(fn($user) => $user->pivot)->toArray() : [];
 
-        // Collect all user ids to exclude form search, group and event users
-        $exclude = $groupUsers ? $groupUsers->pluck('id')->toArray() : [];
-        $exclude = $users->isNotEmpty() ? array_merge($exclude, $users->pluck('id')->toArray()) : $exclude;
-
         /**
          * Users that were in the group, have calendar event user status, but were removed from the group later.
          * We should display them as legacy users so the admin can see that this user attended this calendar event
@@ -56,6 +52,11 @@ class CalendarEventController extends Controller
 
             // After this we have our legacy group users that had on the calendar event user status but were removed form the group later
         }
+
+        // Collect all user ids to exclude form search, group and event users, but count in the group removed users also
+        $exclude = $groupUsers ? $groupUsers->pluck('id')->toArray() : [];
+        $exclude = $users->isNotEmpty() ? array_merge($exclude, $users->pluck('id')->toArray()) : $exclude;
+        $exclude = $legacyUsers->isNotEmpty() ? array_merge($exclude, $legacyUsers->pluck('id')->toArray()) : $exclude;
 
         return view('admin.calendar-event.show', [
             'calendarEvent' => $calendarEvent,

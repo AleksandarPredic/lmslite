@@ -41,11 +41,14 @@
     <script>
         // TODO: Rewrite this in plan JS or move it to js file, currently using ES6 but this is fine as we will use only supported browsers
         function searchUsers(routeUrl) {
+            const optionInitValue = '<option value="">{{ __('loading...') }}</option>';
+
             return {
                 routeUrl: routeUrl.url,
                 message: '',
                 name: '',
-                options: '<option value="">{{ __('loading...') }}</option>',
+                optionsDefault: optionInitValue,
+                options: optionInitValue,
                 exclude: JSON.parse('{{ json_encode($exclude) }}'),
 
                 getResults(event) {
@@ -58,6 +61,8 @@
                     }
 
                     that.message = 'Loading users...'
+                    // Reset options from previous search
+                    that.options = that.optionsDefault;
 
                     axios.post(this.routeUrl, {
                         name: that.name,

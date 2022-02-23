@@ -49,6 +49,7 @@ Route::name('admin.')->middleware('can:admin')->group(function () {
     Route::delete('/admin/groups/{group}/users/{user}', [GroupController::class, 'removeUser'])->name('groups.users.destroy');
 
     // User
+    Route::resource('/admin/users', UserController::class);
     Route::post('/admin/users/find', [UserController::class, 'findUsers'])->name('users.find');
 });
 

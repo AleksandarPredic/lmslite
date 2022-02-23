@@ -1,9 +1,17 @@
 <x-nav-link
-    :href="route('admin.courses.index')"
-    :active="request()->routeIs('admin.courses.index')"
+    :href="route('admin.users.index')"
+    :active="request()->routeIs('admin.users.index')"
     class="mr-2"
 >
-    {{ __('Courses') }}
+    {{ __('Users') }}
+</x-nav-link>
+
+<x-nav-link
+    :href="route('admin.events.index')"
+    :active="request()->routeIs('admin.events.index')"
+    class="mr-2"
+>
+    {{ __('Events') }}
 </x-nav-link>
 
 <x-nav-link
@@ -15,9 +23,9 @@
 </x-nav-link>
 
 <x-nav-link
-    :href="route('admin.events.index')"
-    :active="request()->routeIs('admin.events.index')"
+    :href="route('admin.courses.index')"
+    :active="request()->routeIs('admin.courses.index')"
     class="mr-2"
 >
-    {{ __('Events') }}
+    {{ __('Courses') }}
 </x-nav-link>

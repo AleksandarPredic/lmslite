@@ -30,6 +30,8 @@ class CreateUsersTable extends Migration
             $table->text('school_info')->nullable();
             $table->text('sign_up_date')->nullable();
             $table->boolean('active')->default(true);
+            $table->mediumText('note')->nullable();
+            $table->string('thumbnail')->nullable();
             $table->timestamps();
         });
     }

@@ -35,6 +35,7 @@ class UserFactory extends Factory
             'school_info' => $this->faker->text(),
             'sign_up_date' => now()->months(-5),
             'active' => true,
+            'note' => $this->faker->text()
         ];
     }
 

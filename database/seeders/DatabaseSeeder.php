@@ -39,11 +39,6 @@ class DatabaseSeeder extends Seeder
                 'user_id' => $user->id
             ]);
 
-            UserRole::create([
-                'role_id' => 2,
-                'user_id' => $user->id
-            ]);
-
             // Create guest user
             $user = User::factory()->create([
                 'name' => 'Guest student',

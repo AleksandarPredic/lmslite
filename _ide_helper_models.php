@@ -186,6 +186,7 @@ namespace App\Models{
  * @property string $name
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|Role excludeAdminRole()
  * @method static \Illuminate\Database\Eloquent\Builder|Role newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Role newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Role query()
@@ -207,6 +208,18 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string $password
  * @property string|null $remember_token
+ * @property string|null $parent_1_name
+ * @property string|null $parent_1_phone
+ * @property string|null $parent_2_name
+ * @property string|null $parent_2_phone
+ * @property \Illuminate\Support\Carbon|null $date_of_birth
+ * @property string|null $address
+ * @property string|null $school
+ * @property string|null $school_info
+ * @property \Illuminate\Support\Carbon|null $sign_up_date
+ * @property int $active
+ * @property string|null $note
+ * @property string|null $thumbnail
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CalendarEventUserStatus[] $calendarEventStatuses
@@ -221,18 +234,33 @@ namespace App\Models{
  * @property-read int|null $role_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Sanctum\PersonalAccessToken[] $tokens
  * @property-read int|null $tokens_count
+ * @method static \Illuminate\Database\Eloquent\Builder|User activeUsers()
+ * @method static \Illuminate\Database\Eloquent\Builder|User allExceptAdmins()
  * @method static \Database\Factories\UserFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|User filterByName(?string $name)
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User query()
  * @method static \Illuminate\Database\Eloquent\Builder|User userDefaultSorting()
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereAddress($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereDateOfBirth($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmailVerifiedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereNote($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereParent1Name($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereParent1Phone($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereParent2Name($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereParent2Phone($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereSchool($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereSchoolInfo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereSignUpDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereThumbnail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  */
 	class User extends \Eloquent {}

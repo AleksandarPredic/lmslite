@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Traits\RequestValidationRulesTrait;
 use App\Models\Group;
 use App\Models\User;
-use App\Models\UserGroup;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Validation\ValidationException;

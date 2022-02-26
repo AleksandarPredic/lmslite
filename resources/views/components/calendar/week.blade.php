@@ -32,24 +32,22 @@
             @csrf
 
             <div class="calendar-week__filter-date">
-                <x-label>{{ __('Start date') }}</x-label>
-                <x-input
+                <x-admin.form.input-date-time
                     name="calendar_start"
-                    type="datetime-local"
-                    step="86400"
-                    value="{{ $calendarStart }}"
-                    required
+                    :value="$calendarStart"
+                    :label="__('Start date')"
+                    step="only_date"
+                    :required="true"
                 />
             </div>
 
             <div class="calendar-week__filter-date">
-                <x-label>{{ __('End date') }}</x-label>
-                <x-input
+                <x-admin.form.input-date-time
                     name="calendar_end"
-                    type="datetime-local"
-                    step="86400"
-                    value="{{ $calendarEnd }}"
-                    required
+                    :value="$calendarEnd"
+                    :label="__('End date')"
+                    step="only_date"
+                    :required="true"
                 />
             </div>
 

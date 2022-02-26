@@ -1,10 +1,11 @@
-@props(['name', 'value', 'label', 'required' => false, 'type' => 'text'])
+@props(['name', 'value', 'label', 'required' => false, 'type' => 'text', 'step' => false])
 
 <x-admin.form.field>
     <x-admin.form.label for="{{ $name }}" :value="$label" />
 
     @php
-        $required = $required? 'required' : '';
+        $required = $required ? 'required' : '';
+        $step = $step ? sprintf('step=%s', $step) : '';
     @endphp
 
     <input
@@ -14,6 +15,7 @@
         name="{{ $name }}"
         value="{{ $value }}"
         {{ $required }}
+        {{ $step }}
     />
 
     <x-admin.form.error name="{{ $name }}" />

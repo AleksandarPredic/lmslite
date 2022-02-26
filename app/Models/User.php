@@ -23,6 +23,18 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'parent_1_name',
+        'parent_1_phone',
+        'parent_2_name',
+        'parent_2_phone',
+        'date_of_birth',
+        'address',
+        'school',
+        'school_info',
+        'sign_up_date',
+        'active',
+        'note',
+        'thumbnail',
     ];
 
     /**
@@ -42,6 +54,8 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'date_of_birth' => 'datetime',
+        'sign_up_date' => 'datetime'
     ];
 
     public function role(): BelongsToMany
@@ -65,6 +79,50 @@ class User extends Authenticatable
     }
 
     /**
+     * Create user role
+     *
+     * @param int $roleId
+     *
+     * @return UserRole
+     */
+    public function createRole(int $roleId): UserRole
+    {
+        return UserRole::create([
+            'role_id' => $roleId,
+            'user_id' => $this->id
+        ]);
+    }
+
+    /**
+     * Update user role
+     *
+     * @param int $roleId
+     *
+     * @return bool
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     */
+    public function updateRole(int $roleId): bool
+    {
+        $role = UserRole::findOrFail($roleId);
+
+        return $role->update([
+            'role_id' => $roleId,
+        ]);
+    }
+
+    /**
+     * Return roles separated by comma, as string
+     *
+     * We don't yet support multiple roles, but in the future we might
+     *
+     * @return string
+     */
+    public function getRolesString()
+    {
+        return $this->role->implode('name', ', ');
+    }
+
+    /**
      * Sort users on many screens: group.show, calendarEvent.show, any other screen that displays user collection.
      * So using this we will always keep the same sorting on the whole app as the app user will have better experience.
      *
@@ -75,5 +133,56 @@ class User extends Authenticatable
     public function scopeUserDefaultSorting(Builder $builder)
     {
         $builder->orderBy('name', 'asc');
+    }
+
+    /**
+     * Filter all active users
+     *
+     * @param Builder $builder
+     *
+     * @return void
+     */
+    public function scopeFilterByName(Builder $builder, ?string $name)
+    {
+        $builder->when($name, function ($builder, $name) {
+            $builder->whereRaw('lower(name) like (?)',["%{$name}%"]);
+        });
+    }
+
+    /**
+     * Filter all active users
+     *
+     * @param Builder $builder
+     *
+     * @return void
+     */
+    public function scopeActiveUsers(Builder $builder)
+    {
+        $builder->whereActive(true);
+    }
+
+    /**
+     * Filter all users except admin users
+     *
+     * @param Builder $builder
+     *
+     * @return void
+     */
+    public function scopeAllExceptAdmins(Builder $builder)
+    {
+        $builder->with('role')->whereHas('role', function ($query) {
+            $query->where('role_id', '!=', 1);
+        });
+    }
+
+    /**
+     * Return user image src url
+     *
+     * @return string
+     */
+    public function imageSrcUrl()
+    {
+        // TODO: Add user image upload in the future and use this as a placeholder
+        return asset('/images/user-placeholder.png');
     }
 }

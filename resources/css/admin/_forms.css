@@ -33,3 +33,13 @@
 .admin-form__field :disabled {
     opacity: 0.3;
 }
+
+/**
+ Forms: User index form
+ */
+.user-index-search input,
+.user-index-search .admin-form__field,
+.user-index-search .admin-form__button {
+    margin-top: 0;
+    margin-bottom: 0;
+}

@@ -91,7 +91,8 @@ return [
     'datetime_format' => [
         'default' => 'd.m.Y h:i:s A',
         // Used in various blade files to display event starting and ending times
-        'public' => 'l | d.m.Y h:i A'
+        'public' => 'l | d.m.Y h:i A',
+        'date_only' => 'd.m.Y'
     ],
 
     /*

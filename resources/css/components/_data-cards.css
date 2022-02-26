@@ -1,10 +1,6 @@
 /**
  Data cards component
  */
-.data-cards_card__name {
-    margin-bottom: 0.5rem;
-}
-
 .data-cards_properties {
     flex-wrap: wrap;
 }

@@ -21,6 +21,10 @@
     margin-bottom: 3.5rem;
 }
 
+.calendar-week__filter .admin-form__field {
+    margin-bottom: 0;
+}
+
 .calendar-week__filter form button {
     margin-top: 20px;
 }

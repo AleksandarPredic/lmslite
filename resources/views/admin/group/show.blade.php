@@ -70,9 +70,10 @@
                         >
                             {{-- # Properties --}}
                             <x-slot name="properties">
-                                <x-data-property>
-                                    {{ $user->name }}
-                                </x-data-property>
+                                <x-data-property-link
+                                    href="{{ route('admin.users.show', $user) }}"
+                                    title="{{ $user->name }}"
+                                />
                             </x-slot>
 
                             {{-- # Links --}}

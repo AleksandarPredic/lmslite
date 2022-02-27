@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\RequestValidationRulesTrait;
+use App\Models\CalendarEvent;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 
@@ -71,7 +73,8 @@ class UserController extends Controller
     public function show(User $user)
     {
         return view('admin.users.show', [
-            'user' => $user
+            'user' => $user,
+            'calendarEvents' => $user->getUserNextEvents(5)
         ]);
     }
 

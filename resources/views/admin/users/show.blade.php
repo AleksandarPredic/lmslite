@@ -2,6 +2,9 @@
 /**
  * Enable autocomplete in blade file
  * @var \App\Models\User $user
+ * @var \App\Models\Group $group
+ * @var \Illuminate\Database\Eloquent\Collection $calendarEvents
+ * @var \App\Models\CalendarEvent $calendarEvent
  */
 @endphp
 <x-app-layout>
@@ -108,6 +111,25 @@
                     name="{{ __('Note') }}"
                     value="{{ $user->note }}"
                 />
+            </x-slot>
+
+            {{-- # Meta --}}
+            <x-slot name="meta">
+                <x-admin.singular.meta.name
+                    name="{{ __('User next 5 calendar events.') }}"
+                />
+                <small class="px-2">(Results are cached for 30 minutes)</small>
+
+                <div class="px-2">
+                    @if($calendarEvents->isNotEmpty())
+                        @foreach($calendarEvents as $calendarEvent)
+                            <x-admin.singular.meta.item-calendar-event
+                                :calendar-event="$calendarEvent"
+                                :showEventName="true"
+                            />
+                        @endforeach
+                    @endif
+                </div>
             </x-slot>
 
         </x-admin.singular.wrapper>

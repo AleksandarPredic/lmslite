@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -184,5 +185,55 @@ class User extends Authenticatable
     {
         // TODO: Add user image upload in the future and use this as a placeholder
         return asset('/images/user-placeholder.png');
+    }
+
+    /**
+     * Return next calendar events for this user
+     * We have two types here:
+     * - CalendarEvent where user is added directly
+     * - CalendarEvent where the user is added via group, via event group
+     *
+     * @param int $limit
+     *
+     * @return Collection
+     */
+    public function getUserNextEvents(int $limit)
+    {
+        return cache()->remember(
+            "user.calendarEvents.{$this->id}",
+            now()->addMinutes(30),
+            function () use ($limit) {
+                // Get events that this user is added outside event assigned group
+                $calendarEvents = $this->calendarEvents()
+                                       ->whereDate('starting_at', '>', now())
+                                       ->orderBy('starting_at')
+                                       ->limit($limit)
+                                       ->get();
+
+                // Get all user calendar events, if the group is assigned to an event. That means that this user will attent them
+                $groupCalendarEvents = new Collection();
+                if ($this->groups->isNotEmpty()) {
+                    // Collect all events that has this group, as it has the user also
+                    $events = new Collection();
+                    foreach ($this->groups as $group) {
+                        if ($group->events->isNotEmpty()) {
+                            $events = $events->merge($group->events);
+                        }
+
+                    }
+
+                    // We have events, now lets get next 5 calendar events
+                    if ($events->isNotEmpty()) {
+                        $groupCalendarEvents = CalendarEvent::whereIn('event_id', $events->pluck('id')->toArray())
+                                                            ->whereDate('starting_at', '>', now())
+                                                            ->orderBy('starting_at')
+                                                            ->limit(5)
+                                                            ->get();
+                    }
+                }
+
+                return $calendarEvents->merge($groupCalendarEvents)->sortBy('starting_at')->take($limit);
+            }
+        );
     }
 }

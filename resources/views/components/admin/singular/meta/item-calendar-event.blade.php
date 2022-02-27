@@ -1,6 +1,6 @@
 {{-- # Used in admin.event.show --}}
 
-@props(['calendarEvent'])
+@props(['calendarEvent', 'showEventName' => false])
 
 <x-admin.singular.meta.item-wrapper>
     <x-admin.singular.meta.item-icon>

@@ -2,9 +2,6 @@
 /**
  * Enable autocomplete in blade file
  * @var \App\Models\User $user
- * @var \App\Models\Group $group
- * @var \Illuminate\Database\Eloquent\Collection $calendarEvents
- * @var \App\Models\CalendarEvent $calendarEvent
  */
 @endphp
 <x-app-layout>
@@ -18,6 +15,7 @@
         </div>
 
         <div class="flex justify-end mb-4 px-4">
+            <x-admin.action-link-button href="{{ route('admin.users.statistics', $user) }}" title="{{ __('Statistics') }}" />
             <x-admin.action-link-button href="{{ route('admin.users.edit', $user) }}" title="{{ __('Edit') }}" />
             <x-admin.action-delete-button action="{{ route('admin.users.destroy', $user) }}" />
         </div>
@@ -111,60 +109,6 @@
                     name="{{ __('Note') }}"
                     value="{{ $user->note }}"
                 />
-            </x-slot>
-
-            {{-- # Meta --}}
-            <x-slot name="meta">
-
-                {{-- # Next calendar events --}}
-                <div class="mb-4 px-2">
-                    <h2 class="text-lg"><strong>{{ __('User next 5 calendar events') }}</strong></h2>
-                    <small>(Results are cached for 30 minutes)</small>
-
-                    <div>
-                        @if($calendarEvents->isNotEmpty())
-                            @foreach($calendarEvents as $calendarEvent)
-                                <x-admin.singular.meta.item-calendar-event
-                                    :calendar-event="$calendarEvent"
-                                />
-                            @endforeach
-                        @endif
-                    </div>
-                </div>
-
-                {{-- # Calendar events statuses --}}
-                <br />
-                <div class="px-2 mb-4 mt-8">
-                    <h2 class="text-lg"><strong>{{ __('User calendar event statuses') }}</strong></h2>
-                    <div class="mb-4"><small>(Results are cached for 30 minutes)</small></div>
-
-                    <div>
-                        {{-- # Attended status --}}
-                        <x-admin.singular.meta.item-user-status
-                            name="{{ __('Attended') }}"
-                            :calendarEventStatuses="$calendarEventStatusesAttended"
-                        />
-
-                        {{-- # Canceled status --}}
-                        <x-admin.singular.meta.item-user-status
-                            name="{{ __('Canceled') }}"
-                            :calendarEventStatuses="$calendarEventStatusesCanceled"
-                        />
-
-                        {{-- # Compensation status --}}
-                        <x-admin.singular.meta.item-user-status
-                            name="{{ __('Compensation') }}"
-                            :calendarEventStatuses="$calendarEventStatusesCompensation"
-                        />
-
-                        {{-- # No Show status --}}
-                        <x-admin.singular.meta.item-user-status
-                            name="{{ __('No Show') }}"
-                            :calendarEventStatuses="$calendarEventStatusesNoShow"
-                        />
-
-                    </div>
-                </div>
             </x-slot>
 
         </x-admin.singular.wrapper>

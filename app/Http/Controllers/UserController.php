@@ -68,11 +68,26 @@ class UserController extends Controller
      * @param  User  $user
      * @return View
      */
-    public function show(User $user)
+    public function show(User $user): View
+    {
+        return view('admin.users.show', [
+            'user' => $user
+        ]);
+    }
+
+    /**
+     * Display the user statistics
+     *
+     * @param User $user
+     *
+     * @return View
+     * @throws \Exception
+     */
+    public function statistics(User $user): View
     {
         $statuses = $user->getCalendarEventStatusesLastMonths(6);
 
-        return view('admin.users.show', [
+        return view('admin.users.statistics', [
             'user' => $user,
             'calendarEvents' => $user->getUserNextEvents(5),
             'calendarEventStatusesAttended' => $statuses->where('status', 'attended'),

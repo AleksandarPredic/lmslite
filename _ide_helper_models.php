@@ -72,6 +72,8 @@ namespace App\Models{
  * @property string|null $info
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CalendarEvent[] $calendarEvents
+ * @property-read int|null $calendar_events_count
  * @method static \Illuminate\Database\Eloquent\Builder|CalendarEventUserStatus newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CalendarEventUserStatus newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CalendarEventUserStatus query()

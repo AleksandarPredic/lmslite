@@ -58,14 +58,14 @@
                     value="{{ $user->active ? __('Yes') : __('No') }}"
                 />
             </x-slot>
-            
+
             {{-- # Meta --}}
             <x-slot name="meta">
 
                 {{-- # Next calendar events --}}
                 <div class="mb-4 px-2">
                     <h2 class="text-lg"><strong>{{ __('User next 5 calendar events') }}</strong></h2>
-                    <small>(Results are cached for 30 minutes)</small>
+                    <small>(Results are cached for 10 minutes)</small>
 
                     <div>
                         @if($calendarEvents->isNotEmpty())
@@ -82,7 +82,7 @@
                 <br />
                 <div class="px-2 mb-4 mt-8">
                     <h2 class="text-lg"><strong>{{ __('User calendar event statuses in last 6 months') }}</strong></h2>
-                    <div class="mb-4"><small>(Results are cached for 30 minutes)</small></div>
+                    <div class="mb-4"><small>(Results are cached for 10 minutes)</small></div>
 
                     <div>
                         {{-- # Attended status --}}

@@ -201,7 +201,7 @@ class User extends Authenticatable
     {
         return cache()->remember(
             "user.calendarEvents.{$this->id}.{$limit}",
-            now()->addMinutes(30),
+            now()->addMinutes(10),
             function () use ($limit) {
                 // Get events that this user is added outside event assigned group
                 $calendarEvents = $this->calendarEvents()
@@ -251,7 +251,7 @@ class User extends Authenticatable
     {
         return cache()->remember(
             "user.calendarEventsStatuses.{$this->id}.{$months}",
-            now()->addMinutes(30),
+            now()->addMinutes(10),
             function () use ($months) {
                 return $this->calendarEventStatuses()
                             ->with(['calendarEvents' => function($query) {

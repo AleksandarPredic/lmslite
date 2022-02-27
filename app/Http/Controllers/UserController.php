@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\RequestValidationRulesTrait;
-use App\Models\CalendarEvent;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 
@@ -72,9 +70,15 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
+        $statuses = $user->getCalendarEventStatusesLastMonths(6);
+
         return view('admin.users.show', [
             'user' => $user,
-            'calendarEvents' => $user->getUserNextEvents(5)
+            'calendarEvents' => $user->getUserNextEvents(5),
+            'calendarEventStatusesAttended' => $statuses->where('status', 'attended'),
+            'calendarEventStatusesCanceled' => $statuses->where('status', 'canceled'),
+            'calendarEventStatusesNoShow' => $statuses->where('status', 'no-show'),
+            'calendarEventStatusesCompensation' => $statuses->where('info', 'compensation')
         ]);
     }
 

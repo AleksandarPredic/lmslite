@@ -200,11 +200,12 @@ class User extends Authenticatable
     public function getUserNextEvents(int $limit)
     {
         return cache()->remember(
-            "user.calendarEvents.{$this->id}",
+            "user.calendarEvents.{$this->id}.{$limit}",
             now()->addMinutes(30),
             function () use ($limit) {
                 // Get events that this user is added outside event assigned group
                 $calendarEvents = $this->calendarEvents()
+                                        ->without('event')
                                        ->whereDate('starting_at', '>', now())
                                        ->orderBy('starting_at')
                                        ->limit($limit)
@@ -224,7 +225,8 @@ class User extends Authenticatable
 
                     // We have events, now lets get next 5 calendar events
                     if ($events->isNotEmpty()) {
-                        $groupCalendarEvents = CalendarEvent::whereIn('event_id', $events->pluck('id')->toArray())
+                        $groupCalendarEvents = CalendarEvent::without('event')
+                                                            ->whereIn('event_id', $events->pluck('id')->toArray())
                                                             ->whereDate('starting_at', '>', now())
                                                             ->orderBy('starting_at')
                                                             ->limit(5)
@@ -236,4 +238,31 @@ class User extends Authenticatable
             }
         );
     }
+
+    /**
+     * Get user statuses for the last number of months
+     *
+     * @param int $months
+     *
+     * @return Builder[]|Collection|HasMany[]
+     * @throws \Exception
+     */
+    public function getCalendarEventStatusesLastMonths(int $months)
+    {
+        return cache()->remember(
+            "user.calendarEventsStatuses.{$this->id}.{$months}",
+            now()->addMinutes(30),
+            function () use ($months) {
+                return $this->calendarEventStatuses()
+                            ->with(['calendarEvents' => function($query) {
+                                $query->without('event');
+                            }])
+                            ->whereHas('calendarEvents', function($query) use ($months) {
+                                $query->whereDate('starting_at', '>', now()->subMonths(6));
+                            })
+                            ->get();
+            }
+        );
+    }
+
 }

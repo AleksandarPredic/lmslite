@@ -14,6 +14,11 @@ class CalendarEventUserStatus extends Model
 
     protected $fillable = ['calendar_event_id', 'user_id', 'status', 'info'];
 
+    public function calendarEvents()
+    {
+        return $this->hasMany(CalendarEvent::class, 'id', 'calendar_event_id');
+    }
+
     public static function getStatuses(): array
     {
         $statuses = [];

@@ -115,20 +115,55 @@
 
             {{-- # Meta --}}
             <x-slot name="meta">
-                <x-admin.singular.meta.name
-                    name="{{ __('User next 5 calendar events.') }}"
-                />
-                <small class="px-2">(Results are cached for 30 minutes)</small>
 
-                <div class="px-2">
-                    @if($calendarEvents->isNotEmpty())
-                        @foreach($calendarEvents as $calendarEvent)
-                            <x-admin.singular.meta.item-calendar-event
-                                :calendar-event="$calendarEvent"
-                                :showEventName="true"
-                            />
-                        @endforeach
-                    @endif
+                {{-- # Next calendar events --}}
+                <div class="mb-4 px-2">
+                    <h2 class="text-lg"><strong>{{ __('User next 5 calendar events') }}</strong></h2>
+                    <small>(Results are cached for 30 minutes)</small>
+
+                    <div>
+                        @if($calendarEvents->isNotEmpty())
+                            @foreach($calendarEvents as $calendarEvent)
+                                <x-admin.singular.meta.item-calendar-event
+                                    :calendar-event="$calendarEvent"
+                                />
+                            @endforeach
+                        @endif
+                    </div>
+                </div>
+
+                {{-- # Calendar events statuses --}}
+                <br />
+                <div class="px-2 mb-4 mt-8">
+                    <h2 class="text-lg"><strong>{{ __('User calendar event statuses') }}</strong></h2>
+                    <div class="mb-4"><small>(Results are cached for 30 minutes)</small></div>
+
+                    <div>
+                        {{-- # Attended status --}}
+                        <x-admin.singular.meta.item-user-status
+                            name="{{ __('Attended') }}"
+                            :calendarEventStatuses="$calendarEventStatusesAttended"
+                        />
+
+                        {{-- # Canceled status --}}
+                        <x-admin.singular.meta.item-user-status
+                            name="{{ __('Canceled') }}"
+                            :calendarEventStatuses="$calendarEventStatusesCanceled"
+                        />
+
+                        {{-- # Compensation status --}}
+                        <x-admin.singular.meta.item-user-status
+                            name="{{ __('Compensation') }}"
+                            :calendarEventStatuses="$calendarEventStatusesCompensation"
+                        />
+
+                        {{-- # No Show status --}}
+                        <x-admin.singular.meta.item-user-status
+                            name="{{ __('No Show') }}"
+                            :calendarEventStatuses="$calendarEventStatusesNoShow"
+                        />
+
+                    </div>
                 </div>
             </x-slot>
 

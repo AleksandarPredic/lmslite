@@ -218,7 +218,7 @@ class UserController extends Controller
         $attributes = request()->validate([
             'name' => array_merge(['required'], $this->getNameFieldRules()),
             'email' => $emailRules,
-            'role_id' => ['required', 'numeric', 'exists:user_roles,id'],
+            'role_id' => ['required', 'numeric', 'exists:roles,id'],
             'parent_1_name' => $textRules,
             'parent_1_phone' => $textRules,
             'parent_2_name' => $textRules,

@@ -26,7 +26,7 @@
                 type="email"
                 :value="old('email')"
                 :label="__('Email')"
-                :required="true"
+                :required="false"
             />
 
             <x-admin.form.role

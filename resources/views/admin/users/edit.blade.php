@@ -39,7 +39,7 @@
                 type="email"
                 :value="old('email', $user->email)"
                 :label="__('Email')"
-                :required="true"
+                :required="false"
             />
 
             <x-admin.form.role

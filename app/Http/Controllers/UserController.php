@@ -204,7 +204,7 @@ class UserController extends Controller
         $textRules = ['nullable', 'min:3', 'max:255'];
         $datedRules = ['nullable', 'date'];
 
-        $emailRules = ['required', 'email', 'max:255'];
+        $emailRules = ['nullable', 'email', 'max:255'];
         // New users must have unique email
         if (! $user->exists) {
             $emailRules = array_merge($emailRules, ['unique:users,email']);

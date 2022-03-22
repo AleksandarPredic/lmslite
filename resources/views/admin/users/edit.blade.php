@@ -74,7 +74,6 @@
                 name="date_of_birth"
                 :value="old('date_of_birth', $user->date_of_birth)"
                 :label="__('Date of birth')"
-                step="only_date"
             />
 
             <x-admin.form.input
@@ -99,7 +98,6 @@
                 name="sign_up_date"
                 :value="old('sign_up_date', $user->sign_up_date)"
                 :label="__('Sign up date')"
-                step="only_date"
             />
 
             <x-admin.form.select

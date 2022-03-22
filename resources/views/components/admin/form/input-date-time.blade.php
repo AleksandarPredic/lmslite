@@ -1,4 +1,4 @@
-@props(['name', 'value', 'label', 'required' => false, 'step' => false])
+@props(['name', 'value', 'label', 'required' => false])
 
 {{--
 # Wrapper so we can change date time if needed in the future
@@ -10,13 +10,6 @@
 --}}
 @php
     $value = is_a($value, \Carbon\Carbon::class) ? $value->format('Y-m-d\TH:i') : $value;
-    switch ($step) {
-        case 'only_date':
-            $step = 86400;
-            break;
-        default:
-            $step = 60;
-    }
 @endphp
 
 <x-admin.form.input
@@ -25,5 +18,5 @@
     :value="$value"
     :label="$label"
     :required="$required"
-    :step="$step"
+    :step="60"
 />

@@ -36,7 +36,6 @@
                     name="calendar_start"
                     :value="$calendarStart"
                     :label="__('Start date')"
-                    step="only_date"
                     :required="true"
                 />
             </div>
@@ -46,7 +45,6 @@
                     name="calendar_end"
                     :value="$calendarEnd"
                     :label="__('End date')"
-                    step="only_date"
                     :required="true"
                 />
             </div>

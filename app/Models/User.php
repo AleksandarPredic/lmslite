@@ -100,13 +100,10 @@ class User extends Authenticatable
      * @param int $roleId
      *
      * @return bool
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
     public function updateRole(int $roleId): bool
     {
-        $role = UserRole::findOrFail($roleId);
-
-        return $role->update([
+        return $this->role->first()->pivot->update([
             'role_id' => $roleId,
         ]);
     }

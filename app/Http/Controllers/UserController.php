@@ -131,12 +131,9 @@ class UserController extends Controller
 
         $attributes = $this->validateSanitizeRequest($user);
 
-        try {
-            $updated = $user->update($attributes);
-            $user->updateRole($attributes['role_id']);
-        } catch (\Exception $exception) {
-            // TODO: log error
+        $updated = $user->update($attributes);
 
+        if (! $updated) {
             return redirect()->back()->with(
                 'admin.message.error',
                 sprintf(
@@ -146,14 +143,19 @@ class UserController extends Controller
             )->withInput();
         }
 
-        if (! $updated) {
-            return redirect()->back()->with(
-                'admin.message.error',
-                sprintf(
-                    '[ERROR] User, %s could not be updated!',
-                    $user->name
-                )
-            );
+        // Update role only if it was changed
+        if ((int)$attributes['role_id'] !== $user->role->first()->id) {
+            $roleUpdated = $user->updateRole($attributes['role_id']);
+
+            if (! $roleUpdated) {
+                return redirect()->back()->with(
+                    'admin.message.error',
+                    sprintf(
+                        '[ERROR] Role not updated for user %s!',
+                        $user->name
+                    )
+                )->withInput();
+            }
         }
 
         return redirect()->back()->with(
@@ -162,7 +164,7 @@ class UserController extends Controller
                 'User, %s updated!',
                 $user->name
             )
-        );
+        )->withInput();
     }
 
     /**

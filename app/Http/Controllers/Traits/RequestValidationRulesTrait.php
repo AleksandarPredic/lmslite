@@ -14,7 +14,7 @@ trait RequestValidationRulesTrait
 
     protected function getStartingAtFieldRules(): array
     {
-        return ['date', 'after:today'];
+        return ['date', 'before:ending_at'];
     }
 
     protected function getEndingAtFieldRules(): array

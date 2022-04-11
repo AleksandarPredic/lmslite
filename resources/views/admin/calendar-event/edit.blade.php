@@ -41,8 +41,14 @@
 
             <x-admin.form.textarea
                 name="note"
-                :label="__('Ending at')"
+                :label="__('Note')"
             >{{ old('note', $calendarEvent->note) }}</x-admin.form.textarea>
+
+            <p>
+                <span style="color: red;">IMPORTANT: Any edit in single Calendar event will be overwritten on the parent event update.</span>
+                <br />
+                Or, if you change anything here, don't ever update parent calendar event dates or times, as the algorithm may remove done changes.
+            </p>
 
         </x-admin.form.wrapper>
     </x-admin.main>

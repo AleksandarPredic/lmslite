@@ -94,7 +94,7 @@ class EventObserver
                 $existingCalendarEvents[$calendarEvent->starting_at->format($comparisonDateFormat)] = $calendarEvent;
             }
 
-            $durationInSeconds = $event->ending_at->diffInSeconds($event->starting_at);
+            $durationInSeconds = $event->ending_at->timestamp - $event->starting_at->timestamp;
             $period = CarbonPeriod::create($event->starting_at, $event->recurring_until);
 
             foreach ($period as $date) {
@@ -133,13 +133,6 @@ class EventObserver
             }
         }
 
-        /**
-         * TODO: DB testing
-         * - Maybe we need to add cascade DB data on update, but I'm not sure what that does
-         * - Test if changes above, removing events or connected data, remove linked data in db table. Example, if
-         * when we change the event, the unneeded calendar events are deleted
-         * - Test if overrides for calendar event are deleted when we delete calendar event
-         */
     }
 
     /**
@@ -162,7 +155,8 @@ class EventObserver
      */
     protected function createCalendarEventsUntil(Event $event): Event
     {
-        $durationInSeconds = $event->ending_at->diffInSeconds($event->starting_at);
+
+        $durationInSeconds = $event->ending_at->timestamp - $event->starting_at->timestamp;
         $period = CarbonPeriod::create($event->starting_at, $event->recurring_until);
 
         foreach ($period as $date) {

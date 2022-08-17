@@ -217,10 +217,11 @@ class CalendarEventController extends Controller
      * @param CalendarEvent $calendarEvent
      * @param User $user
      *
-     * @return RedirectResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function updateUserStatus(CalendarEvent $calendarEvent, User $user)
     {
+
         $attributes = \request()->validate([
             'status' => [Rule::in(CalendarEventUserStatus::getStatusEnumValues())],
             'info' => [Rule::in(CalendarEventUserStatus::getInfoEnumValues())]
@@ -231,13 +232,9 @@ class CalendarEventController extends Controller
 
         $calendarEvent->updateUserStatus($user, $status, $info);
 
-        return redirect()->back()->with(
-            'admin.message.success',
-            sprintf(
-                'User %s status changed!',
-                $user->name
-            )
-        );
+        return response()->json([
+            'message' => 'Updated',
+        ]);
     }
 
     /**

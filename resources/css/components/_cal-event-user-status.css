@@ -1,6 +1,20 @@
 /**
  * CalendarEventUser Status component
  */
+.cal-event-user-status {
+    position: relative;
+    padding-bottom: 5px;
+}
+
 .cal-event-user-status select {
     padding: 0.2rem 2rem 0.2rem 0.7rem;
+}
+
+.cal-event-user-status__message {
+    position: absolute;
+    bottom: -14px;
+    left: 0;
+    width: auto;
+    height: auto;
+    white-space: nowrap;
 }

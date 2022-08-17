@@ -2,13 +2,10 @@
 
 <div {!! $attributes->merge(['class' => 'cal-event-user-status']) !!}>
     <form action="{{ $route }}" method="post">
-        @csrf
-        @method('patch')
 
         <select
             name="{{ $name }}"
             id="{{ $name }}"
-            onchange="this.parentElement.submit();"
             required
         >
             @foreach($options as $optionValue => $optionName)
@@ -23,4 +20,5 @@
             @endforeach
         </select>
     </form>
+    <div class="cal-event-user-status__message"></div>
 </div>

@@ -1,3 +1,8 @@
+/**
+ * JS for the component resources/views/components/admin/calendar-event/user/select-field.blade.php
+ *
+ * Ajax updates for the user status on the calendar event
+ */
 export default class CalendarEventStatusUpdate {
     constructor(status) {
         status.querySelector('select').addEventListener('change', (event) => {
@@ -14,12 +19,12 @@ export default class CalendarEventStatusUpdate {
     }
 
     statusChanged = (message, selectField, routeUrl) => {
-        const errorBackgroundColor = '#ff0000';
-        const successBackgroundColor = '#007500';
+        const errorBackgroundColor = 'rgba(255, 0, 0, 0.8)';
+        const successBackgroundColor = 'rgba(0, 117, 0, 0.6)';
 
         const updateMessage = (text, error) => {
             message.innerText = text;
-            error ? selectField.style.backgroundColor = '#ff0000' : selectField.style.backgroundColor = '#007500';
+            error ? selectField.style.backgroundColor = errorBackgroundColor : selectField.style.backgroundColor = successBackgroundColor;
 
             if (! error) {
                 setTimeout(() => {

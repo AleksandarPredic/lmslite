@@ -212,7 +212,8 @@ class CalendarEventController extends Controller
     }
 
     /**
-     * Add user status for this calendar event.
+     * Add user status for this calendar event
+     * Triggered via ajax in resources/js/calendar-event/CalendarEventStatusUpdate.js
      *
      * @param CalendarEvent $calendarEvent
      * @param User $user

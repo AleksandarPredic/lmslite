@@ -7,7 +7,10 @@ window.Alpine = Alpine;
 
 Alpine.start();
 
-// Route calendar-events.users.status.update
+/*
+ * Ajax updates for the user status on the calendar event
+ * Route calendar-events.users.status.update
+ */
 const calendarEventStatusses = document.getElementsByClassName('cal-event-user-status');
 if (calendarEventStatusses.length) {
     for (let calendarEventStatus of calendarEventStatusses) {

@@ -5536,12 +5536,12 @@ var CalendarEventStatusUpdate = /*#__PURE__*/_createClass(function CalendarEvent
   _classCallCheck(this, CalendarEventStatusUpdate);
 
   _defineProperty(this, "statusChanged", function (message, selectField, routeUrl) {
-    var errorBackgroundColor = '#ff0000';
-    var successBackgroundColor = '#007500';
+    var errorBackgroundColor = 'rgba(255, 0, 0, 0.8)';
+    var successBackgroundColor = 'rgba(0, 117, 0, 0.6)';
 
     var updateMessage = function updateMessage(text, error) {
       message.innerText = text;
-      error ? selectField.style.backgroundColor = '#ff0000' : selectField.style.backgroundColor = '#007500';
+      error ? selectField.style.backgroundColor = errorBackgroundColor : selectField.style.backgroundColor = successBackgroundColor;
 
       if (!error) {
         setTimeout(function () {

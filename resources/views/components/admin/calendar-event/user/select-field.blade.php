@@ -1,5 +1,9 @@
 @props(['name', 'value', 'options', 'route'])
 
+{{--
+ * We are using ajax to submit the select field and update the Calendar event user status.
+ * See: resources/js/calendar-event/CalendarEventStatusUpdate.js
+--}}
 <div {!! $attributes->merge(['class' => 'cal-event-user-status']) !!}>
     <form action="{{ $route }}" method="post">
 

@@ -5,11 +5,11 @@
  */
 export default class CalendarEventStatusUpdate {
     constructor(status) {
-        status.querySelector('select').addEventListener('change', (event) => {
-            const selectField = event.currentTarget;
-            const form = selectField.parentNode;
-            const message = form.parentNode.querySelector('.cal-event-user-status__message');
+        const selectField = status.querySelector('select');
+        const form = selectField.parentNode;
+        const message = form.parentNode.querySelector('.cal-event-user-status__message');
 
+        status.querySelector('select').addEventListener('change', (event) => {
             this.statusChanged(
                 message,
                 selectField,

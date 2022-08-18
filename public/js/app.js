@@ -5458,7 +5458,11 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 
 window.Alpine = alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"];
-alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].start(); // Route calendar-events.users.status.update
+alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].start();
+/*
+ * Ajax updates for the user status on the calendar event
+ * Route calendar-events.users.status.update
+ */
 
 var calendarEventStatusses = document.getElementsByClassName('cal-event-user-status');
 
@@ -5530,6 +5534,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+/**
+ * JS for the component resources/views/components/admin/calendar-event/user/select-field.blade.php
+ *
+ * Ajax updates for the user status on the calendar event
+ */
 var CalendarEventStatusUpdate = /*#__PURE__*/_createClass(function CalendarEventStatusUpdate(status) {
   var _this = this;
 
@@ -5570,12 +5579,14 @@ var CalendarEventStatusUpdate = /*#__PURE__*/_createClass(function CalendarEvent
     });
   });
 
-  status.querySelector('select').addEventListener('change', function (event) {
-    var selectField = event.currentTarget;
-    var form = selectField.parentNode;
-    var message = form.parentNode.querySelector('.cal-event-user-status__message');
+  var _selectField = status.querySelector('select');
 
-    _this.statusChanged(message, selectField, form.action);
+  var form = _selectField.parentNode;
+
+  var _message = form.parentNode.querySelector('.cal-event-user-status__message');
+
+  status.querySelector('select').addEventListener('change', function (event) {
+    _this.statusChanged(_message, _selectField, form.action);
   });
 });
 

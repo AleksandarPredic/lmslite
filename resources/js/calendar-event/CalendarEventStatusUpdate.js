@@ -7,24 +7,32 @@ export default class CalendarEventStatusUpdate {
     constructor(status) {
         const selectField = status.querySelector('select');
         const form = selectField.parentNode;
-        const message = form.parentNode.querySelector('.cal-event-user-status__message');
+        const userItemStatusParentElement = form.parentNode;
+        const message = userItemStatusParentElement.querySelector('.cal-event-user-status__message');
+        const userItemParentElement = userItemStatusParentElement.parentNode.parentNode;
 
         status.querySelector('select').addEventListener('change', (event) => {
             this.statusChanged(
                 message,
                 selectField,
-                form.action
+                form.action,
+                userItemParentElement
             );
         });
     }
 
-    statusChanged = (message, selectField, routeUrl) => {
+    statusChanged = (message, selectField, routeUrl, userItemParentElement) => {
         const errorBackgroundColor = 'rgba(255, 0, 0, 0.8)';
         const successBackgroundColor = 'rgba(0, 117, 0, 0.6)';
+        const successUserItemParentElementCssClass = 'singular-meta__item-user-attended';
 
         const updateMessage = (text, error) => {
             message.innerText = text;
-            error ? selectField.style.backgroundColor = errorBackgroundColor : selectField.style.backgroundColor = successBackgroundColor;
+            if (error) {
+                selectField.style.backgroundColor = errorBackgroundColor;
+            } else {
+                selectField.style.backgroundColor = successBackgroundColor;
+            }
 
             if (! error) {
                 setTimeout(() => {
@@ -45,11 +53,20 @@ export default class CalendarEventStatusUpdate {
 
                 updateMessage(response.data.message, false);
                 selectField.disabled = false;
+
+                // After successfull update, if the updated status is attended,mark the whole user meta section green
+                if (data.hasOwnProperty('status') && data.status === 'attended') {
+                    userItemParentElement.classList.add(successUserItemParentElementCssClass);
+                } else {
+                    if (userItemParentElement.classList.contains(successUserItemParentElementCssClass)) {
+                        userItemParentElement.classList.remove(successUserItemParentElementCssClass);
+                    }
+                }
             })
             .catch(function (error) {
                 console.log(error.response);
 
-                if (error.response.data && error.response.data.message) {
+                if (error.response && error.response.data && error.response.data.message) {
                     updateMessage(error.response.data.message, true);
                     return;
                 }

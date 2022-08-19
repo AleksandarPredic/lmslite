@@ -85,6 +85,7 @@
                                 @foreach($users as $user)
                                     <x-admin.singular.meta.item-user
                                         :user="$user"
+                                        class="{{ in_array($user->id, $userIdsWithAttendedStatus) ? 'singular-meta__item-user-attended' : null }}"
                                     >
                                         {{-- # Properties --}}
                                         <x-slot name="properties">
@@ -130,6 +131,7 @@
                             @foreach($groupUsers as $groupUser)
                                 <x-admin.singular.meta.item-user
                                     :user="$groupUser"
+                                    class="{{ in_array($groupUser->id, $userIdsWithAttendedStatus) ? 'singular-meta__item-user-attended' : null }}"
                                 >
                                     {{-- # Properties --}}
                                     <x-slot name="properties">
@@ -140,11 +142,20 @@
                                     </x-slot>
 
                                     {{-- # Links --}}
-                                    <x-admin.calendar-event.user.status
-                                        :calendarEvent="$calendarEvent"
-                                        :user="$groupUser"
-                                        :userStatuses="$usersStatuses"
-                                    />
+
+                                    {{--
+                                        # If this user is already in the calendar event, don't show the status
+                                        # It is already displayed up in the calenar event users
+                                    --}}
+                                    @if(! $users->find($groupUser))
+                                        <x-admin.calendar-event.user.status
+                                            :calendarEvent="$calendarEvent"
+                                            :user="$groupUser"
+                                            :userStatuses="$usersStatuses"
+                                        />
+                                    @else
+                                        <div>Added to this event while he was not a group member.</div>
+                                    @endif
 
                                     {{-- // TODO: Add show link to user profile --}}
                                 </x-admin.singular.meta.item-user>

@@ -95,7 +95,7 @@
                                             />
 
                                             <x-data-property>
-                                                {{ __('Added') }}: {{ lmsCarbonDefaultFormat($user->created_at) }}
+                                                {{ __('Date of birth') }}: {{ lmsCarbonDateFormat($user->date_of_birth) }}
                                             </x-data-property>
                                         </x-slot>
 
@@ -139,6 +139,10 @@
                                             href="{{ route('admin.users.show', $groupUser) }}"
                                             title="{{ $groupUser->name }}"
                                          />
+
+                                        <x-data-property>
+                                            {{ __('Date of birth') }}: {{ lmsCarbonDateFormat($groupUser->date_of_birth) }}
+                                        </x-data-property>
                                     </x-slot>
 
                                     {{-- # Links --}}

@@ -10,6 +10,10 @@
     padding-bottom: 2rem;
 }
 
+.singular-meta .singular-meta__item-user-attended {
+    background-color: rgba(0, 117, 0, 0.15);
+}
+
 .singular-meta .singular-meta__item-icon {
     width: 100%;
     margin-bottom: 1rem;

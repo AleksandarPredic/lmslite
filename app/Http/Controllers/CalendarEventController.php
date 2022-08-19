@@ -33,7 +33,13 @@ class CalendarEventController extends Controller
         $group = $event->group;
         $groupUsers = $group ? $group->users()->userDefaultSorting()->get() : null;
         $usersStatuses = $calendarEvent->userStatuses ? $calendarEvent->userStatuses->map(fn($user) => $user->pivot)->toArray() : [];
-
+        $userIdsWithAttendedStatus = array_map(
+            fn($status) => $status['user_id'],
+            array_filter(
+                $usersStatuses,
+                fn($status) => $status['status'] === 'attended' ?? false
+            )
+        );
         /**
          * Users that were in the group, have calendar event user status, but were removed from the group later.
          * We should display them as legacy users so the admin can see that this user attended this calendar event
@@ -66,6 +72,7 @@ class CalendarEventController extends Controller
             'groupUsers' => $groupUsers,
             'legacyUsers' => $legacyUsers,
             'usersStatuses' => $usersStatuses,
+            'userIdsWithAttendedStatus' => $userIdsWithAttendedStatus,
             'exclude' => $exclude,
             'numberOfusers' => count($exclude)
         ]);

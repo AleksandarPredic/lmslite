@@ -95,7 +95,7 @@
                                             />
 
                                             <x-data-property>
-                                                {{ __('Date of birth') }}: {{ lmsCarbonDateFormat($user->date_of_birth) }}
+                                                {{ __('Date of birth') }}: {{ $user->date_of_birth ? lmsCarbonDateFormat($user->date_of_birth) : 'Not added' }}
                                             </x-data-property>
                                         </x-slot>
 
@@ -141,7 +141,7 @@
                                          />
 
                                         <x-data-property>
-                                            {{ __('Date of birth') }}: {{ lmsCarbonDateFormat($groupUser->date_of_birth) }}
+                                            {{ __('Date of birth') }}: {{ $groupUser->date_of_birth ? lmsCarbonDateFormat($groupUser->date_of_birth) : 'Not added' }}
                                         </x-data-property>
                                     </x-slot>
 

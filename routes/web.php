@@ -4,6 +4,7 @@ use App\Http\Controllers\CalendarEventController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\StatisticsController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -52,6 +53,9 @@ Route::name('admin.')->middleware('can:admin')->group(function () {
     Route::resource('/admin/users', UserController::class);
     Route::get('/admin/users/{user}/statistics', [UserController::class, 'statistics'])->name('users.statistics');
     Route::post('/admin/users/find', [UserController::class, 'findUsers'])->name('users.find');
+
+    // Statistics
+    Route::get('/admin/statistics', [StatisticsController::class, 'index'])->name('statistics');
 });
 
 require __DIR__.'/auth.php';

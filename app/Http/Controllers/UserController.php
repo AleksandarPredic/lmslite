@@ -85,15 +85,9 @@ class UserController extends Controller
      */
     public function statistics(User $user): View
     {
-        $statuses = $user->getCalendarEventStatusesLastMonths(6);
-
         return view('admin.users.statistics', [
             'user' => $user,
-            'calendarEvents' => $user->getUserNextEvents(5),
-            'calendarEventStatusesAttended' => $statuses->where('status', 'attended'),
-            'calendarEventStatusesCanceled' => $statuses->where('status', 'canceled'),
-            'calendarEventStatusesNoShow' => $statuses->where('status', 'no-show'),
-            'calendarEventStatusesCompensation' => $statuses->where('info', 'compensation')
+            'calendarEvents' => $user->getUserNextEvents(5)
         ]);
     }
 

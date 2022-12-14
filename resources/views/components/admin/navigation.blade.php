@@ -29,3 +29,11 @@
 >
     {{ __('Courses') }}
 </x-nav-link>
+
+<x-nav-link
+    :href="route('admin.statistics.index')"
+    :active="request()->routeIs('admin.statistics.index')"
+    class="mr-2"
+>
+    {{ __('Statistics') }}
+</x-nav-link>

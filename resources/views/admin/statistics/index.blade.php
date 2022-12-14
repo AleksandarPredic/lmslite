@@ -27,10 +27,12 @@
                 display: none;
                 position: fixed;
                 top: 50px;
-                left: 30px;
+                left: 50%;
+                transform: translate(-50%, 0);
                 width: 300px;
                 height: auto;
                 background-color: white;
+                overflow-y: auto;
             }
 
             .statistics__details-month--show {
@@ -65,6 +67,16 @@
             });
         </script>
 
+        <div>
+            <ul>
+                <li>Date search start: {{ $dateSearchStart->format('d.m.Y') }}</li>
+                <li>Date search end: {{ $dateSearchEnd->format('d.m.Y') }}</li>
+                <li>Selected course id: {{ $selectedCourseId }}</li>
+            </ul>
+        </div>
+        <br />
+        <br />
+
         <table class="table-auto">
             <thead>
                 <tr>
@@ -76,9 +88,10 @@
             </thead>
             <tbody>
                 @foreach($sortedUserStatuses as $sortedUserStatus)
+                    @php $userName = $sortedUserStatus->user->name; @endphp
                     <tr>
-                        <td>{{ $sortedUserStatus->user->name }}</td>
-                        @foreach($sortedUserStatus->sortedDataPerMonth as $monthPreview)
+                        <td>{{ $userName }}</td>
+                        @foreach($sortedUserStatus->sortedDataPerMonth as $monthDate => $monthPreview)
                             <td>
                                 @php
                                     $printStatuses = sprintf(
@@ -104,7 +117,10 @@
                                         <div class="statistics__details-month-inner">
                                             {{-- Loop through each event --}}
                                             @foreach($monthPreview['sortedCalendarEventUserStatuses'] as $sortedByEvent)
-                                                <strong><p class="mb-4">{{ $sortedByEvent[0][0]->eventName }}</p></strong>
+                                                <div><strong>{{ $userName }}</strong></div>
+                                                <div class="mb-4">{{ $monthDate }}</div>
+                                                <hr class="mb-2" />
+                                                <div class="mb-4"><strong>{{ $sortedByEvent[0][0]->eventName }}</strong></div>
 
                                                 {{-- Loop through each status --}}
                                                 @foreach($sortedByEvent as $sortedByStatus)

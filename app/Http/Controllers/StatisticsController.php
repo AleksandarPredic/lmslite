@@ -21,20 +21,24 @@ class StatisticsController extends Controller
          * http://localhost/admin/statistics
          */
 
-        // TODO: Check with client if we need to show the event name or group name
-
         // TODO: Add caching
 
         // TODO: use this for testing
-        $startDate = Carbon::createFromFormat('d/m/Y', '01/12/2022');
-        $endDate = Carbon::createFromFormat('d/m/Y', '31/02/2023');
+        $startDate = Carbon::createFromFormat('d/m/Y', '01/04/2022')->startOfDay();
+        $endDate = Carbon::createFromFormat('d/m/Y', '31/06/2023')->endOfDay();
+        $courseId = $_GET['course_id'] ?? 1;
 
         $calenarEventUserStatuses = CalendarEventUserStatus::with('user')
-            ->with('calendarEvent')
-            ->whereHas('calendarEvent', function($query) use ($startDate, $endDate) {
-                $query->whereBetween('starting_at', [$startDate, $endDate])->orderBy('starting_at');
+            ->with('calendarEvent.event.group')
+            ->whereHas('calendarEvent', function($query) use ($startDate, $endDate, $courseId) {
+                $query->whereBetween('starting_at', [$startDate, $endDate])
+                    ->whereHas('event.group', function($query) use ($courseId) {
+                        $query->where('course_id', '=', $courseId);
+                    });
             })
             ->get();
+
+        //dd($calenarEventUserStatuses);
 
         $dates = $calenarEventUserStatuses
             ->groupBy('calendar_event_id')
@@ -118,9 +122,13 @@ class StatisticsController extends Controller
             ];
         }
 
-       // dd(collect($sortedUserStatuses)->get(19));
+        //dd(collect($sortedUserStatuses));
+        //dd(collect($sortedUserStatuses)->get(19));
 
         return view('admin.statistics.index', [
+            'dateSearchStart' => $startDate,
+            'dateSearchEnd' => $endDate,
+            'selectedCourseId' => $courseId,
             'dates' => $datesWithKeysAsMonths,
             'sortedUserStatuses' => collect($sortedUserStatuses)
         ]);

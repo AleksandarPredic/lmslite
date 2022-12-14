@@ -55,7 +55,7 @@ Route::name('admin.')->middleware('can:admin')->group(function () {
     Route::post('/admin/users/find', [UserController::class, 'findUsers'])->name('users.find');
 
     // Statistics
-    Route::get('/admin/statistics', [StatisticsController::class, 'index'])->name('statistics');
+    Route::get('/admin/statistics', [StatisticsController::class, 'index'])->name('statistics.index');
 });
 
 require __DIR__.'/auth.php';

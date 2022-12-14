@@ -13,3 +13,7 @@
 <x-responsive-nav-link :href="route('admin.courses.index')" :active="request()->routeIs('admin.courses.index')">
     {{ __('Courses') }}
 </x-responsive-nav-link>
+
+<x-responsive-nav-link :href="route('admin.statistics.index')" :active="request()->routeIs('admin.statistics.index')">
+    {{ __('Statistics') }}
+</x-responsive-nav-link>

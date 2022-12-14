@@ -235,31 +235,4 @@ class User extends Authenticatable
             }
         );
     }
-
-    /**
-     * Get user statuses for the last number of months
-     *
-     * @param int $months
-     *
-     * @return Builder[]|Collection|HasMany[]
-     * @throws \Exception
-     */
-    public function getCalendarEventStatusesLastMonths(int $months)
-    {
-        return cache()->remember(
-            "user.calendarEventsStatuses.{$this->id}.{$months}",
-            now()->addMinutes(10),
-            function () use ($months) {
-                return $this->calendarEventStatuses()
-                            ->with(['calendarEvents' => function($query) {
-                                $query->without('event');
-                            }])
-                            ->whereHas('calendarEvents', function($query) use ($months) {
-                                $query->whereDate('starting_at', '>', now()->subMonths(6));
-                            })
-                            ->get();
-            }
-        );
-    }
-
 }

@@ -54,12 +54,15 @@ export default class CalendarEventStatusUpdate {
                 updateMessage(response.data.message, false);
                 selectField.disabled = false;
 
-                // After successfull update, if the updated status is attended,mark the whole user meta section green
-                if (data.hasOwnProperty('status') && data.status === 'attended') {
-                    userItemParentElement.classList.add(successUserItemParentElementCssClass);
-                } else {
-                    if (userItemParentElement.classList.contains(successUserItemParentElementCssClass)) {
-                        userItemParentElement.classList.remove(successUserItemParentElementCssClass);
+                // After successfully updated, if the updated status is attended,mark the whole user meta section green
+                if (data.hasOwnProperty('status')) {
+                    // Mark green and remove green only for status changes, we don't care about info
+                    if (data.status === 'attended') {
+                        userItemParentElement.classList.add(successUserItemParentElementCssClass);
+                    } else {
+                        if (userItemParentElement.classList.contains(successUserItemParentElementCssClass)) {
+                            userItemParentElement.classList.remove(successUserItemParentElementCssClass);
+                        }
                     }
                 }
             })

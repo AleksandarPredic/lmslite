@@ -77,40 +77,6 @@
                         @endif
                     </div>
                 </div>
-
-                {{-- # Calendar events statuses --}}
-                <br />
-                <div class="px-2 mb-4 mt-8">
-                    <h2 class="text-lg"><strong>{{ __('User calendar event statuses in last 6 months') }}</strong></h2>
-                    <div class="mb-4"><small>(Results are cached for 10 minutes)</small></div>
-
-                    <div>
-                        {{-- # Attended status --}}
-                        <x-admin.singular.meta.item-user-status
-                            name="{{ __('Attended') }}"
-                            :calendarEventStatuses="$calendarEventStatusesAttended"
-                        />
-
-                        {{-- # Canceled status --}}
-                        <x-admin.singular.meta.item-user-status
-                            name="{{ __('Canceled') }}"
-                            :calendarEventStatuses="$calendarEventStatusesCanceled"
-                        />
-
-                        {{-- # Compensation status --}}
-                        <x-admin.singular.meta.item-user-status
-                            name="{{ __('Compensation') }}"
-                            :calendarEventStatuses="$calendarEventStatusesCompensation"
-                        />
-
-                        {{-- # No Show status --}}
-                        <x-admin.singular.meta.item-user-status
-                            name="{{ __('No Show') }}"
-                            :calendarEventStatuses="$calendarEventStatusesNoShow"
-                        />
-
-                    </div>
-                </div>
             </x-slot>
 
         </x-admin.singular.wrapper>

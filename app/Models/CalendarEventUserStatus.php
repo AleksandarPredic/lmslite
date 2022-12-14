@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Http\Controllers\Traits\ModelEnumTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class CalendarEventUserStatus extends Model
 {
@@ -14,9 +16,14 @@ class CalendarEventUserStatus extends Model
 
     protected $fillable = ['calendar_event_id', 'user_id', 'status', 'info'];
 
-    public function calendarEvents()
+    public function calendarEvent(): BelongsTo
     {
-        return $this->hasMany(CalendarEvent::class, 'id', 'calendar_event_id');
+        return $this->belongsTo(CalendarEvent::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
     public static function getStatuses(): array

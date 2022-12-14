@@ -25,7 +25,7 @@ class StatisticsController extends Controller
 
         // TODO: use this for testing
         $startDate = Carbon::createFromFormat('d/m/Y', '01/04/2022')->startOfDay();
-        $endDate = Carbon::createFromFormat('d/m/Y', '31/06/2023')->endOfDay();
+        $endDate = Carbon::createFromFormat('d/m/Y', '31/06/2022')->endOfDay();
         $courseId = $_GET['course_id'] ?? 1;
 
         $calenarEventUserStatuses = CalendarEventUserStatus::with('user')

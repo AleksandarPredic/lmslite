@@ -18,6 +18,7 @@
                 text-align: center;
             }
 
+            .statistics__details-calendar-event-list a:hover,
             .statistics__details-month-trigger:hover {
                 color: blue;
                 font-weight: bold;
@@ -129,7 +130,7 @@
                                                     </div>
 
                                                     {{-- Loop through each status --}}
-                                                    <ul class="mb-4">
+                                                    <ul class="mb-4 statistics__details-calendar-event-list">
                                                         @foreach($sortedByStatus as $calendarEventUserStatus)
                                                             @php
                                                                 /**
@@ -138,7 +139,9 @@
                                                                 $status = $calendarEventUserStatus->userStatus
                                                             @endphp
                                                             <li class="text-sm">
-                                                                {{ $status->calendarEvent->starting_at->format('D, d.m.Y') }} - {{ $status->info ?? 'none'}}
+                                                                <a href="{{ route('admin.calendar-events.show', $status->calendarEvent) }}" class="mb-1">
+                                                                    {{ $status->calendarEvent->starting_at->format('D, d.m.Y') }} - {{ $status->info ?? 'none'}}
+                                                                </a>
                                                             </li>
                                                         @endforeach
                                                     </ul>

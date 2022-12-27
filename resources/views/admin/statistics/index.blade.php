@@ -36,6 +36,10 @@
                 overflow-y: auto;
             }
 
+            .statistics__details-month-inner {
+                overflow-y: auto;
+            }
+
             .statistics__details-month--show {
                 display: block;
             }

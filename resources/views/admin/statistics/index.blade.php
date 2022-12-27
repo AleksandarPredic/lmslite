@@ -32,11 +32,8 @@
                 transform: translate(-50%, 0);
                 width: 300px;
                 height: auto;
+                max-height: calc(100vh - 80px);
                 background-color: white;
-                overflow-y: auto;
-            }
-
-            .statistics__details-month-inner {
                 overflow-y: auto;
             }
 

@@ -32,6 +32,7 @@
                 transform: translate(-50%, 0);
                 width: 300px;
                 height: auto;
+                max-height: calc(100vh - 80px);
                 background-color: white;
                 overflow-y: auto;
             }
@@ -73,6 +74,7 @@
                 <li>Date search start: {{ $dateSearchStart->format('d.m.Y') }}</li>
                 <li>Date search end: {{ $dateSearchEnd->format('d.m.Y') }}</li>
                 <li>Selected course id: {{ $selectedCourseId }}</li>
+                <li>Legend: 1st digit -> attended, 2nd -> canceled, 3rd -> no-show</li>
             </ul>
         </div>
         <br />

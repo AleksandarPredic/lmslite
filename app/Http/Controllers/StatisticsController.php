@@ -19,13 +19,16 @@ class StatisticsController extends Controller
          * TODO: Continue here
          * http://localhost/admin/events/3
          * http://localhost/admin/statistics
+         * http://localhost/admin/statistics?course_id=2&start_date=01-12-2022&end_date=31-02-2023
          */
 
         // TODO: Add caching
 
         // TODO: use this for testing
-        $startDate = Carbon::createFromFormat('d/m/Y', '01/04/2022')->startOfDay();
-        $endDate = Carbon::createFromFormat('d/m/Y', '31/06/2022')->endOfDay();
+        $startDateParam = $_GET['start_date'] ?? '01-04-2022';
+        $endDateParam = $_GET['end_date'] ?? '31-06-2022';
+        $startDate = Carbon::createFromFormat('d-m-Y', $startDateParam)->startOfDay();
+        $endDate = Carbon::createFromFormat('d-m-Y', $endDateParam)->endOfDay();
         $courseId = $_GET['course_id'] ?? 1;
 
         $calenarEventUserStatuses = CalendarEventUserStatus::with('user')

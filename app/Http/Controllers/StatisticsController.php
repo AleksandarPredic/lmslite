@@ -132,8 +132,8 @@ class StatisticsController extends Controller
         }
 
         return view('admin.statistics.index', [
-            'dateSearchStart' => $startDate->format('Y-m-d\TH:i'),
-            'dateSearchEnd' => $endDate->format('Y-m-d\TH:i'),
+            'dateSearchStart' => $startDate->format(self::FILTER_DATE_FORMAT),
+            'dateSearchEnd' => $endDate->format(self::FILTER_DATE_FORMAT),
             'selectedCourseId' => $courseId,
             'selectedGroupId' => $groupId,
             'dates' => $datesWithKeysAsMonths,

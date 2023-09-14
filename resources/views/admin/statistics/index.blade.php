@@ -5,6 +5,7 @@
 
     <x-admin.main>
 
+        {{-- TODO: Move this to css --}}
         <style>
             table {
                 border: 1px solid;
@@ -70,13 +71,46 @@
         </script>
 
         <div>
-            <ul>
-                <li>Date search start: {{ $dateSearchStart->format('d.m.Y') }}</li>
-                <li>Date search end: {{ $dateSearchEnd->format('d.m.Y') }}</li>
-                <li>Selected course id: {{ $selectedCourseId }}</li>
-                <li>Legend: 1st digit -> attended, 2nd -> canceled, 3rd -> no-show</li>
-            </ul>
+            <strong>Legend: 1st digit -> attended, 2nd -> canceled, 3rd -> no-show</strong>
         </div>
+        <br />
+        <br />
+
+        {{-- # Filter --}}
+        <div class="statistics-filter">
+
+            <x-admin.form.wrapper
+                action="{{ route('admin.statistics.index') }}"
+                method="get"
+                :buttonText="__('Filter')"
+            >
+                <x-admin.form.input-date-time
+                    name="calendar_start"
+                    :value="$dateSearchStart"
+                    :label="__('Start date')"
+                    :required="true"
+                />
+
+                <x-admin.form.input-date-time
+                    name="calendar_end"
+                    :value="$dateSearchEnd"
+                    :label="__('End date')"
+                    :required="true"
+                />
+
+                <x-admin.form.course
+                    :value="$selectedCourseId"
+                />
+
+                <x-admin.form.group
+                    :value="$selectedGroupId"
+                />
+
+            </x-admin.form.wrapper>
+        </div><!-- / .statistics-filter -->
+
+        <br />
+        <hr />
         <br />
         <br />
 

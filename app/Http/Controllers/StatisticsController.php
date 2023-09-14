@@ -8,6 +8,8 @@ use Illuminate\Support\Carbon;
 
 class StatisticsController extends Controller
 {
+    private const FILTER_DATE_FORMAT = 'Y-m-d\TH:i';
+
     /**
      * Display a listing of the resource.
      *
@@ -24,24 +26,30 @@ class StatisticsController extends Controller
 
         // TODO: Add caching
 
-        // TODO: use this for testing
-        $startDateParam = $_GET['start_date'] ?? '01-04-2022';
-        $endDateParam = $_GET['end_date'] ?? '31-06-2022';
-        $startDate = Carbon::createFromFormat('d-m-Y', $startDateParam)->startOfDay();
-        $endDate = Carbon::createFromFormat('d-m-Y', $endDateParam)->endOfDay();
-        $courseId = $_GET['course_id'] ?? 1;
+        if (request()->exists('calendar_start') && request()->exists('calendar_end')) {
+            $startDate = Carbon::createFromFormat(self::FILTER_DATE_FORMAT, request()->get('calendar_start'))->startOfDay();
+            $endDate = Carbon::createFromFormat(self::FILTER_DATE_FORMAT, request()->get('calendar_end'))->endOfDay();
+        } else {
+            $startDate = Carbon::now()->subMonths(2)->startOfMonth();
+            $endDate = Carbon::now()->endOfMonth();
+        }
+
+        $courseId = request()->exists('course_id') ? intval(request()->get('course_id')) : 1;
+        $groupId = request()->exists('group_id') ? intval(request()->get('group_id')) : 0;
 
         $calenarEventUserStatuses = CalendarEventUserStatus::with('user')
             ->with('calendarEvent.event.group')
-            ->whereHas('calendarEvent', function($query) use ($startDate, $endDate, $courseId) {
+            ->whereHas('calendarEvent', function($query) use ($startDate, $endDate, $courseId, $groupId) {
                 $query->whereBetween('starting_at', [$startDate, $endDate])
-                    ->whereHas('event.group', function($query) use ($courseId) {
+                    ->whereHas('event.group', function($query) use ($courseId, $groupId) {
                         $query->where('course_id', '=', $courseId);
+
+                        if (0 !== $groupId) {
+                            $query->where('id', '=', $groupId);
+                        }
                     });
             })
             ->get();
-
-        //dd($calenarEventUserStatuses);
 
         $dates = $calenarEventUserStatuses
             ->groupBy('calendar_event_id')
@@ -111,8 +119,6 @@ class StatisticsController extends Controller
                         $reMappedCalendarEventUserStatuses
                     );
 
-                    //dd($reMappedCalendarEventUserStatuses);
-
                     return [
                         'statuses' => [
                             'attended' => $values['attended'] ?? 0,
@@ -125,13 +131,11 @@ class StatisticsController extends Controller
             ];
         }
 
-        //dd(collect($sortedUserStatuses));
-        //dd(collect($sortedUserStatuses)->get(19));
-
         return view('admin.statistics.index', [
-            'dateSearchStart' => $startDate,
-            'dateSearchEnd' => $endDate,
+            'dateSearchStart' => $startDate->format('Y-m-d\TH:i'),
+            'dateSearchEnd' => $endDate->format('Y-m-d\TH:i'),
             'selectedCourseId' => $courseId,
+            'selectedGroupId' => $groupId,
             'dates' => $datesWithKeysAsMonths,
             'sortedUserStatuses' => collect($sortedUserStatuses)
         ]);

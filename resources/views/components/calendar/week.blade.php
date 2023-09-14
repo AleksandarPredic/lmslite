@@ -7,9 +7,8 @@
  * @var \Carbon\CarbonPeriod $carbonPeriod
  * @var \Carbon\Carbon $day
  * @var \App\Models\CalendarEvent $calendarEvent
- * @var string $calendarStart
- * @var string $calendarEnd
- * @var string $calendarEnd
+ * @var string $calendarStart format 'Y-m-d\TH:i'
+ * @var string $calendarEnd format 'Y-m-d\TH:i'
  * @var string $dateTimeFormatDay
  * @var string $dateTimeFormatWeek
  */

@@ -1,0 +1,3 @@
+.data-cards__pagination span[aria-current="page"] span {
+    background-color: #d2d2d2;
+}

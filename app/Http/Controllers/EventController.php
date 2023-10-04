@@ -22,8 +22,8 @@ class EventController extends Controller
     public function index()
     {
         return view('admin.event.index', [
-            'events' => Event::orderBy('starting_at', 'asc')
-                             ->paginate(10)
+            'events' => Event::orderBy('starting_at', 'desc')
+                             ->paginate(20)
                              ->withQueryString()
         ]);
     }

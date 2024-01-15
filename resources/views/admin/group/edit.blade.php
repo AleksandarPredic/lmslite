@@ -47,6 +47,13 @@
                 name="note"
                 :label="__('Note')"
             >{{ old('note', $group->note) }}</x-admin.form.textarea>
+
+            <x-admin.form.select
+                name="active"
+                :value="(int)old('active', $group->active)"
+                :label="__('Active')"
+                :options="$activeOptions"
+            />
         </x-admin.form.wrapper>
     </x-admin.main>
 </x-app-layout>

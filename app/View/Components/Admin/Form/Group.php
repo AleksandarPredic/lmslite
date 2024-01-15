@@ -27,6 +27,8 @@ class Group extends Component
      */
     public function __construct(int $value = 0, bool $disabled = false)
     {
+        // These properties are usied in resources/views/components/admin/form/group.blade.php
+        // We don't use them for now as in the edit event the group can not be changed
         $this->value = $value;
         $this->disabled = $disabled;
     }
@@ -39,7 +41,7 @@ class Group extends Component
     public function render()
     {
         $options = ['0' => __('None')];
-        if (! empty($groups = GroupModel::orderByName())) {
+        if (! empty($groups = GroupModel::where('active', true)->orderBy('name', 'ASC')->get())) {
             foreach ($groups as $group) {
                 $options[$group->id] = $group->name;
             }

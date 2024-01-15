@@ -32,7 +32,13 @@ class GroupController extends Controller
      */
     public function create(): View
     {
-        return view('admin.group.create');
+        // When creating group, only active option is allowed
+        $activeOptions = $this->getGroupActiveColumnSelectOptions();
+        unset($activeOptions[0]);
+
+        return view('admin.group.create', [
+            'activeOptions' => $activeOptions
+        ]);
     }
 
     /**
@@ -84,7 +90,8 @@ class GroupController extends Controller
     public function edit(Group $group): View
     {
         return view('admin.group.edit', [
-            'group' => $group->load('course')
+            'group' => $group->load('course'),
+            'activeOptions' => $this->getGroupActiveColumnSelectOptions()
         ]);
     }
 
@@ -226,6 +233,7 @@ class GroupController extends Controller
             'ending_at' => array_merge(['required'], $this->getEndingAtFieldRules()),
             'course_id' => ['nullable', 'numeric'],
             'note' => array_merge(['nullable'], $this->getNoteFieldRules()),
+            'active' => ['required', 'boolean'],
         ]);
 
         // additional sanitization
@@ -236,5 +244,10 @@ class GroupController extends Controller
         }
 
         return $attributes;
+    }
+
+    private function getGroupActiveColumnSelectOptions()
+    {
+        return [1 => __('Yes'), 0 => __('No')];
     }
 }

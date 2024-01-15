@@ -15,7 +15,7 @@ class Group extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'starting_at', 'ending_at', 'course_id', 'note'];
+    protected $fillable = ['name', 'starting_at', 'ending_at', 'course_id', 'note', 'active'];
 
     /**
      * The attributes that should be cast.
@@ -26,6 +26,7 @@ class Group extends Model
     protected $casts = [
         'starting_at' => 'datetime',
         'ending_at' => 'datetime',
+        'active' => 'boolean',
     ];
 
     public function scopeOrderByName(Builder $query): Collection

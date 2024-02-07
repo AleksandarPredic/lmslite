@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Course;
+use App\Models\CourseMembership;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 
@@ -43,6 +44,8 @@ class CourseController extends Controller
             'name' => $attributes['name']
         ]);
 
+        $course->addNewMembershipPrice($attributes['price']);
+
         return redirect(route('admin.courses.index'))
             ->with('admin.message.success', "Course, {$course->name}, created!");
     }
@@ -57,7 +60,8 @@ class CourseController extends Controller
     public function edit(Course $course)
     {
         return view('admin.course.edit', [
-           'course' => $course
+           'course' => $course,
+            'price' => $course->getLatestMembershipPriceAsDecimal()
         ]);
     }
 
@@ -75,6 +79,8 @@ class CourseController extends Controller
         $course->update([
             'name' => $attributes['name']
         ]);
+
+        $course->addNewMembershipPrice($attributes['price']);
 
         return back()->with('admin.message.success', 'Course updated!');
     }
@@ -102,7 +108,8 @@ class CourseController extends Controller
     protected function processRequest(): array
     {
         $attributes = \request()->validate([
-            'name' => ['required', 'min:3','max:255']
+            'name' => ['required', 'min:3','max:255'],
+            'price' => ['required', 'numeric']
         ]);
 
         $attributes['name'] = strip_tags($attributes['name']);

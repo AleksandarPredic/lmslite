@@ -5,12 +5,15 @@ namespace Database\Seeders;
 use App\Models\CalendarEventUser;
 use App\Models\CalendarEventUserStatus;
 use App\Models\Course;
+use App\Models\CourseMembership;
 use App\Models\Event;
 use App\Models\User;
 use App\Models\UserGroup;
 use App\Models\UserRole;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Faker\Factory as Faker;
 
 class DatabaseSeeder extends Seeder
 {
@@ -24,6 +27,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RoleSeeder::class,
         ]);
+
+        $faker = Faker::create();
 
         // Create one admin user with multiple roles
         if ('local' === config('app.env')) {
@@ -75,7 +80,25 @@ class DatabaseSeeder extends Seeder
         // Create a few courses
         $courses = ['Painting', 'Programming', 'Other'];
         foreach ($courses as $course) {
-            Course::factory()->create(['name' => $course]);
+            $course = Course::factory()->create(['name' => $course]);
+
+            $coursePrices = [];
+            for ($i = 0; $i <= 2; $i++) {
+                $coursePrices[] = $faker->numberBetween(2000, 5000);
+            }
+
+            // Make a couple of prices per couser, so we can test price changes
+            foreach ($coursePrices as $subMonths => $coursePrice) {
+                // Simulate that the price changes before today date so we can compare membership to pay per month price
+                $createdTime = Carbon::now()->subMonths($subMonths);
+
+                CourseMembership::create([
+                    'course_id' => $course->id,
+                    'price' => $coursePrice,
+                    'created_at' => $createdTime,
+                    'updated_at' => $createdTime,
+                ]);
+            }
         }
 
         $this->call([

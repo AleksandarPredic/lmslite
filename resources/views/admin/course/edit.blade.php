@@ -22,6 +22,15 @@
                 :required="true"
             />
 
+            <x-admin.form.input
+                name="price"
+                type="number"
+                :value="old('price', $price)"
+                :label="__('Price')"
+                :required="true"
+                :step="0.01"
+            />
+
         </x-admin.form.wrapper>
     </x-admin.main>
 </x-app-layout>

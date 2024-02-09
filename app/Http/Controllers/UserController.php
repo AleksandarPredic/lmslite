@@ -30,6 +30,22 @@ class UserController extends Controller
     }
 
     /**
+     * Display the user statistics
+     *
+     * @param User $user
+     *
+     * @return View
+     * @throws \Exception
+     */
+    public function nextCalendarEvents(User $user): View
+    {
+        return view('admin.users.nextcalendarevents', [
+            'user' => $user,
+            'calendarEvents' => $user->getUserNextEvents(5)
+        ]);
+    }
+
+    /**
      * Show the form for creating a new resource.
      * @return View
      */
@@ -72,22 +88,6 @@ class UserController extends Controller
     {
         return view('admin.users.show', [
             'user' => $user
-        ]);
-    }
-
-    /**
-     * Display the user statistics
-     *
-     * @param User $user
-     *
-     * @return View
-     * @throws \Exception
-     */
-    public function statistics(User $user): View
-    {
-        return view('admin.users.statistics', [
-            'user' => $user,
-            'calendarEvents' => $user->getUserNextEvents(5)
         ]);
     }
 

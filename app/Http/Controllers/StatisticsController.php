@@ -34,7 +34,7 @@ class StatisticsController extends Controller
             $endDate = Carbon::now()->endOfMonth();
         }
 
-        $courseId = request()->exists('course_id') ? intval(request()->get('course_id')) : 1;
+        $courseId = request()->exists('course_id') ? intval(request()->get('course_id')) : 0;
         $groupId = request()->exists('group_id') ? intval(request()->get('group_id')) : 0;
 
         $calenarEventUserStatuses = CalendarEventUserStatus::with('user')
@@ -42,7 +42,9 @@ class StatisticsController extends Controller
             ->whereHas('calendarEvent', function($query) use ($startDate, $endDate, $courseId, $groupId) {
                 $query->whereBetween('starting_at', [$startDate, $endDate])
                     ->whereHas('event.group', function($query) use ($courseId, $groupId) {
-                        $query->where('course_id', '=', $courseId);
+                        if (0 !== $courseId) {
+                            $query->where('course_id', '=', $courseId);
+                        }
 
                         if (0 !== $groupId) {
                             $query->where('id', '=', $groupId);

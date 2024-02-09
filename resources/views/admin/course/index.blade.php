@@ -23,8 +23,14 @@
                         :svg="$icon"
                     >
                         <x-link
+                            href="{{ route('admin.courses.show', [$course]) }}"
+                            title="{{ __('Manage') }}"
+                        />
+
+                        <x-link
                             href="{{ route('admin.courses.edit', [$course]) }}"
-                            title="Edit" />
+                            title="{{ __('Edit') }}"
+                        />
 
                         <x-admin.form.delete-button action="{{ route('admin.courses.destroy', [$course]) }}" />
                     </x-data-cards.card>

@@ -51,6 +51,21 @@ class CourseController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     *
+     * @param Course $course
+     *
+     * @return View
+     */
+    public function show(Course $course)
+    {
+        return view('admin.course.show', [
+            'course' => $course,
+            'prices' => $course->courseMembershipPrices
+        ]);
+    }
+
+    /**
      * Show the form for editing the specified resource.
      *
      * @param Course $course

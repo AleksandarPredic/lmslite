@@ -29,7 +29,7 @@ Route::get('/dashboard', function () {
 
 Route::name('admin.')->middleware('can:admin')->group(function () {
     // Course
-    Route::resource('/admin/courses', CourseController::class)->except(['show']);
+    Route::resource('/admin/courses', CourseController::class);
 
     // Event
     Route::resource('/admin/events', EventController::class);

@@ -12,4 +12,9 @@ class CourseMembership extends Model
     protected $casts = [
         'price' => 'double',
     ];
+
+    public function getPriceDisplayFormat()
+    {
+        return number_format($this->price, 2);
+    }
 }

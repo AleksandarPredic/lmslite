@@ -19,9 +19,28 @@ class Course extends Model
         return $query->orderBy('name')->get();
     }
 
+    /**
+     * @param string $name
+     * @param double $price
+     *
+     * @return CourseDiscount
+     */
+    public function addNewDiscount($name, $price)
+    {
+        return $this->courseDiscounts()->create([
+            'name' => $name,
+            'price' => $price
+        ]);
+    }
+
+    /**
+     * @param double $price
+     *
+     * @return CourseMembership
+     */
     public function addNewMembershipPrice($price)
     {
-        $this->courseMembershipPrices()->create([
+        return $this->courseMembershipPrices()->create([
             'price' => $price
         ]);
     }
@@ -39,5 +58,10 @@ class Course extends Model
     public function courseMembershipPrices(): HasMany
     {
         return $this->hasMany(CourseMembership::class);
+    }
+
+    public function courseDiscounts(): HasMany
+    {
+        return $this->hasMany(CourseDiscount::class);
     }
 }

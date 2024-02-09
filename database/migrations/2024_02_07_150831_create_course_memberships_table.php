@@ -16,7 +16,7 @@ class CreateCourseMembershipsTable extends Migration
         Schema::create('course_memberships', function (Blueprint $table) {
             $table->id();
             $table->foreignId('course_id')->constrained()->cascadeOnDelete();
-            $table->decimal('price');
+            $table->decimal('price', 14);
             $table->timestamps();
         });
     }

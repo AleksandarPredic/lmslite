@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class CourseMembership extends Model
 {
+    use HasFactory;
+
     protected $fillable = ['course_id', 'price'];
 
     protected $casts = [

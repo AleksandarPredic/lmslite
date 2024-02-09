@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\CalendarEventUser;
 use App\Models\CalendarEventUserStatus;
 use App\Models\Course;
+use App\Models\CourseDiscount;
 use App\Models\CourseMembership;
 use App\Models\Event;
 use App\Models\User;
@@ -97,6 +98,21 @@ class DatabaseSeeder extends Seeder
                     'price' => $coursePrice,
                     'created_at' => $createdTime,
                     'updated_at' => $createdTime,
+                ]);
+            }
+
+            if ($course->id > 2) {
+                continue;
+            }
+
+            // Add two discount prices for courses with ID 1 and 2
+            $courseDiscountPrices = [500, 1000];
+
+            foreach ($courseDiscountPrices as $courseDiscount) {
+                CourseDiscount::create([
+                    'course_id' => $course->id,
+                    'name' => 'discount ' . $faker->word,
+                    'price' => $courseDiscount,
                 ]);
             }
         }

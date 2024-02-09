@@ -3,12 +3,30 @@
 namespace App\Http\Controllers;
 
 use App\Models\Course;
-use App\Models\CourseMembership;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 
 class CourseController extends Controller
 {
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @return RedirectResponse
+     */
+    public function storeDiscount(Course $course)
+    {
+
+        $attributes = $this->processRequest();
+
+        $discount = $course->addNewDiscount(
+            $attributes['name'],
+            $attributes['price']
+        );
+
+        return redirect(route('admin.courses.show', $course->id))
+            ->with('admin.message.success', "Course discount, {$discount->name}, added!");
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -46,7 +64,7 @@ class CourseController extends Controller
 
         $course->addNewMembershipPrice($attributes['price']);
 
-        return redirect(route('admin.courses.index'))
+        return redirect(route('admin.courses.show', $course->id))
             ->with('admin.message.success', "Course, {$course->name}, created!");
     }
 
@@ -61,7 +79,8 @@ class CourseController extends Controller
     {
         return view('admin.course.show', [
             'course' => $course,
-            'prices' => $course->courseMembershipPrices
+            'prices' => $course->courseMembershipPrices,
+            'discounts' => $course->courseDiscounts,
         ]);
     }
 

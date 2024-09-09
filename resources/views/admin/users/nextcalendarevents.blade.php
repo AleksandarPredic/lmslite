@@ -63,20 +63,23 @@
             <x-slot name="meta">
 
                 {{-- # Next calendar events --}}
-                <div class="mb-4 px-2">
-                    <h2 class="text-lg"><strong>{{ __('User next 5 calendar events') }}</strong></h2>
-                    <small>(Results are cached for 10 minutes)</small>
+                <x-admin.singular.meta.list-wrapper class="p-2">
+                    <div class="mb-4 px-2">
+                        <h2 class="text-lg"><strong>{{ __('User next 5 calendar events') }}</strong></h2>
+                        <small>(Results are cached for 10 minutes)</small>
 
-                    <div>
-                        @if($calendarEvents->isNotEmpty())
-                            @foreach($calendarEvents as $calendarEvent)
-                                <x-admin.singular.meta.item-calendar-event
-                                    :calendar-event="$calendarEvent"
-                                />
-                            @endforeach
-                        @endif
+                        <div>
+                            @if($calendarEvents->isNotEmpty())
+                                @foreach($calendarEvents as $calendarEvent)
+                                    <x-admin.singular.meta.item-calendar-event
+                                        :calendar-event="$calendarEvent"
+                                        :showEventName="true"
+                                    />
+                                @endforeach
+                            @endif
+                        </div>
                     </div>
-                </div>
+                </x-admin.singular.meta.list-wrapper>
             </x-slot>
 
         </x-admin.singular.wrapper>

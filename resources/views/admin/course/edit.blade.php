@@ -4,8 +4,13 @@
     </x-admin.header>
 
     <x-admin.main>
-        <div class="flex justify-end">
+        <div class="flex mb-4">
             <x-admin.redirect-link href="{{ route('admin.courses.index') }}" :title="__('Back to all!')" />
+        </div>
+
+        <div class="flex justify-end mb-4 px-4">
+            <x-admin.action-link-button href="{{ route('admin.courses.show', $course) }}" title="{{ __('Manage') }}" />
+            <x-admin.action-delete-button action="{{ route('admin.courses.destroy', $course) }}" />
         </div>
 
         <x-admin.form.wrapper

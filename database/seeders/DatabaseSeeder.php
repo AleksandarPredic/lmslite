@@ -88,7 +88,7 @@ class DatabaseSeeder extends Seeder
                 $coursePrices[] = $faker->numberBetween(2000, 5000);
             }
 
-            // Make a couple of prices per couser, so we can test price changes
+            // Make a couple of prices per course, so we can test price changes
             foreach ($coursePrices as $subMonths => $coursePrice) {
                 // Simulate that the price changes before today date so we can compare membership to pay per month price
                 $createdTime = Carbon::now()->subMonths($subMonths);
@@ -116,6 +116,9 @@ class DatabaseSeeder extends Seeder
                 ]);
             }
         }
+
+        // Add one more course without a price and course discounts so we can handle legacy courses views which had no price until now
+        Course::factory()->create(['name' => 'No Price']);
 
         $this->call([
             GroupSeeder::class,

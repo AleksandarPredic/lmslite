@@ -56,7 +56,7 @@
                     name="{{ __('Discounts') }}"
                 />
 
-                @if($prices->isNotEmpty())
+                @if($discounts->isNotEmpty())
                     <x-admin.singular.meta.list-wrapper>
                         @foreach($discounts as $discount)
                             <x-admin.singular.meta.item-wrapper>

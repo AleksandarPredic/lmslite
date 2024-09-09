@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Course;
 use App\Models\Group;
 use Illuminate\Database\Seeder;
 
@@ -14,12 +15,15 @@ class GroupSeeder extends Seeder
      */
     public function run()
     {
+        // Groups are seeding after the courses are created
         Group::factory([
-            'name' => 'Painting'
+            'name' => 'Painting',
+            'course_id' => (Course::where('name', 'Painting')->first())->id
         ])->create();
 
         Group::factory([
-            'name' => 'Programming'
+            'name' => 'Programming',
+            'course_id' => (Course::where('name', 'Programming')->first())->id
         ])->create();
     }
 }

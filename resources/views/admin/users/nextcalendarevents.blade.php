@@ -18,7 +18,7 @@
         </div>
 
         <div class="flex justify-end mb-4 px-4">
-            <x-admin.action-link-button href="{{ route('admin.users.show', $user) }}" title="{{ __('Back to user') }}" />
+            <x-admin.action-link-button href="{{ route('admin.users.show', $user) }}" title="{{ __('Back to profile') }}" />
         </div>
 
         <x-admin.singular.wrapper>

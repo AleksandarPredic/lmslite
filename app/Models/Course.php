@@ -34,6 +34,7 @@ class Course extends Model
     }
 
     /**
+     *
      * @param double $price
      *
      * @return CourseMembership
@@ -45,6 +46,11 @@ class Course extends Model
         ]);
     }
 
+    /**
+     * Used to get the value for the edit screen input
+     *
+     * @return float
+     */
     public function getLatestMembershipPriceAsDecimal()
     {
         return $this->getLatestMembershipPrice()->pluck('price')->first();
@@ -53,6 +59,16 @@ class Course extends Model
     public function getLatestMembershipPrice()
     {
         return $this->courseMembershipPrices()->latest();
+    }
+
+    public function getAllPricesSordedFromNewest()
+    {
+        return $this->courseMembershipPrices()->orderBy('created_at', 'desc')->get();
+    }
+
+    public function getAllPricesSordedFromOldest()
+    {
+        return $this->courseMembershipPrices()->orderBy('created_at', 'asc')->get();
     }
 
     public function courseMembershipPrices(): HasMany

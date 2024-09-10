@@ -65,9 +65,7 @@
                 <x-admin.singular.meta.list-wrapper>
 
                     @foreach($users as $user)
-                        <x-admin.singular.meta.item-user
-                            :user="$user"
-                        >
+                        <x-admin.singular.meta.item-user>
                             {{-- # Properties --}}
                             <x-slot name="properties">
                                 <x-data-property-link

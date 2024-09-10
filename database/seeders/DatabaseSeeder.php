@@ -89,15 +89,23 @@ class DatabaseSeeder extends Seeder
             }
 
             // Make a couple of prices per course, so we can test price changes
-            foreach ($coursePrices as $subMonths => $coursePrice) {
-                // Simulate that the price changes before today date so we can compare membership to pay per month price
-                $createdTime = Carbon::now()->subMonths($subMonths);
+            foreach ($coursePrices as $addMonths => $coursePrice) {
+                // Simulate that the price changes after today date so we can compare membership to pay per month price
+                $createdTime = Carbon::now()->addMonths($addMonths + 1);
 
                 CourseMembership::create([
                     'course_id' => $course->id,
                     'price' => $coursePrice,
                     'created_at' => $createdTime,
                     'updated_at' => $createdTime,
+                ]);
+
+                // Create two prices so I can test multiple prices in the same month
+                CourseMembership::create([
+                    'course_id' => $course->id,
+                    'price' => $coursePrice + 500,
+                    'created_at' => $createdTime->addDays(3),
+                    'updated_at' => $createdTime->addDays(3),
                 ]);
             }
 

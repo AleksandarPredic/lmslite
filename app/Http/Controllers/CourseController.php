@@ -79,7 +79,7 @@ class CourseController extends Controller
     {
         return view('admin.course.show', [
             'course' => $course,
-            'prices' => $course->courseMembershipPrices,
+            'prices' => $course->getAllPricesSordedFromNewest(),
             'discounts' => $course->courseDiscounts,
         ]);
     }

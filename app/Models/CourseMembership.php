@@ -13,6 +13,8 @@ class CourseMembership extends Model
 
     protected $casts = [
         'price' => 'double',
+        'starting_at' => 'datetime',
+        'ending_at' => 'datetime',
     ];
 
     public function getPriceDisplayFormat()

@@ -17,16 +17,23 @@ class GroupSeeder extends Seeder
     {
         Group::factory([
             'name' => 'Painting',
-            'course_id' => (Course::where('name', 'Painting')->first())->id
+            'course_id' => (Course::where('name', 'Painting')->first())->id,
+            'price_1' => 3500,
+            'price_2' => 2500,
+            'active' => true,
         ])->create();
 
         Group::factory([
             'name' => 'Programming',
-            'course_id' => (Course::where('name', 'Programming')->first())->id
+            'course_id' => (Course::where('name', 'Programming')->first())->id,
+            'price_1' => 3000,
+            'price_2' => 2600,
+            'active' => true,
         ])->create();
 
         Group::factory([
-            'name' => 'Without course attached'
+            'name' => 'Empty data',
+            'price_2' => null,
         ])->create();
     }
 }

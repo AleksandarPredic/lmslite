@@ -45,8 +45,23 @@
                 />
 
                 <x-admin.singular.property
+                    name="{{ __('Price 1') }}"
+                    value="{{ lmsPricePublicFormat($group->price_1) }}"
+                />
+
+                <x-admin.singular.property
+                    name="{{ __('Price 2') }}"
+                    value="{{ lmsPricePublicFormat($group->price_2) }}"
+                />
+
+                <x-admin.singular.property
                     name="{{ __('Note') }}"
                     value="{{ $group->note }}"
+                />
+
+                <x-admin.singular.property
+                    name="{{ __('Active') }}"
+                    value="{{ $group->active ? __('Yes') : __('No') }}"
                 />
             </x-slot>
 

@@ -46,3 +46,28 @@ if (! function_exists('lmsCarbonDateFormat')) {
         return $dateTime->format(config('app.datetime_format.date_only'));
     }
 }
+
+if (! function_exists('lmsPricePublicFormat')) {
+    /**
+     * Used across the application to unify the price displayed in common format.
+     * Shows decimal places only when they exist.
+     *
+     * @param float|string|null $price
+     *
+     * @return string
+     */
+    function lmsPricePublicFormat($price): string
+    {
+        if ($price === null) {
+            return _('Empty');
+        }
+
+        // Convert to float to ensure proper comparison
+        $price = (float) $price;
+
+        // Check if the price is a whole number
+        $decimals = (floor($price) == $price) ? 0 : 2;
+
+        return number_format($price, $decimals);
+    }
+}

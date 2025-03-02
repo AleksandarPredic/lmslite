@@ -202,7 +202,6 @@ class User extends Authenticatable
             function () use ($limit) {
                 // Get events that this user is added outside event assigned group
                 $calendarEvents = $this->calendarEvents()
-                                        ->without('event')
                                        ->whereDate('starting_at', '>', now())
                                        ->orderBy('starting_at')
                                        ->limit($limit)

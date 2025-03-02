@@ -66,7 +66,7 @@ class User extends Authenticatable
 
     public function groups(): BelongsToMany
     {
-        return $this->belongsToMany(Group::class, 'user_groups')->withPivot('id');
+        return $this->belongsToMany(Group::class, 'user_groups')->withPivot('id', 'price_type');
     }
 
     public function calendarEvents(): BelongsToMany
@@ -182,6 +182,16 @@ class User extends Authenticatable
     {
         // TODO: Add user image upload in the future and use this as a placeholder
         return asset('/images/user-placeholder.png');
+    }
+
+    /**
+     * Return Group pivot relationship selected price type
+     *
+     * @return string
+     */
+    public function getUserPivotPriceType(): string
+    {
+        return $this->pivot->price_type ?? 'price_1';
     }
 
     /**

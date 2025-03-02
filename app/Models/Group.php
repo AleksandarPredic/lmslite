@@ -55,7 +55,7 @@ class Group extends Model
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'user_groups')->withPivot('id');
+        return $this->belongsToMany(User::class, 'user_groups')->withPivot('id', 'price_type');
     }
 
     /**

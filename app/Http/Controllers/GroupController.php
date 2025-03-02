@@ -185,6 +185,19 @@ class GroupController extends Controller
         );
     }
 
+    public function updateUserPriceType(Group $group, User $user)
+    {
+        $validated = request()->validate([
+            'price_type' => 'required|in:price_1,price_2',
+        ]);
+
+        $group->users()->updateExistingPivot($user->id, [
+            'price_type' => $validated['price_type'],
+        ]);
+
+        return back()->with('success', __('Price type updated successfully.'));
+    }
+
     /**
      * Remove the user relationship via the pivot table
      *

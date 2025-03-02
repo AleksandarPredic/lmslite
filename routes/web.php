@@ -51,7 +51,7 @@ Route::name('admin.')->middleware('can:admin')->group(function () {
 
     // User
     Route::resource('/admin/users', UserController::class);
-    Route::get('/admin/users/{user}/statistics', [UserController::class, 'statistics'])->name('users.statistics');
+    Route::get('/admin/users/{user}/next-calendar-events', [UserController::class, 'nextCalendarEvents'])->name('users.nextCalendarEvents');
     Route::post('/admin/users/find', [UserController::class, 'findUsers'])->name('users.find');
 
     // Statistics

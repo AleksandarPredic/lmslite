@@ -76,16 +76,16 @@ class UserController extends Controller
     }
 
     /**
-     * Display the user statistics
+     * Display the user next calendar events
      *
      * @param User $user
      *
      * @return View
      * @throws \Exception
      */
-    public function statistics(User $user): View
+    public function nextCalendarEvents(User $user): View
     {
-        return view('admin.users.statistics', [
+        return view('admin.users.next-calendar-events', [
             'user' => $user,
             'calendarEvents' => $user->getUserNextEvents(5)
         ]);

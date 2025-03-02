@@ -15,7 +15,16 @@ class Group extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'starting_at', 'ending_at', 'course_id', 'note', 'active'];
+    protected $fillable = [
+        'name',
+        'starting_at',
+        'ending_at',
+        'course_id',
+        'note',
+        'active',
+        'price_1',
+        'price_2',
+    ];
 
     /**
      * The attributes that should be cast.

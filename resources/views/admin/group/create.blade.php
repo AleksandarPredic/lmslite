@@ -42,6 +42,22 @@
                 :label="__('Note')"
             >{{ old('note') }}</x-admin.form.textarea>
 
+            <x-admin.form.input
+                name="price_1"
+                type="number"
+                step="0.01"
+                :value="old('price_1')"
+                :label="__('Price 1')"
+            />
+
+            <x-admin.form.input
+                name="price_2"
+                type="number"
+                step="0.01"
+                :value="old('price_2')"
+                :label="__('Price 2')"
+            />
+
             {{-- When creating group, only active option is allowed --}}
             <x-admin.form.select
                 name="active"

@@ -54,6 +54,7 @@
                 :label="__('Active')"
                 :options="$activeOptions"
             />
+            <p><small>* If you set group to non-active it will be hidden in some select fields or queries. Usually used for old Groups no longer in use.</small></p>
         </x-admin.form.wrapper>
     </x-admin.main>
 </x-app-layout>

@@ -42,7 +42,9 @@ class StatisticsController extends Controller
             ->whereHas('calendarEvent', function($query) use ($startDate, $endDate, $courseId, $groupId) {
                 $query->whereBetween('starting_at', [$startDate, $endDate])
                     ->whereHas('event.group', function($query) use ($courseId, $groupId) {
-                        $query->where('course_id', '=', $courseId);
+                        if (0 !== $courseId) {
+                            $query->where('course_id', '=', $courseId);
+                        }
 
                         if (0 !== $groupId) {
                             $query->where('id', '=', $groupId);

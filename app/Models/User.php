@@ -59,6 +59,13 @@ class User extends Authenticatable
         'sign_up_date' => 'datetime'
     ];
 
+    /**
+     * The relationships that should be eager loaded by default.
+     *
+     * @var array
+     */
+    protected $with = [];
+
     public function role(): BelongsToMany
     {
         return $this->belongsToMany(Role::class, 'user_roles')->withPivot('id');

@@ -6,6 +6,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\StatisticsController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserPaymentsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -54,6 +55,7 @@ Route::name('admin.')->middleware('can:admin')->group(function () {
     Route::resource('/admin/users', UserController::class);
     Route::get('/admin/users/{user}/next-calendar-events', [UserController::class, 'nextCalendarEvents'])->name('users.nextCalendarEvents');
     Route::post('/admin/users/find', [UserController::class, 'findUsers'])->name('users.find');
+    Route::get('/admin/users/{user}/payments', [UserPaymentsController::class, 'index'])->name('users.payments.index');
 
     // Statistics
     Route::get('/admin/statistics', [StatisticsController::class, 'index'])->name('statistics.index');

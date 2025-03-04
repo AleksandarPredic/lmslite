@@ -15,8 +15,7 @@
         </div>
 
         <div class="flex justify-end mb-4 px-4">
-            <x-admin.action-link-button href="{{ route('admin.users.create') }}" title="{{ __('Create new') }}" />
-            <x-admin.action-link-button href="{{ route('admin.users.nextCalendarEvents', $user) }}" title="{{ __('Next Events') }}" />
+            <x-admin.action-link-button href="{{ route('admin.users.create') }}" title="{{ __('Create') }}" />
             <x-admin.action-link-button href="{{ route('admin.users.edit', $user) }}" title="{{ __('Edit') }}" />
             <x-admin.action-delete-button action="{{ route('admin.users.destroy', $user) }}" />
         </div>
@@ -57,6 +56,11 @@
                     name="{{ __('Active') }}"
                     value="{{ $user->active ? __('Yes') : __('No') }}"
                 />
+
+                <div class="flex justify-end mt-4 px-4">
+                    <x-admin.action-link-button href="{{ route('admin.users.payments.index', $user) }}" title="{{ __('Payments') }}" />
+                    <x-admin.action-link-button href="{{ route('admin.users.nextCalendarEvents', $user) }}" title="{{ __('Next Events') }}" />
+                </div>
             </x-slot>
 
             {{-- # Properties --}}

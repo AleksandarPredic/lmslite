@@ -61,36 +61,64 @@
                 {{-- # Meta --}}
                 <x-slot name="meta">
 
+                    <x-admin.singular.meta.name
+                        name="{{ __('User groups') }}"
+                    />
+
                     @foreach($user->groups as $group)
-                        <x-admin.singular.meta.name
+
+                        @php
+                            // Use group's starting_at and ending_at dates
+                            $startDate = Carbon\Carbon::parse($group->starting_at)->startOfMonth();
+                            $endDate = Carbon\Carbon::parse($group->ending_at)->endOfMonth();
+
+                            // Use CarbonPeriod to create a period with 1 month interval
+                            $period = Carbon\CarbonPeriod::create($startDate, '1 month', $endDate);
+
+                            // Generate array of months
+                            $months = [];
+                            foreach ($period as $date) {
+                                $months[] = [
+                                    'date' => $date->copy(),
+                                    'name' => $date->format('F Y')
+                                ];
+                            }
+                        @endphp
+
+                        <br />
+                        <x-admin.singular.meta.info
                             name="{{ $group->name }}"
+                            value=""
                         />
 
                         <x-admin.singular.meta.list-wrapper>
 
-                            @php
-                                // Use group's starting_at and ending_at dates
-                                $startDate = Carbon\Carbon::parse($group->starting_at)->startOfMonth();
-                                $endDate = Carbon\Carbon::parse($group->ending_at)->endOfMonth();
-
-                                // Use CarbonPeriod to create a period with 1 month interval
-                                $period = Carbon\CarbonPeriod::create($startDate, '1 month', $endDate);
-
-                                // Generate array of months
-                                $months = [];
-                                foreach ($period as $date) {
-                                    $months[] = [
-                                        'date' => $date->copy(),
-                                        'name' => $date->format('F Y')
-                                    ];
-                                }
-                            @endphp
-
                             @foreach($months as $month)
-                                <x-admin.singular.meta.info
-                                    name="{{ $month['name'] }}"
-                                    value="{{ __('Payment status: Not paid') }}"
-                                />
+                                <x-admin.singular.meta.item-wrapper>
+                                    <x-admin.singular.meta.item-icon>
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zm-7 5h5v5h-5z"/></svg>
+                                    </x-admin.singular.meta.item-icon>
+
+
+                                    <div class="font-bold text-lg">{{ $month['name'] }}</div>
+
+
+                                    <x-admin.singular.meta.item-properties-wrapper class="flex-1 justify-end">
+                                        <x-data-property>
+                                            {{ __('Status') }}: {{ __('Not paid') }}
+                                        </x-data-property>
+
+                                        <x-data-property>
+                                            {{ __('Date') }}: {{ '14.02.2024.' }}
+                                        </x-data-property>
+
+                                        <x-data-property>
+                                            {{ __('Amount') }}: {{ '3500' }}
+                                        </x-data-property>
+                                    </x-admin.singular.meta.item-properties-wrapper>
+
+                                </x-admin.singular.meta.item-wrapper>
+
                             @endforeach
 
                         </x-admin.singular.meta.list-wrapper>

@@ -14,7 +14,7 @@ class AddPriceTypeToUserGroupsTable extends Migration
     public function up()
     {
         Schema::table('user_groups', function (Blueprint $table) {
-            $table->string('price_type')->nullable()->after('user_id');
+            $table->string('price_type')->default('price_1')->after('user_id');
         });
     }
 

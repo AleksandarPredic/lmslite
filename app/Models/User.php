@@ -86,6 +86,11 @@ class User extends Authenticatable
         return $this->hasMany(CalendarEventUserStatus::class);
     }
 
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
     /**
      * Create user role
      *
@@ -189,16 +194,6 @@ class User extends Authenticatable
     {
         // TODO: Add user image upload in the future and use this as a placeholder
         return asset('/images/user-placeholder.png');
-    }
-
-    /**
-     * Return Group pivot relationship selected price type
-     *
-     * @return string
-     */
-    public function getUserPivotPriceType(): string
-    {
-        return $this->pivot->price_type ?? 'price_1';
     }
 
     /**

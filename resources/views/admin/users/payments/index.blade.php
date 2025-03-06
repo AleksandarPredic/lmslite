@@ -34,8 +34,8 @@
                     <x-admin.singular.item
                         class="text-sm text-gray-500"
                     >
-                        {{ __('Groups') }}
-                        @foreach($user->groups as $group)
+                        {{ __('Groups (Active only)') }}
+                        @foreach($groups as $group)
                             <a href="{{ route('admin.groups.show', $group) }}">{{ $group->name }}</a>
                         @endforeach
                     </x-admin.singular.item>
@@ -58,75 +58,104 @@
             </x-slot>
 
 
-                {{-- # Meta --}}
-                <x-slot name="meta">
+            {{-- # Meta --}}
+            <x-slot name="meta">
 
-                    <x-admin.singular.meta.name
-                        name="{{ __('User groups') }}"
+                <x-admin.singular.meta.name
+                    name="{{ __('User active groups') }}"
+                />
+
+                @foreach($groups as $group)
+
+                    @php
+                        // Use group's starting_at and ending_at dates
+                        $startDate = Carbon\Carbon::parse($group->starting_at)->startOfMonth();
+                        $endDate = Carbon\Carbon::parse($group->ending_at)->endOfMonth();
+
+                        // Use CarbonPeriod to create a period with 1 month interval
+                        $period = Carbon\CarbonPeriod::create($startDate, '1 month', $endDate);
+
+                        // Generate array of months
+                        $months = [];
+                        foreach ($period as $date) {
+                            $months[] = [
+                                'date' => $date->copy(),
+                                'name' => $date->format('F Y')
+                            ];
+                        }
+                    @endphp
+
+                    <br />
+                    <x-admin.singular.meta.info
+                        name="{{ $group->name }}"
+                        value=""
                     />
 
-                    @foreach($user->groups as $group)
+                    <x-admin.singular.meta.list-wrapper>
 
-                        @php
-                            // Use group's starting_at and ending_at dates
-                            $startDate = Carbon\Carbon::parse($group->starting_at)->startOfMonth();
-                            $endDate = Carbon\Carbon::parse($group->ending_at)->endOfMonth();
+                        @foreach($months as $month)
+                            <x-admin.singular.meta.item-wrapper>
+                                <x-admin.singular.meta.item-icon>
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zm-7 5h5v5h-5z"/></svg>
+                                </x-admin.singular.meta.item-icon>
 
-                            // Use CarbonPeriod to create a period with 1 month interval
-                            $period = Carbon\CarbonPeriod::create($startDate, '1 month', $endDate);
+                                <div class="font-bold text-lg">{{ $month['name'] }} | {{ lmsPricePublicFormat($group->user_price) }}</div>
 
-                            // Generate array of months
-                            $months = [];
-                            foreach ($period as $date) {
-                                $months[] = [
-                                    'date' => $date->copy(),
-                                    'name' => $date->format('F Y')
-                                ];
-                            }
-                        @endphp
+                                @php
+                                    $monthKey = $month['date']->format('Y-n');
+                                    $payment = $group->paymentsByMonth[$monthKey] ?? null;
+                                @endphp
 
-                        <br />
-                        <x-admin.singular.meta.info
-                            name="{{ $group->name }}"
-                            value=""
-                        />
-
-                        <x-admin.singular.meta.list-wrapper>
-
-                            @foreach($months as $month)
-                                <x-admin.singular.meta.item-wrapper>
-                                    <x-admin.singular.meta.item-icon>
-                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zm-7 5h5v5h-5z"/></svg>
-                                    </x-admin.singular.meta.item-icon>
-
-
-                                    <div class="font-bold text-lg">{{ $month['name'] }}</div>
-
-
-                                    <x-admin.singular.meta.item-properties-wrapper class="flex-1 justify-end">
-                                        <x-data-property>
-                                            {{ __('Status') }}: {{ __('Not paid') }}
+                                <x-admin.singular.meta.item-properties-wrapper class="flex-1 justify-end">
+                                    @if($payment)
+                                        <x-data-property class="mb-2 mt-2">
+                                            {{ __('Date') }}: {{ $payment->payment_date->format('d.m.Y.') }}
                                         </x-data-property>
 
-                                        <x-data-property>
-                                            {{ __('Date') }}: {{ '14.02.2024.' }}
+                                        @if($payment->note)
+                                            <x-data-property class="mb-2 mt-2">
+                                                {{ __('Note') }}: {{ $payment->note }}
+                                            </x-data-property>
+                                        @endif
+
+                                        <x-data-property class="font-bold mb-2 mt-2">
+                                            {{ __('Amount') }}: {{ lmsPricePublicFormat($payment->amount) }}
                                         </x-data-property>
+                                    @else
+                                        <!-- Payment form -->
+                                        <form
+                                            action="{{ route('admin.users.payments.store', $user) }}"
+                                            method="POST"
+                                            class="lg:flex"
+                                            onsubmit="return confirm('Are you sure you want to record payment of ' + this.elements.amount.value + ' for {{ $month['name'] }}?');"
+                                        >
+                                            @csrf
+                                            <input type="hidden" name="group_id" value="{{ $group->id }}">
+                                            <input type="hidden" name="payment_month" value="{{ $month['date']->month }}">
+                                            <input type="hidden" name="payment_year" value="{{ $month['date']->year }}">
 
-                                        <x-data-property>
-                                            {{ __('Amount') }}: {{ '3500' }}
-                                        </x-data-property>
-                                    </x-admin.singular.meta.item-properties-wrapper>
+                                            <div class="mr-2 mb-2 mt-2">
+                                                <input type="number" name="amount" class="text-sm rounded-md border-gray-300" placeholder="Amount" step="0.01" min="0" max="99999999.99" required>
+                                            </div>
 
+                                            <div class="mr-2 mb-2 mt-2">
+                                                <input type="text" name="note" class="text-sm rounded-md border-gray-300" placeholder="Note (optional)">
+                                            </div>
 
+                                            <button type="submit" class="font-bold py-2 px-4 rounded bg-gray-100 mb-2 mt-2">
+                                                {{ __('Record Payment') }}
+                                            </button>
+                                        </form>
+                                    @endif
+                                </x-admin.singular.meta.item-properties-wrapper>
+                            </x-admin.singular.meta.item-wrapper>
 
-                                </x-admin.singular.meta.item-wrapper>
+                        @endforeach
 
-                            @endforeach
+                    </x-admin.singular.meta.list-wrapper>
+                @endforeach
 
-                        </x-admin.singular.meta.list-wrapper>
-                    @endforeach
-
-                </x-slot>
+            </x-slot>
 
 
         </x-admin.singular.wrapper>

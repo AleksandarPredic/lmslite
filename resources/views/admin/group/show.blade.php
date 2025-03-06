@@ -101,7 +101,7 @@
                                 @csrf
                                 @method('PATCH')
                                 @php
-                                    $selectedPriceType = $user->getUserPivotPriceType();
+                                    $selectedPriceType = $user->pivot->price_type;
                                     $priceSelectBackground = $selectedPriceType === 'price_1' ? 'white' : '#f2dbdb';
                                 @endphp
                                 <select name="price_type" class="text-sm border-gray-300 rounded-md shadow-sm" onchange="this.form.submit()" style="background-color: {{ $priceSelectBackground }};">

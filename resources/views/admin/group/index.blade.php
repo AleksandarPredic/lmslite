@@ -34,6 +34,18 @@
                             <x-data-property>
                                 {{ __('Course') }}: {{ $group->course ? $group->course->name : 'None' }}
                             </x-data-property>
+
+                            <x-data-property>
+                                {{ __('Active') }}: {{ $group->active ? __('Yes') : __('No') }}
+                            </x-data-property>
+
+                            <x-data-property>
+                                {{ __('Price one') }}: {{ $group->price_1 ? lmsPricePublicFormat($group->price_1) : __('No price') }}
+                            </x-data-property>
+
+                            <x-data-property>
+                                {{ __('Price two') }}: {{ $group->price_2 ? lmsPricePublicFormat($group->price_2) : __('No price') }}
+                            </x-data-property>
                         </x-slot>
 
                         {{-- Group action links --}}

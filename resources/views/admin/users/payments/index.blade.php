@@ -117,6 +117,8 @@
                                         </x-data-property>
                                     </x-admin.singular.meta.item-properties-wrapper>
 
+
+
                                 </x-admin.singular.meta.item-wrapper>
 
                             @endforeach

@@ -21,5 +21,4 @@ class UserPaymentsController extends Controller
             'user' => $userObj
         ]);
     }
-
 }

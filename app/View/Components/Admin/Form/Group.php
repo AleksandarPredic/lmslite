@@ -40,8 +40,29 @@ class Group extends Component
      */
     public function render()
     {
+        $groups = GroupModel::where('active', true)->orderBy('name', 'ASC')->get();
+
+        // If group_id param is provided in the URL, use this to show groups that are not active but comiong from hardcoded links
+        // Example we have this in the UserPayments index view
+        if (isset($_GET['group_id']) && $_GET['group_id'] > 0) {
+            $requestedGroupId = (int) $_GET['group_id'];
+
+            // Check if this group is already in the collection
+            $groupExists = $groups->contains('id', $requestedGroupId);
+
+            // If not (it might be inactive), fetch and add it
+            if (!$groupExists) {
+                $additionalGroup = GroupModel::find($requestedGroupId);
+                if ($additionalGroup) {
+                    $groups->push($additionalGroup);
+                    // Resort the collection after adding the new group
+                    $groups = $groups->sortBy('name');
+                }
+            }
+        }
+
         $options = ['0' => __('None')];
-        if (! empty($groups = GroupModel::where('active', true)->orderBy('name', 'ASC')->get())) {
+        if (! empty($groups)) {
             foreach ($groups as $group) {
                 $options[$group->id] = $group->name;
             }

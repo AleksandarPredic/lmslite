@@ -102,6 +102,7 @@
                     :value="$selectedCourseId"
                 />
 
+                {{-- In the statistics we show all groups if we have the param group_id --}}
                 <x-admin.form.group
                     :value="$selectedGroupId"
                 />

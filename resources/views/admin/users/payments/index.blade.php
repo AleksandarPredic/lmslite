@@ -34,7 +34,7 @@
                     <x-admin.singular.item
                         class="text-sm text-gray-500"
                     >
-                        {{ __('Groups (Active only)') }}
+                        {{ __('Groups (In last 2 years)') }}
                         @foreach($groups as $group)
                             <a href="{{ route('admin.groups.show', $group) }}">{{ $group->name }}</a>
                         @endforeach
@@ -62,7 +62,7 @@
             <x-slot name="meta">
 
                 <x-admin.singular.meta.name
-                    name="{{ __('User active groups') }}"
+                    name="{{ __('User groups in last 2 years') }}"
                 />
 
                 @foreach($groups as $group)
@@ -86,10 +86,22 @@
                     @endphp
 
                     <br />
-                    <x-admin.singular.meta.info
-                        name="{{ $group->name }}"
-                        value=""
-                    />
+
+                    <x-admin.singular.meta.item-wrapper class="bg-gray-100 text-lg">
+                        {{ $group->name }}
+                        <div class="flex-1 text-right">
+                            <a href="{{ route('admin.statistics.index', [
+                            'group_id' => $group->id,
+                            'calendar_start' => $group->starting_at->startOfDay()->format($statistics_filter_date_format),
+                            'calendar_end' => $group->ending_at->startOfDay()->format($statistics_filter_date_format)
+                        ]) }}"
+                               class="text-blue-600 hover:underline"
+                               target="_blank"
+                            >
+                                {{ __('View Statistics') }}
+                            </a>
+                        </div>
+                    </x-admin.singular.meta.item-wrapper>
 
                     <x-admin.singular.meta.list-wrapper>
 
@@ -100,6 +112,11 @@
                                 </x-admin.singular.meta.item-icon>
 
                                 <div class="font-bold text-lg">{{ $month['name'] }} | {{ lmsPricePublicFormat($group->user_price) }}</div>
+
+                                <x-admin.user-payments.statusses
+                                    :month="$month"
+                                    :group="$group"
+                                />
 
                                 @php
                                     $monthKey = $month['date']->format('Y-n');

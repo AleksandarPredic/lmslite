@@ -21,7 +21,7 @@ class StatisticsController extends Controller
          * TODO: Continue here
          * http://localhost/admin/events/3
          * http://localhost/admin/statistics
-         * http://localhost/admin/statistics?course_id=2&start_date=01-12-2022&end_date=31-02-2023
+         * http://localhost/admin/statistics?group_id=2&calendar_start=2025-03-20T00%3A00&calendar_end=2025-09-20T00%3A00
          */
 
         // TODO: Add caching
@@ -34,7 +34,7 @@ class StatisticsController extends Controller
             $endDate = Carbon::now()->endOfMonth();
         }
 
-        $courseId = request()->exists('course_id') ? intval(request()->get('course_id')) : 1;
+        $courseId = request()->exists('course_id') ? intval(request()->get('course_id')) : 0;
         $groupId = request()->exists('group_id') ? intval(request()->get('group_id')) : 0;
 
         $calenarEventUserStatuses = CalendarEventUserStatus::with('user')
@@ -141,5 +141,10 @@ class StatisticsController extends Controller
             'dates' => $datesWithKeysAsMonths,
             'sortedUserStatuses' => collect($sortedUserStatuses)
         ]);
+    }
+
+    public static function getDateFormat()
+    {
+        return self::FILTER_DATE_FORMAT;
     }
 }

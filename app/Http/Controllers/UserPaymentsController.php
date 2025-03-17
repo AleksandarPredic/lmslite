@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CalendarEventUserStatus;
+use App\Models\Payment;
 use App\Models\User;
 use App\Services\PaymentService;
 use Carbon\CarbonPeriod;
@@ -136,5 +137,19 @@ class UserPaymentsController extends Controller
         $this->paymentService->recordPayment($user, $data);
 
         return redirect()->back()->with('admin.message.success', 'Payment recorded successfully');
+    }
+
+    public function destroy(User $user, Payment $payment): RedirectResponse
+    {
+        // Get month name using Carbon
+        $date = Carbon::createFromDate($payment->payment_year, $payment->payment_month, 1);
+
+        // Delete the payment
+        $payment->delete();
+
+        // Redirect back with success message
+        return redirect()
+            ->route('admin.users.payments.index', $user)
+            ->with('admin.message.success', 'Payment deleted successfully for ' . $date->format('F Y'));
     }
 }

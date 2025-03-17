@@ -125,19 +125,29 @@
 
                                 <x-admin.singular.meta.item-properties-wrapper class="flex-1 justify-end">
                                     @if($payment)
-                                        <x-data-property class="mb-2 mt-2">
-                                            {{ __('Date') }}: {{ $payment->payment_date->format('d.m.Y.') }}
-                                        </x-data-property>
-
-                                        @if($payment->note)
+                                        <div class="flex justify-between items-center">
                                             <x-data-property class="mb-2 mt-2">
-                                                {{ __('Note') }}: {{ $payment->note }}
+                                                {{ __('Date') }}: {{ $payment->payment_date->format('d.m.Y.') }}
                                             </x-data-property>
-                                        @endif
 
-                                        <x-data-property class="font-bold mb-2 mt-2">
-                                            {{ __('Amount') }}: {{ lmsPricePublicFormat($payment->amount) }}
-                                        </x-data-property>
+                                            @if($payment->note)
+                                                <x-data-property class="mb-2 mt-2">
+                                                    {{ __('Note') }}: {{ $payment->note }}
+                                                </x-data-property>
+                                            @endif
+
+                                            <x-data-property class="font-bold mb-2 mt-2">
+                                                {{ __('Amount') }}: {{ lmsPricePublicFormat($payment->amount) }}
+                                            </x-data-property>
+
+                                            <form action="{{ route('admin.users.payments.destroy', ['user' => $user, 'payment' => $payment]) }}"
+                                                  method="POST"
+                                                  onsubmit="return confirm('Are you sure you want to delete this payment' + ' for {{ $month['name'] }}?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-red-600 ml-4 mr-4">{{ __('Delete') }}</button>
+                                            </form>
+                                        </div>
                                     @else
                                         <!-- Payment form -->
                                         <form

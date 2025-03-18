@@ -96,7 +96,7 @@
                             {{-- # Properties --}}
                             <x-slot name="properties">
                                 <x-data-property-link
-                                    href="{{ route('admin.users.show', $user) }}"
+                                    href="{{ route('admin.users.payments.index', $user) }}"
                                     title="{{ $user->name }}"
                                 />
                             </x-slot>

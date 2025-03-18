@@ -45,6 +45,11 @@
                 />
 
                 <x-admin.singular.property
+                    name="{{ __('Course') }}"
+                    value="{{ $group->course ? $group->course->name : __('No course assigned') }}"
+                />
+
+                <x-admin.singular.property
                     name="{{ __('Price 1') }}"
                     value="{{ lmsPricePublicFormat($group->price_1) }}"
                 />

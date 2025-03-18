@@ -92,7 +92,7 @@
                                             <x-data-property-link
                                                 href="{{ route('admin.users.show', $user) }}"
                                                 title="{{ $user->name }}"
-                                            />s
+                                            />
                                         </x-slot>
 
                                         {{-- # Links --}}

@@ -114,6 +114,11 @@
                     name="{{ __('Note') }}"
                     value="{{ $user->note }}"
                 />
+
+                <x-admin.singular.property
+                    name="{{ __('Payment note') }}"
+                    value="{{ $user->payment_note }}"
+                />
             </x-slot>
 
         </x-admin.singular.wrapper>

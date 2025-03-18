@@ -65,11 +65,6 @@
                 />
 
                 <x-admin.singular.property
-                    name="{{ __('Payment note') }}"
-                    value="{{ $user->payment_note }}"
-                />
-
-                <x-admin.singular.property
                     name="{{ __('Active') }}"
                     value="{{ $group->active ? __('Yes') : __('No') }}"
                 />

@@ -128,7 +128,7 @@
                 @foreach($sortedUserStatuses as $sortedUserStatus)
                     @php $userName = $sortedUserStatus->user->name; @endphp
                     <tr>
-                        <td>{{ $userName }}</td>
+                        <td><a href="{{ route('admin.users.payments.index', $sortedUserStatus->user) }}">{{ $userName }}</a></td>
                         @foreach($sortedUserStatus->sortedDataPerMonth as $monthDate => $monthPreview)
                             <td>
                                 @php

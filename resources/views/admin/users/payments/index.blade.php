@@ -61,6 +61,14 @@
             {{-- # Meta --}}
             <x-slot name="meta">
 
+                <section class="mb-4 pb-4 px-2">
+                    <h3>User Payment Note</h3>
+                    <p class="pl-3 pr-4 py-2 bg-indigo-50 text-lg">{{ $user->payment_note }}</p>
+                </section>
+
+                <hr class="mb-4 mt-4" />
+                <br />
+
                 <x-admin.singular.meta.name
                     name="{{ __('User groups in last 2 years') }}"
                 />

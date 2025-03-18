@@ -226,6 +226,7 @@ class UserController extends Controller
             'sign_up_date' => $datedRules,
             'active' => ['required', 'boolean'],
             'note' => array_merge(['nullable'], $this->getNoteFieldRules()),
+            'payment_note' => array_merge(['nullable'], $this->getNoteFieldRules()),
         ]);
 
         // Add random password for every user, but we will not yet use passwords. Maybe in next version
@@ -247,7 +248,8 @@ class UserController extends Controller
                     'address',
                     'school',
                     'school_info',
-                    'note'
+                    'note',
+                    'payment_note',
                 ] )) {
 
                 continue;

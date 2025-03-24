@@ -7,16 +7,62 @@
 
         {{-- TODO: Move this to css --}}
         <style>
+            .statistics__table-wrapper {
+                overflow-x: auto;
+                width: 100%;
+                -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS devices */
+            }
+
             table {
                 border: 1px solid;
                 border-collapse: collapse;
+                width: auto; /* Allow table to expand based on content */
             }
 
             table th,
             table td {
-                width: 150px;
+                width: 300px;
                 border: 1px solid;
                 text-align: center;
+                padding: 10px;
+            }
+
+            td.statistics__table-data {
+                min-width: 280px;
+                width: 250px;
+            }
+
+            table td hr {
+                border-color: darkgrey;
+            }
+
+            .statistics__group-payments ul li {
+                display: flex;
+                margin-bottom: 8px;
+                text-align: left;
+                justify-content: center;
+            }
+
+            .statistics__group-payments ul li > span:last-child{
+                font-weight: bold;
+                color: green;
+            }
+
+            .statistics__group-payments:not(.statistics__group-payments--show) ul li > span:first-child{
+                width: 175px;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+                color: gray;
+            }
+
+            .statistics__group-payments--show ul li {
+                display: block;
+            }
+
+            /* Add the zebra striping for alternate rows */
+            table tbody tr:nth-child(even) {
+                background-color: #e0e8f7;
             }
 
             .statistics__details-calendar-event-list a:hover,
@@ -45,6 +91,7 @@
 
         <script>
             window.addEventListener('load', () => {
+                // Show modal for event attendance
                 const showCssClass = 'statistics__details-month--show';
                 const allModals = document.querySelectorAll('.statistics__details-month');
 
@@ -56,7 +103,7 @@
                             modal.classList.remove(showCssClass);
                         }
 
-                        event.currentTarget.parentElement.nextElementSibling.classList.add(showCssClass);
+                        event.currentTarget.parentElement.parentElement.nextElementSibling.classList.add(showCssClass);
                     });
                 }
 
@@ -65,6 +112,22 @@
                         event.preventDefault();
 
                         event.currentTarget.parentElement.parentElement.classList.remove(showCssClass);
+                    });
+                }
+
+                // Toggle payment detail information css class
+                const showPaymentsCssClass = 'statistics__group-payments--show';
+                for (const paymentDetails of document.querySelectorAll('.statistics__group-payments')) {
+                    paymentDetails.addEventListener('click', (event) => {
+                        event.preventDefault();
+
+                        const element = event.currentTarget;
+
+                        if (element.classList.contains(showPaymentsCssClass)) {
+                            element.classList.remove(showPaymentsCssClass);
+                        } else {
+                            element.classList.add(showPaymentsCssClass);
+                        }
                     });
                 }
             });
@@ -115,22 +178,23 @@
         <br />
         <br />
 
-        <table class="table-auto">
-            <thead>
+        <div class="statistics__table-wrapper">
+            <table>
+                <thead>
                 <tr>
                     <th>Name</th>
                     @foreach($dates as $date)
                         <th>{{ $date }}</th>
                     @endforeach
                 </tr>
-            </thead>
-            <tbody>
+                </thead>
+                <tbody>
                 @foreach($sortedUserStatuses as $sortedUserStatus)
                     @php $userName = $sortedUserStatus->user->name; @endphp
                     <tr>
-                        <td><a href="{{ route('admin.users.payments.index', $sortedUserStatus->user) }}">{{ $userName }}</a></td>
+                        <td class="statistics__table-name"><a href="{{ route('admin.users.payments.index', $sortedUserStatus->user) }}">{{ $userName }}</a></td>
                         @foreach($sortedUserStatus->sortedDataPerMonth as $monthDate => $monthPreview)
-                            <td>
+                            <td class="statistics__table-data">
                                 @php
                                     $printStatuses = sprintf(
                                         '%s | %s | %s',
@@ -141,9 +205,33 @@
                                 @endphp
                                 <div>
                                     @if(! empty($monthPreview['sortedCalendarEventUserStatuses']))
-                                        <a class="statistics__details-month-trigger" href="#">{{ $printStatuses }}</a>
+                                        <div>
+                                            <a class="statistics__details-month-trigger" href="#">{{ $printStatuses }}</a>
+                                        </div>
+
+                                        {{-- // TODO: Add payments if exists --}}
+                                        <hr class="mt-4 mb-4"/>
+                                        <div class="statistics__group-payments">
+                                            <ul>
+                                                <li><span>Crtanje - pon 18:00 - 2024/2025, 12.03.2025.</span> <span>- 3000,00</span></li>
+                                                <li><span>Python 2 - pon 19:45 - 2024/2025 - I semestar, 12.03.2025.</span> <span>- 3000,00</span></li>
+                                                <li><span>Robotika II - sub 12:45 - 2024/2025 - I semestar, 12.03.2025.</span> <span>- 3000,00</span></li>
+                                            </ul>
+                                        </div>
                                     @else
-                                        {{ $printStatuses }}
+                                        <div>
+                                            {{ $printStatuses }}
+                                        </div>
+
+                                        {{-- // TODO: Add payments if exists --}}
+                                        <hr class="mt-4 mb-4"/>
+                                        <div class="statistics__group-payments">
+                                            <ul>
+                                                <li><span>Crtanje - pon 18:00 - 2024/2025, 12.03.2025.</span> <span>- 3000,00</span></li>
+                                                <li><span>Python 2 - pon 19:45 - 2024/2025 - I semestar, 12.03.2025.</span> <span>- 3000,00</span></li>
+                                                <li><span>Robotika II - sub 12:45 - 2024/2025 - I semestar, 12.03.2025.</span> <span>- 3000,00</span></li>
+                                            </ul>
+                                        </div>
                                     @endif
                                 </div>
 
@@ -191,8 +279,9 @@
                         @endforeach
                     </tr>
                 @endforeach
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
 
     </x-admin.main>
 </x-app-layout>

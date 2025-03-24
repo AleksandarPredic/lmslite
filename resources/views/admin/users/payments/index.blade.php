@@ -103,8 +103,8 @@
                             <div class="flex-1 text-right">
                                 <a href="{{ route('admin.statistics.index', [
                                 'group_id' => $group->id,
-                                'calendar_start' => $group->starting_at->startOfDay()->format($statistics_filter_date_format),
-                                'calendar_end' => $group->ending_at->startOfDay()->format($statistics_filter_date_format)
+                                'calendar_start' => $startDate->startOfDay()->format($statistics_filter_date_format),
+                                'calendar_end' => $endDate->startOfDay()->format($statistics_filter_date_format)
                             ]) }}"
                                    class="text-blue-600 hover:underline"
                                    target="_blank"

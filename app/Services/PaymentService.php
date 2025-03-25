@@ -65,4 +65,19 @@ class PaymentService
                       ->orderBy('payment_month')
                       ->get();
     }
+
+    /**
+     * Get payments for multiple users within a date range
+     *
+     * @param int[] $userIds Array of user IDs
+     * @param \Carbon\Carbon $startDate Start date for filtering payments
+     * @param \Carbon\Carbon $endDate End date for filtering payments
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getUsersPaymentsBetweebDates(array $userIds, $startDate, $endDate): Collection
+    {
+        return Payment::whereIn('user_id', $userIds)
+               ->whereBetween('payment_date', [$startDate, $endDate])
+               ->get();
+    }
 }

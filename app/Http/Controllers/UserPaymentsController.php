@@ -13,7 +13,7 @@ use Illuminate\Support\Carbon;
 
 class UserPaymentsController extends Controller
 {
-    protected $paymentService;
+    protected PaymentService $paymentService;
 
     public function __construct(PaymentService $paymentService)
     {

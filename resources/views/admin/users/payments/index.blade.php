@@ -138,7 +138,7 @@
                                         @if($payment)
                                             <div class="flex justify-between items-center">
                                                 <x-data-property class="mb-2 mt-2">
-                                                    {{ __('Date') }}: {{ $payment->payment_date->format('d.m.Y.') }}
+                                                    {{ __('Date') }}: {{ lmsCarbonDateFormat($payment->payment_date) }}
                                                 </x-data-property>
 
                                                 @if($payment->note)

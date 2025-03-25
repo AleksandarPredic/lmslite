@@ -58,6 +58,9 @@
 
             .statistics__group-payments--show ul li {
                 display: block;
+                padding: 5px 10px;
+                background-color: #e0e8f7;
+                border-radius: 5px;
             }
 
             /* Add the zebra striping for alternate rows */
@@ -202,6 +205,8 @@
                                         $monthPreview['statuses']['canceled'],
                                         $monthPreview['statuses']['no-show']
                                     );
+
+                                    $payments = $monthPreview['payments'];
                                 @endphp
                                 <div>
                                     @if(! empty($monthPreview['sortedCalendarEventUserStatuses']))
@@ -209,29 +214,17 @@
                                             <a class="statistics__details-month-trigger" href="#">{{ $printStatuses }}</a>
                                         </div>
 
-                                        {{-- // TODO: Add payments if exists --}}
-                                        <hr class="mt-4 mb-4"/>
-                                        <div class="statistics__group-payments">
-                                            <ul>
-                                                <li><span>Crtanje - pon 18:00 - 2024/2025, 12.03.2025.</span> <span>- 3000,00</span></li>
-                                                <li><span>Python 2 - pon 19:45 - 2024/2025 - I semestar, 12.03.2025.</span> <span>- 3000,00</span></li>
-                                                <li><span>Robotika II - sub 12:45 - 2024/2025 - I semestar, 12.03.2025.</span> <span>- 3000,00</span></li>
-                                            </ul>
-                                        </div>
+                                        <x-admin.statistics.payments-month-list
+                                            :payments="$payments"
+                                        />
                                     @else
                                         <div>
                                             {{ $printStatuses }}
                                         </div>
 
-                                        {{-- // TODO: Add payments if exists --}}
-                                        <hr class="mt-4 mb-4"/>
-                                        <div class="statistics__group-payments">
-                                            <ul>
-                                                <li><span>Crtanje - pon 18:00 - 2024/2025, 12.03.2025.</span> <span>- 3000,00</span></li>
-                                                <li><span>Python 2 - pon 19:45 - 2024/2025 - I semestar, 12.03.2025.</span> <span>- 3000,00</span></li>
-                                                <li><span>Robotika II - sub 12:45 - 2024/2025 - I semestar, 12.03.2025.</span> <span>- 3000,00</span></li>
-                                            </ul>
-                                        </div>
+                                        <x-admin.statistics.payments-month-list
+                                            :payments="$payments"
+                                        />
                                     @endif
                                 </div>
 

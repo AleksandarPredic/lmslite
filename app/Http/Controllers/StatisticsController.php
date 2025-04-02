@@ -38,6 +38,21 @@ class StatisticsController extends Controller
         $courseId = request()->exists('course_id') ? intval(request()->get('course_id')) : 0;
         $groupId = request()->exists('group_id') ? intval(request()->get('group_id')) : 0;
 
+        // Return early with empty data if neither course nor group is selected
+        if ($courseId === 0 && $groupId === 0) {
+            session()->flash('admin.message.error', __('Please select either a course or a group to view statistics.'));
+
+            return view('admin.statistics.index', [
+                'dateSearchStart' => $startDate->format(self::FILTER_DATE_FORMAT),
+                'dateSearchEnd' => $endDate->format(self::FILTER_DATE_FORMAT),
+                'selectedCourseId' => $courseId,
+                'selectedGroupId' => $groupId,
+                'dates' => [],
+                'sortedUserStatuses' => collect([])
+            ]);
+        }
+
+
         $calenarEventUserStatuses = CalendarEventUserStatus::with('user')
             // Eager load all user payments but only for the dates selected in the statistics filter
             ->with(['user.payments' => function($query) use ($startDate, $endDate) {
@@ -141,7 +156,7 @@ class StatisticsController extends Controller
 
                     // Check if payment date is within this month
                     return $payment->payment_month === (int)$monthNum && $payment->payment_year === (int)$year;
-                });
+                })->sortBy('payment_date'); // Sort by payment date
 
                 $processedMonths[$monthAsMonthSlashYearString] = [
                     'month' => $monthAsMonthSlashYearString,
@@ -154,6 +169,9 @@ class StatisticsController extends Controller
                     'payments' => $payments
                 ];
             }
+
+            // Sort the processed months by key (month/year) in ascending order as this can cause printing months in different column
+            ksort($processedMonths);
 
             $sortedUserStatuses[$userId] = (object)[
                 'user' => $user,

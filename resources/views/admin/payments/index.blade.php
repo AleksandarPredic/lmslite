@@ -43,6 +43,10 @@
                 </x-admin.form.wrapper>
             </div><!-- / .payments-filter -->
 
+            @if($payments->isEmpty())
+                <h3>{{ __('There are not payments for the selected period.') }}</h3>
+            @else
+
             {{-- # Meta --}}
             <x-slot name="meta">
                 <x-admin.singular.meta.name
@@ -97,6 +101,7 @@
                     </div>
                 </div>
             </x-slot>
+            @endif
 
         </x-admin.singular.wrapper>
     </x-admin.main>

@@ -22,6 +22,7 @@ class CreatePaymentsTable extends Migration
             $table->unsignedTinyInteger('payment_month');
             $table->unsignedSmallInteger('payment_year');
             $table->string('note')->nullable();
+            $table->foreignId('created_by_id')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
 
             $table->unique(['user_id', 'group_id', 'payment_month', 'payment_year']);

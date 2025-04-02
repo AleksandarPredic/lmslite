@@ -14,6 +14,9 @@ class PaymentService
      */
     public function recordPayment(User $user, array $data): Payment
     {
+        // Get the currently logged-in user
+        $loggedInUserId = auth()->id();
+
         // Check if payment exists for this month/year/group
         $existingPayment = Payment::where('user_id', $user->id)
                                   ->where('group_id', $data['group_id'])
@@ -27,6 +30,7 @@ class PaymentService
                 'amount' => $data['amount'],
                 'payment_date' => $data['payment_date'],
                 'note' => $data['note'] ?? $existingPayment->note,
+                'created_by_id' => $loggedInUserId,
             ]);
 
             return $existingPayment;
@@ -41,6 +45,7 @@ class PaymentService
             'payment_month' => $data['payment_month'],
             'payment_year' => $data['payment_year'],
             'note' => $data['note'] ?? null,
+            'created_by_id' => $loggedInUserId,
         ]);
     }
 

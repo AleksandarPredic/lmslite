@@ -18,6 +18,7 @@ class Payment extends Model
         'payment_month',
         'payment_year',
         'note',
+        'created_by_id',
     ];
 
     protected $casts = [

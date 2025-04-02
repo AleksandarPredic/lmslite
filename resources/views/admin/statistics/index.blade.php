@@ -176,6 +176,10 @@
             </x-admin.form.wrapper>
         </div><!-- / .statistics-filter -->
 
+        @if($formErrorMessage ?? null)
+            <h3 class="text-red-600">{{ $formErrorMessage }}</h3>
+        @endif
+
         <br />
         <hr />
         <br />

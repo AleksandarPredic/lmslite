@@ -40,15 +40,14 @@ class StatisticsController extends Controller
 
         // Return early with empty data if neither course nor group is selected
         if ($courseId === 0 && $groupId === 0) {
-            session()->flash('admin.message.error', __('Please select either a course or a group to view statistics.'));
-
             return view('admin.statistics.index', [
                 'dateSearchStart' => $startDate->format(self::FILTER_DATE_FORMAT),
                 'dateSearchEnd' => $endDate->format(self::FILTER_DATE_FORMAT),
                 'selectedCourseId' => $courseId,
                 'selectedGroupId' => $groupId,
                 'dates' => [],
-                'sortedUserStatuses' => collect([])
+                'sortedUserStatuses' => collect([]),
+                'formErrorMessage' => __('Please select either a course or a group to view statistics.')
             ]);
         }
 

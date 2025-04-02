@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Payment;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Carbon;
 
 class PaymentService
 {
@@ -79,5 +80,20 @@ class PaymentService
         return Payment::whereIn('user_id', $userIds)
                ->whereBetween('payment_date', [$startDate, $endDate])
                ->get();
+    }
+
+    /**
+     * Get all payments within a specific date range
+     *
+     * @param Carbon $startDate
+     * @param Carbon $endDate
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getPaymentsInDateRange(Carbon $startDate, Carbon $endDate)
+    {
+        return Payment::with(['user', 'group'])
+                      ->whereBetween('payment_date', [$startDate, $endDate])
+                      ->orderBy('payment_date', 'desc')
+                      ->get();
     }
 }

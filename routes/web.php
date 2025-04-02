@@ -61,6 +61,9 @@ Route::name('admin.')->middleware('can:admin')->group(function () {
 
     // Statistics
     Route::get('/admin/statistics', [StatisticsController::class, 'index'])->name('statistics.index');
+
+    // Payments review
+    Route::get('/admin/payments/statistics', [App\Http\Controllers\PaymentsStatisticsController::class, 'index'])->name('payments.statistics');
 });
 
 require __DIR__.'/auth.php';

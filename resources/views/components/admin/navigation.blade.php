@@ -37,3 +37,11 @@
 >
     {{ __('Statistics') }}
 </x-nav-link>
+
+<x-nav-link
+    :href="route('admin.payments.statistics')"
+    :active="request()->routeIs('admin.payments.statistics')"
+    class="mr-2"
+>
+    {{ __('Payments review') }}
+</x-nav-link>

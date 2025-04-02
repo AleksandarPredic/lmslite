@@ -130,7 +130,7 @@ class UserPaymentsController extends Controller
             'amount' => ['required', 'numeric', 'min:0', 'max:99999999.99'],
             'payment_month' => ['required', 'integer', 'min:1', 'max:12'],
             'payment_year' => ['required', 'integer', 'min:2000', 'max:' . (date('Y') + 10)],
-            'payment_date' => ['nullable', 'date'],
+            'payment_date' => ['date'],
             'note' => ['nullable', 'string', 'max:255'],
         ]);
 

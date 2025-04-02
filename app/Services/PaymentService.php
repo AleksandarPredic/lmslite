@@ -24,7 +24,7 @@ class PaymentService
             // Update existing payment
             $existingPayment->update([
                 'amount' => $data['amount'],
-                'payment_date' => $data['payment_date'] ?? now(),
+                'payment_date' => $data['payment_date'],
                 'note' => $data['note'] ?? $existingPayment->note,
             ]);
 
@@ -36,7 +36,7 @@ class PaymentService
             'user_id' => $user->id,
             'group_id' => $data['group_id'],
             'amount' => $data['amount'],
-            'payment_date' => $data['payment_date'] ?? now(),
+            'payment_date' => $data['payment_date'],
             'payment_month' => $data['payment_month'],
             'payment_year' => $data['payment_year'],
             'note' => $data['note'] ?? null,

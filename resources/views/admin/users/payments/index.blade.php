@@ -173,6 +173,10 @@
                                                 <input type="hidden" name="payment_year" value="{{ $month['date']->year }}">
 
                                                 <div class="mr-2 mb-2 mt-2">
+                                                    <input type="date" name="payment_date" class="text-sm rounded-md border-gray-300" value="{{ date('Y-m-d') }}" placeholder="Payment Date">
+                                                </div>
+
+                                                <div class="mr-2 mb-2 mt-2">
                                                     <input type="number" name="amount" class="text-sm rounded-md border-gray-300" placeholder="Amount" step="0.01" min="0" max="99999999.99" required>
                                                 </div>
 

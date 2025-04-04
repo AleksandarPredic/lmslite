@@ -5,7 +5,7 @@
     $monthYearKey = $month['date']->format('Y-m');
     $monthlyStatus = $group->monthlyStatuses[$monthYearKey];
 @endphp
-<div class="mr-2 mb-2 mt-2 ml-12 text-sm">
+<div class="mr-2 mb-2 mt-2 ml-12 text-sm singular-meta-user-payments__statuses">
     <ul>
         <li class="font-medium text-green-600">{{ __('Attended') }}: {{ count($monthlyStatus['attended']) }}</li>
         <li class="font-medium text-red-600">{{ __('Canceled') }}: {{ count($monthlyStatus['canceled']) }}</li>

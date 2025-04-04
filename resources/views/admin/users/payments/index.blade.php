@@ -19,7 +19,7 @@
             <x-admin.action-link-button href="{{ route('admin.users.show', $user) }}" title="{{ __('Back to user') }}" />
         </div>
 
-        <x-admin.singular.wrapper>
+        <x-admin.singular.wrapper class="singular-meta-user-payments">
             {{-- # Header --}}
             <x-slot name="info">
                 <x-admin.singular.item>
@@ -98,7 +98,7 @@
 
                         <br />
 
-                        <x-admin.singular.meta.item-wrapper class="bg-gray-100 text-lg">
+                        <x-admin.singular.meta.item-wrapper class="bg-gray-100 text-lg singular-meta-user-payments__item-header">
                             {{ $group->name }}
                             <div class="flex-1 text-right">
                                 <a href="{{ route('admin.statistics.index', [
@@ -164,7 +164,7 @@
                                             <form
                                                 action="{{ route('admin.users.payments.store', $user) }}"
                                                 method="POST"
-                                                class="lg:flex"
+                                                class="lg:flex singular-meta-user-payments__payment"
                                                 onsubmit="return confirm('Are you sure you want to record payment of ' + this.elements.amount.value + ' for {{ $month['name'] }}?');"
                                             >
                                                 @csrf

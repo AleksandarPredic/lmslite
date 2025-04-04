@@ -1,5 +1,7 @@
 {{-- # https://tailwindui.com/components/application-ui/data-display/description-lists --}}
-<div class="singular-meta bg-white shadow overflow-hidden sm:rounded-lg event-preview">
+<div
+    {!! $attributes->merge(['class' => 'singular-meta bg-white shadow overflow-hidden sm:rounded-lg event-preview']) !!}
+>
 
     {{-- # Header --}}
     <header class="px-4 py-6 sm:px-6">

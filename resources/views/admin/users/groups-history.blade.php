@@ -7,7 +7,7 @@
 @endphp
 <x-app-layout>
     <x-admin.header>
-        {{ __('Preview user') }}
+        {{ __('User groups history') }}
     </x-admin.header>
 
     <x-admin.main>

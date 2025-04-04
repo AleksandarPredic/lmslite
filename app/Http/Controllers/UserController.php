@@ -92,6 +92,30 @@ class UserController extends Controller
     }
 
     /**
+     * Display the user history, Which courses and groups this user was member of. Sorted desc
+     *
+     * @param User $user
+     *
+     * @return View
+     */
+    public function showGroupsHistory(User $user): View
+    {
+        // Get all groups the user was ever a member of (including current groups)
+        $groupsWithCourses = $user->groups()
+                                  ->with(['course'])
+                                  ->withPivot('created_at')
+                                  ->orderBy('pivot_created_at', 'desc')
+                                  ->get()
+                                  ->groupBy('course.name')
+                                  ->sortKeys();
+
+        return view('admin.users.groups-history', [
+            'user' => $user,
+            'groupsSortedByCourseName' => $groupsWithCourses
+        ]);
+    }
+
+    /**
      * Show the form for editing the specified resource.
      *
      * @param  User  $user

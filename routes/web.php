@@ -54,6 +54,7 @@ Route::name('admin.')->middleware('can:admin')->group(function () {
     // User
     Route::resource('/admin/users', UserController::class);
     Route::get('/admin/users/{user}/next-calendar-events', [UserController::class, 'nextCalendarEvents'])->name('users.nextCalendarEvents');
+    Route::get('/admin/users/{user}/courses-history', [UserController::class, 'showGroupsHistory'])->name('users.groups-history');
     Route::post('/admin/users/find', [UserController::class, 'findUsers'])->name('users.find');
 
     // User payments - using only specific resource methods

@@ -1,0 +1,15 @@
+/**********************************
+ * HELPER CSS CLASSES
+ **********************************/
+
+@media (max-width: 768px) {
+    .sm--lms-mb-10 {
+        margin-bottom: 10px !important;
+    }
+
+    .sm--lms-my-5 {
+        margin-top: 5px !important;
+        margin-bottom: 5px !important;
+    }
+}
+

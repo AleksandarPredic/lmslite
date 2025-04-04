@@ -60,6 +60,7 @@
                 <div class="flex justify-end mt-4 px-4">
                     <x-admin.action-link-button href="{{ route('admin.users.payments.index', $user) }}" title="{{ __('Payments') }}" />
                     <x-admin.action-link-button href="{{ route('admin.users.nextCalendarEvents', $user) }}" title="{{ __('Next Events') }}" />
+                    <x-admin.action-link-button href="{{ route('admin.users.groups-history', $user) }}" title="{{ __('History') }}" />
                 </div>
             </x-slot>
 

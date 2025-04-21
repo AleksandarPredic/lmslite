@@ -99,6 +99,11 @@
                 name="note"
                 :label="__('Note')"
             >{{ old('note') }}</x-admin.form.textarea>
+
+            <x-admin.form.textarea
+                name="payment_note"
+                :label="__('Payment note')"
+            >{{ old('payment_note') }}</x-admin.form.textarea>
         </x-admin.form.wrapper>
     </x-admin.main>
 </x-app-layout>

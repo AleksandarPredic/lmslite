@@ -79,6 +79,50 @@ Testing steps to make sure we update CalendarModel relationship correctly after 
 2. Check each day from new starting_at until recurring_until
 3. Check that we do not modify CalendarEvent models before starting_at, so we can keep them for the history and stats
 
+## Group features
+Ecah group manage screen will display these features:
+* Basic information
+* Added new users, which are not already in the group 
+* Users that are in the group
+
+### Managing users that are in the group
+We can:
+* Remove user from the group
+* Set the user price to price_1 or price_2. This is the price that user need to pay for this group.
+
+### Create group
+When creating the group, the important is to set the group starting at and ending at dates. Those dates will be 
+used to track payments per group.
+
+### Setting the group to non active
+If you set the `Active` property of the Group to `No`, then this group will not be visible in many select fields across the LMS.
+
+## User Payments
+If you visit the user screen, and select to view the user, you will have the "Payments" button available.
+
+Clicking the button, will open a new screen where you can manage user payments for the Groups which he is member of.
+
+Here you can see the list of Groups, and per group list of months. For each month you can see if the user has paid, or 
+you will have the fields to add the payment or delete the payment.
+
+IMPORTANT: All the payments for the users are managed in this screen only, so all the related functionality is in this screen.
+
+### Payments preview
+In this menu item you can preview payments per day or selected period.
+
+## Statistics
+In the main manu, we have the "Statistics" link. 
+
+Here you can preview all the user attendance per each event, per month. You can also preview the user payments for the Groups.
+
+IMPORTANT: This screen will only display the users that have user event statuses. If the user has no statuses for the selected period 
+the user will not be listed.
+
+## User Groups History
+If you visit the user screen, and select to view the user, you will have the "History" button available.
+
+Here you can preview all Groups, user has ever been member of, sorted by Courses.
+
 ## Production setup
 
 ### Seed UserType data

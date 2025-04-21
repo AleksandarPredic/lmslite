@@ -17,3 +17,7 @@
 <x-responsive-nav-link :href="route('admin.statistics.index')" :active="request()->routeIs('admin.statistics.index')">
     {{ __('Statistics') }}
 </x-responsive-nav-link>
+
+<x-responsive-nav-link :href="route('admin.payments.statistics')" :active="request()->routeIs('admin.payments.statistics')">
+    {{ __('Payments review') }}
+</x-responsive-nav-link>

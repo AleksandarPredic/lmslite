@@ -71,7 +71,7 @@ class GroupController extends Controller
      */
     public function show(Group $group)
     {
-        $users = $group->load('users')->users()->userDefaultSorting()->get();
+        $users = $group->load(['users'])->users()->userDefaultSorting()->get();
 
         return view('admin.group.show', [
             'group' => $group,
@@ -185,6 +185,26 @@ class GroupController extends Controller
         );
     }
 
+    public function updateUserPriceType(Group $group, User $user)
+    {
+        $validated = request()->validate([
+            'price_type' => 'required|in:price_1,price_2',
+        ]);
+
+        $group->users()->updateExistingPivot($user->id, [
+            'price_type' => $validated['price_type'],
+        ]);
+
+        return back()->with(
+            'admin.message.success',
+            sprintf(
+                __('Price type updated successfully for %s.'),
+                $user->name
+            )
+
+        );
+    }
+
     /**
      * Remove the user relationship via the pivot table
      *
@@ -233,6 +253,8 @@ class GroupController extends Controller
             'ending_at' => array_merge(['required'], $this->getEndingAtFieldRules()),
             'course_id' => ['nullable', 'numeric'],
             'note' => array_merge(['nullable'], $this->getNoteFieldRules()),
+            'price_1' => 'nullable|numeric|min:0|max:99999999.99',
+            'price_2' => 'nullable|numeric|min:0|max:99999999.99',
             'active' => ['required', 'boolean'],
         ]);
 

@@ -35,6 +35,7 @@ class User extends Authenticatable
         'sign_up_date',
         'active',
         'note',
+        'payment_note',
         'thumbnail',
     ];
 
@@ -59,6 +60,13 @@ class User extends Authenticatable
         'sign_up_date' => 'datetime'
     ];
 
+    /**
+     * The relationships that should be eager loaded by default.
+     *
+     * @var array
+     */
+    protected $with = [];
+
     public function role(): BelongsToMany
     {
         return $this->belongsToMany(Role::class, 'user_roles')->withPivot('id');
@@ -66,7 +74,7 @@ class User extends Authenticatable
 
     public function groups(): BelongsToMany
     {
-        return $this->belongsToMany(Group::class, 'user_groups')->withPivot('id');
+        return $this->belongsToMany(Group::class, 'user_groups')->withPivot('id', 'price_type');
     }
 
     public function calendarEvents(): BelongsToMany
@@ -77,6 +85,11 @@ class User extends Authenticatable
     public function calendarEventStatuses(): HasMany
     {
         return $this->hasMany(CalendarEventUserStatus::class);
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
     }
 
     /**
@@ -202,7 +215,6 @@ class User extends Authenticatable
             function () use ($limit) {
                 // Get events that this user is added outside event assigned group
                 $calendarEvents = $this->calendarEvents()
-                                        ->without('event')
                                        ->whereDate('starting_at', '>', now())
                                        ->orderBy('starting_at')
                                        ->limit($limit)

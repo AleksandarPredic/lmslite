@@ -18,10 +18,11 @@ class StatisticsController extends Controller
     public function index()
     {
         /**
-         * TODO: Continue here
-         * http://localhost/admin/events/3
+         * Here we will show all user payments, for all groups, even if he has no statusses for them recorded. This way we show all
+         * payments, not just payments for groups related to CalendarEventUserStatus
+         *
          * http://localhost/admin/statistics
-         * http://localhost/admin/statistics?course_id=2&start_date=01-12-2022&end_date=31-02-2023
+         * http://localhost/admin/statistics?group_id=2&calendar_start=2025-03-20T00%3A00&calendar_end=2025-09-20T00%3A00
          */
 
         // TODO: Add caching
@@ -34,22 +35,43 @@ class StatisticsController extends Controller
             $endDate = Carbon::now()->endOfMonth();
         }
 
-        $courseId = request()->exists('course_id') ? intval(request()->get('course_id')) : 1;
+        $courseId = request()->exists('course_id') ? intval(request()->get('course_id')) : 0;
         $groupId = request()->exists('group_id') ? intval(request()->get('group_id')) : 0;
 
-        $calenarEventUserStatuses = CalendarEventUserStatus::with('user')
-            ->with('calendarEvent.event.group')
-            ->whereHas('calendarEvent', function($query) use ($startDate, $endDate, $courseId, $groupId) {
-                $query->whereBetween('starting_at', [$startDate, $endDate])
-                    ->whereHas('event.group', function($query) use ($courseId, $groupId) {
-                        $query->where('course_id', '=', $courseId);
+        // Return early with empty data if neither course nor group is selected
+        if ($courseId === 0 && $groupId === 0) {
+            return view('admin.statistics.index', [
+                'dateSearchStart' => $startDate->format(self::FILTER_DATE_FORMAT),
+                'dateSearchEnd' => $endDate->format(self::FILTER_DATE_FORMAT),
+                'selectedCourseId' => $courseId,
+                'selectedGroupId' => $groupId,
+                'dates' => [],
+                'sortedUserStatuses' => collect([]),
+                'formErrorMessage' => __('Please select either a course or a group to view statistics.')
+            ]);
+        }
 
-                        if (0 !== $groupId) {
-                            $query->where('id', '=', $groupId);
-                        }
-                    });
-            })
-            ->get();
+
+        $calenarEventUserStatuses = CalendarEventUserStatus::with('user')
+            // Eager load all user payments but only for the dates selected in the statistics filter
+            ->with(['user.payments' => function($query) use ($startDate, $endDate) {
+                $query->whereBetween('payment_date', [$startDate, $endDate])
+                      ->with('group');
+            }])
+           ->with('calendarEvent.event.group')
+           ->whereHas('calendarEvent', function($query) use ($startDate, $endDate, $courseId, $groupId) {
+               $query->whereBetween('starting_at', [$startDate, $endDate])
+                     ->whereHas('event.group', function($query) use ($courseId, $groupId) {
+                         if (0 !== $courseId) {
+                             $query->where('course_id', '=', $courseId);
+                         }
+
+                         if (0 !== $groupId) {
+                             $query->where('id', '=', $groupId);
+                         }
+                     });
+           })
+           ->get();
 
         $dates = $calenarEventUserStatuses
             ->groupBy('calendar_event_id')
@@ -62,7 +84,12 @@ class StatisticsController extends Controller
             $datesWithKeysAsMonths[$date->format('m/Y')] = $date->format('M Y');
         }
 
-        $usersWithCalendarEventUserStatuses = $calenarEventUserStatuses->groupBy('user_id');
+        // Group users and sort them by months so we get them aligned just fine for the table printing in as we need to keep the order of the months for TD with TH
+        $usersWithCalendarEventUserStatuses = $calenarEventUserStatuses
+            ->sortBy(function($status) {
+                return $status->calendarEvent->starting_at->timestamp;
+            })
+            ->groupBy('user_id');
 
         $sortedUserStatuses = [];
         foreach ($usersWithCalendarEventUserStatuses as $userId => $calendarEventUserStatuses) {
@@ -94,40 +121,61 @@ class StatisticsController extends Controller
                 }
             }
 
+            // Prepare all the data sorted per month
+            $processedMonths = [];
+            foreach ($sortedDataPerMonth as $monthAsMonthSlashYearString => $month) {
+                $values = array_count_values($month['statuses']);
+
+                // Re-map calendar event statuses by Event and by status
+                $reMappedCalendarEventUserStatuses = [];
+                if (! empty($month['calendarEventUserStatuses'])) {
+                    foreach ($month['calendarEventUserStatuses'] as $calendarEventUserStatus) {
+                        // Sort all by the same event id and the same status, but we will have to loop through it again below
+                        $reMappedCalendarEventUserStatuses[$calendarEventUserStatus->calendarEvent->event->id][$calendarEventUserStatus->status][] = (object)[
+                            'eventName' => $calendarEventUserStatus->calendarEvent->event->name,
+                            'status' => $calendarEventUserStatus->status,
+                            'userStatus' => $calendarEventUserStatus,
+                        ];
+                    }
+                }
+
+                // After sorting it, just remove status keys, so we can access the items more easily in te view
+                $reMappedCalendarEventUserStatuses = array_map(
+                    fn($item) => array_values($item),
+                    $reMappedCalendarEventUserStatuses
+                );
+
+                // Add payments per month for this user, but filter only for this month from the Collection
+                /**
+                 * @var \Illuminate\Database\Eloquent\Collection $payments
+                 */
+                $payments = $user->payments->filter(function($payment) use ($monthAsMonthSlashYearString) {
+                    // Extract year and month from the "05/2025" format
+                    list($monthNum, $year) = explode('/', $monthAsMonthSlashYearString);
+
+                    // Check if payment date is within this month
+                    return $payment->payment_month === (int)$monthNum && $payment->payment_year === (int)$year;
+                })->sortBy('payment_date'); // Sort by payment date
+
+                $processedMonths[$monthAsMonthSlashYearString] = [
+                    'month' => $monthAsMonthSlashYearString,
+                    'statuses' => [
+                        'attended' => $values['attended'] ?? 0,
+                        'canceled' => $values['canceled'] ?? 0,
+                        'no-show' => $values['no-show'] ?? 0,
+                    ],
+                    'sortedCalendarEventUserStatuses' => $reMappedCalendarEventUserStatuses,
+                    'payments' => $payments
+                ];
+            }
+
+            // Sort the processed months by key (month/year) in ascending order as this can cause printing months in different column
+            ksort($processedMonths);
+
             $sortedUserStatuses[$userId] = (object)[
                 'user' => $user,
                 'months' => $statusesGroupedByMonth,
-                'sortedDataPerMonth' => array_map(function ($month) {
-                    $values = array_count_values($month['statuses']);
-
-                    // Re-map calendar event statuses by Event and by status
-                    $reMappedCalendarEventUserStatuses = [];
-                    if (! empty($month['calendarEventUserStatuses'])) {
-                        foreach ($month['calendarEventUserStatuses'] as $calendarEventUserStatus) {
-                            // Sort all by the same event id and the same status, but we will have to loop through it again below
-                            $reMappedCalendarEventUserStatuses[$calendarEventUserStatus->calendarEvent->event->id][$calendarEventUserStatus->status][] = (object)[
-                                'eventName' => $calendarEventUserStatus->calendarEvent->event->name,
-                                'status' => $calendarEventUserStatus->status,
-                                'userStatus' => $calendarEventUserStatus,
-                            ];
-                        }
-                    }
-
-                    // After sorting it, just remove status keys, so we can access the items more easily in te view
-                    $reMappedCalendarEventUserStatuses = array_map(
-                        fn($item) => array_values($item),
-                        $reMappedCalendarEventUserStatuses
-                    );
-
-                    return [
-                        'statuses' => [
-                            'attended' => $values['attended'] ?? 0,
-                            'canceled' => $values['canceled'] ?? 0,
-                            'no-show' => $values['no-show'] ?? 0,
-                        ],
-                        'sortedCalendarEventUserStatuses' => $reMappedCalendarEventUserStatuses
-                    ];
-                }, $sortedDataPerMonth)
+                'sortedDataPerMonth' => $processedMonths,
             ];
         }
 
@@ -139,5 +187,10 @@ class StatisticsController extends Controller
             'dates' => $datesWithKeysAsMonths,
             'sortedUserStatuses' => collect($sortedUserStatuses)
         ]);
+    }
+
+    public static function getDateFormat()
+    {
+        return self::FILTER_DATE_FORMAT;
     }
 }

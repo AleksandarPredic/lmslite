@@ -74,7 +74,7 @@
             @if(($groupUsers) || $users->isNotEmpty() || $legacyUsers->isNotEmpty())
                 <x-slot name="meta">
 
-                    {{-- # Calendar event users --}}
+                    {{-- # Calendar event users not belonging to groups --}}
                     @if($users->isNotEmpty())
                         <div class="mb-4 pb-3">
                             <x-admin.singular.meta.name
@@ -93,10 +93,6 @@
                                                 href="{{ route('admin.users.show', $user) }}"
                                                 title="{{ $user->name }}"
                                             />
-
-                                            <x-data-property>
-                                                {{ __('Date of birth') }}: {{ $user->date_of_birth ? lmsCarbonDateFormat($user->date_of_birth) : 'Not added' }}
-                                            </x-data-property>
                                         </x-slot>
 
                                         {{-- # Links --}}
@@ -140,9 +136,7 @@
                                             title="{{ $groupUser->name }}"
                                          />
 
-                                        <x-data-property>
-                                            {{ __('Date of birth') }}: {{ $groupUser->date_of_birth ? lmsCarbonDateFormat($groupUser->date_of_birth) : 'Not added' }}
-                                        </x-data-property>
+                                        <x-admin.action-link-button href="{{ route('admin.users.payments.index', $groupUser) }}" title="{{ __('Payments') }}" />
                                     </x-slot>
 
                                     {{-- # Links --}}

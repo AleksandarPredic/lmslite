@@ -15,7 +15,16 @@ class Group extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'starting_at', 'ending_at', 'course_id', 'note', 'active'];
+    protected $fillable = [
+        'name',
+        'starting_at',
+        'ending_at',
+        'course_id',
+        'note',
+        'active',
+        'price_1',
+        'price_2',
+    ];
 
     /**
      * The attributes that should be cast.
@@ -27,6 +36,8 @@ class Group extends Model
         'starting_at' => 'datetime',
         'ending_at' => 'datetime',
         'active' => 'boolean',
+        'price_1' => 'decimal:2',
+        'price_2' => 'decimal:2',
     ];
 
     public function scopeOrderByName(Builder $query): Collection
@@ -46,7 +57,12 @@ class Group extends Model
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'user_groups')->withPivot('id');
+        return $this->belongsToMany(User::class, 'user_groups')->withPivot('id', 'price_type');
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
     }
 
     /**

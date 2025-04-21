@@ -6,6 +6,7 @@
  * COMMON
  *******************/
 @import "_common.css";
+@import "_helpers.css";
 
 /*******************
  * COMPONENTS
@@ -21,3 +22,4 @@
  *******************/
 @import "admin/_forms.css";
 @import "admin/view/_show.css";
+@import "admin/view/_user-payments.css";

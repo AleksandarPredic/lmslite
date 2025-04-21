@@ -76,18 +76,42 @@ class UserController extends Controller
     }
 
     /**
-     * Display the user statistics
+     * Display the user next calendar events
      *
      * @param User $user
      *
      * @return View
      * @throws \Exception
      */
-    public function statistics(User $user): View
+    public function nextCalendarEvents(User $user): View
     {
-        return view('admin.users.statistics', [
+        return view('admin.users.next-calendar-events', [
             'user' => $user,
             'calendarEvents' => $user->getUserNextEvents(5)
+        ]);
+    }
+
+    /**
+     * Display the user history, Which courses and groups this user was member of. Sorted desc
+     *
+     * @param User $user
+     *
+     * @return View
+     */
+    public function showGroupsHistory(User $user): View
+    {
+        // Get all groups the user was ever a member of (including current groups)
+        $groupsWithCourses = $user->groups()
+                                  ->with(['course'])
+                                  ->withPivot('created_at')
+                                  ->orderBy('pivot_created_at', 'desc')
+                                  ->get()
+                                  ->groupBy('course.name')
+                                  ->sortKeys();
+
+        return view('admin.users.groups-history', [
+            'user' => $user,
+            'groupsSortedByCourseName' => $groupsWithCourses
         ]);
     }
 
@@ -226,6 +250,7 @@ class UserController extends Controller
             'sign_up_date' => $datedRules,
             'active' => ['required', 'boolean'],
             'note' => array_merge(['nullable'], $this->getNoteFieldRules()),
+            'payment_note' => array_merge(['nullable'], $this->getNoteFieldRules()),
         ]);
 
         // Add random password for every user, but we will not yet use passwords. Maybe in next version
@@ -247,7 +272,8 @@ class UserController extends Controller
                     'address',
                     'school',
                     'school_info',
-                    'note'
+                    'note',
+                    'payment_note',
                 ] )) {
 
                 continue;

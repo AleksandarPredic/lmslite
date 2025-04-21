@@ -45,8 +45,28 @@
                 />
 
                 <x-admin.singular.property
+                    name="{{ __('Course') }}"
+                    value="{{ $group->course ? $group->course->name : __('No course assigned') }}"
+                />
+
+                <x-admin.singular.property
+                    name="{{ __('Price 1') }}"
+                    value="{{ lmsPricePublicFormat($group->price_1) }}"
+                />
+
+                <x-admin.singular.property
+                    name="{{ __('Price 2') }}"
+                    value="{{ lmsPricePublicFormat($group->price_2) }}"
+                />
+
+                <x-admin.singular.property
                     name="{{ __('Note') }}"
                     value="{{ $group->note }}"
+                />
+
+                <x-admin.singular.property
+                    name="{{ __('Active') }}"
+                    value="{{ $group->active ? __('Yes') : __('No') }}"
                 />
             </x-slot>
 
@@ -65,6 +85,11 @@
                 <x-admin.singular.meta.list-wrapper>
 
                     @foreach($users as $user)
+                        @php
+                            /**
+                             * @var \App\Models\User $user
+                             */
+                        @endphp
                         <x-admin.singular.meta.item-user
                             :user="$user"
                         >
@@ -76,14 +101,30 @@
                                 />
                             </x-slot>
 
+                            {{-- Price assignment form --}}
+                            <form method="POST" action="{{ route('admin.groups.users.update-price-type', [$group, $user]) }}">
+                                @csrf
+                                @method('PATCH')
+                                @php
+                                    $selectedPriceType = $user->pivot->price_type;
+                                    $priceSelectBackground = $selectedPriceType === 'price_1' ? 'white' : '#f2dbdb';
+                                @endphp
+                                <select name="price_type" class="text-sm border-gray-300 rounded-md shadow-sm" onchange="this.form.submit()" style="background-color: {{ $priceSelectBackground }};">
+                                    <option value="price_1" {{ $selectedPriceType === 'price_1' || empty($selectedPriceType) ? 'selected' : '' }}>
+                                        {{ __('Price 1') }}: {{ lmsPricePublicFormat($group->price_1) }}
+                                    </option>
+                                    <option value="price_2" {{ $selectedPriceType === 'price_2' ? 'selected' : '' }}>
+                                        {{ __('Price 2') }}: {{ lmsPricePublicFormat($group->price_2) }}
+                                    </option>
+                                </select>
+                            </form>
+
                             {{-- # Links --}}
                             <x-admin.action-delete-button
                                 class="px-2 py-1"
                                 action="{{ route('admin.groups.users.destroy', [$group, $user]) }}"
                                 button-text="{{ __('Remove')}}"
                             />
-
-                            {{-- // TODO: Add show link to user profile --}}
                         </x-admin.singular.meta.item-user>
                     @endforeach
 

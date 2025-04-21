@@ -145,19 +145,26 @@ class StatisticsController extends Controller
                     $reMappedCalendarEventUserStatuses
                 );
 
+                // Extract year and month from the "05/2025" format
+                list($monthNum, $year) = explode('/', $monthAsMonthSlashYearString);
+
                 // Add payments per month for this user, but filter only for this month from the Collection
                 /**
                  * @var \Illuminate\Database\Eloquent\Collection $payments
                  */
-                $payments = $user->payments->filter(function($payment) use ($monthAsMonthSlashYearString) {
-                    // Extract year and month from the "05/2025" format
-                    list($monthNum, $year) = explode('/', $monthAsMonthSlashYearString);
+                $payments = $user->payments->filter(function($payment) use ($monthNum, $year) {
+
 
                     // Check if payment date is within this month
                     return $payment->payment_month === (int)$monthNum && $payment->payment_year === (int)$year;
                 })->sortBy('payment_date'); // Sort by payment date
 
-                $processedMonths[$monthAsMonthSlashYearString] = [
+                $keyForSortingMonthsAsTimestamp = (new Carbon())
+                    ->setYear($year)
+                    ->setMonth($monthNum)
+                    ->setDay(1);
+
+                $processedMonths[$keyForSortingMonthsAsTimestamp->timestamp] = [
                     'month' => $monthAsMonthSlashYearString,
                     'statuses' => [
                         'attended' => $values['attended'] ?? 0,
@@ -170,6 +177,7 @@ class StatisticsController extends Controller
             }
 
             // Sort the processed months by key (month/year) in ascending order as this can cause printing months in different column
+            // We must use timestamp as ksort can not suport (month/year), so we switched to timestamp instead of the (month/year) string
             ksort($processedMonths);
 
             $sortedUserStatuses[$userId] = (object)[

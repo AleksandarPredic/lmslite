@@ -200,7 +200,7 @@
                     @php $userName = $sortedUserStatus->user->name; @endphp
                     <tr>
                         <td class="statistics__table-name"><a href="{{ route('admin.users.payments.index', $sortedUserStatus->user) }}">{{ $userName }}</a></td>
-                        @foreach($sortedUserStatus->sortedDataPerMonth as $monthDate => $monthPreview)
+                        @foreach($sortedUserStatus->sortedDataPerMonth as $monthPreviewTimestamp => $monthPreview)
                             <td class="statistics__table-data">
                                 @php
                                     $printStatuses = sprintf(
@@ -241,7 +241,7 @@
                                             {{-- Loop through each event --}}
                                             @foreach($monthPreview['sortedCalendarEventUserStatuses'] as $sortedByEvent)
                                                 <div><strong>{{ $userName }}</strong></div>
-                                                <div class="mb-4">{{ $monthDate }}</div>
+                                                <div class="mb-4">{{ (new \Illuminate\Support\Carbon($monthPreviewTimestamp))->format('M Y') }}</div>
                                                 <hr class="mb-2" />
                                                 <div class="mb-4"><strong>{{ $sortedByEvent[0][0]->eventName }}</strong></div>
 

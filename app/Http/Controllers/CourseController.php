@@ -16,7 +16,9 @@ class CourseController extends Controller
     public function index()
     {
         return view('admin.course.index', [
-            'courses' => Course::orderBy('name', 'asc')->paginate(10)->withQueryString()
+            'courses' => Course::orderBy('name', 'asc')
+                                ->filterByName(request()->get('name'))
+                                ->paginate(10)->withQueryString()
         ]);
     }
 

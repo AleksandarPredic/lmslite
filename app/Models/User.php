@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\ResourceScopeFilterSearchByName;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,7 +14,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, ResourceScopeFilterSearchByName;
 
     /**
      * The attributes that are mass assignable.
@@ -144,20 +145,6 @@ class User extends Authenticatable
     public function scopeUserDefaultSorting(Builder $builder)
     {
         $builder->orderBy('name', 'asc');
-    }
-
-    /**
-     * Filter all active users
-     *
-     * @param Builder $builder
-     *
-     * @return void
-     */
-    public function scopeFilterByName(Builder $builder, ?string $name)
-    {
-        $builder->when($name, function ($builder, $name) {
-            $builder->whereRaw('lower(name) like (?)',["%{$name}%"]);
-        });
     }
 
     /**

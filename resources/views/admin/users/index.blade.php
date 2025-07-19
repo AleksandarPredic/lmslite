@@ -8,34 +8,9 @@
             <x-admin.action-link-button href="{{ route('admin.users.create') }}" title="{{ __('Create') }}" />
         </div>
 
-        <div class="mb-4">
-            <h5 class="mb-2">{{ __('Search by name') }}</h5>
-
-            <div class="flex items-center">
-                <x-admin.form.wrapper
-                    class="flex items-center user-index-search"
-                    action="{{ route('admin.users.index') }}"
-                    method="GET"
-                    :buttonText="__('Search')"
-                >
-
-                    <x-admin.form.input
-                        name="name"
-                        :value="request()->get('name')"
-                        :label="null"
-                        :required="true"
-                    />
-
-                </x-admin.form.wrapper>
-
-                <x-link
-                    class="ml-4"
-                    href="{{ route('admin.users.index') }}"
-                    title="{{ __('Reset') }}" />
-            </div>
-        </div>
-
-
+        <x-admin.resource-index-search
+            route="{{ route('admin.users.index') }}"
+        />
 
         <x-data-cards.wrapper>
             <x-slot name="cards">

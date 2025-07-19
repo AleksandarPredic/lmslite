@@ -5,11 +5,13 @@
  * See: resources/js/calendar-event/CalendarEventStatusUpdate.js
 --}}
 <div {!! $attributes->merge(['class' => 'cal-event-user-status']) !!}>
+    <div class="text-center">{{ ucfirst($name) }}</div>
     <form action="{{ $route }}" method="post">
 
         <select
             name="{{ $name }}"
             id="{{ $name }}"
+            data-currentvalue="{{ $value }}"
             required
         >
             @foreach($options as $optionValue => $optionName)

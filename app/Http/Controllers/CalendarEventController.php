@@ -229,11 +229,35 @@ class CalendarEventController extends Controller
      */
     public function updateUserStatus(CalendarEvent $calendarEvent, User $user)
     {
-
+        // IMPORTANT: We will not send here both status and info in one request
+        // We update them separately via requests that send only status or info
         $attributes = \request()->validate([
             'status' => [Rule::in(CalendarEventUserStatus::getStatusEnumValues())],
             'info' => [Rule::in(CalendarEventUserStatus::getInfoEnumValues())]
         ]);
+
+        // If Info is submitted, prevent saving if status empty.
+        /*
+         * In case we sent $attributes['info'] === 'none', that is ok, it is the same as null.
+         * And we have have a fallback in JS, if someone set status to none, we need to set the info to none also
+         * or we may get statuses which are not usable for statistics
+         */
+        if (! empty($attributes['info']) && $attributes['info'] !== 'none') {
+            try {
+                $userStatus = $calendarEvent->getUserStatus($user);
+
+                if ($userStatus->status === 'none' || empty($userStatus->status)) {
+                    throw ValidationException::withMessages(
+                        ['status' => __('Please select the status first')]
+                    );
+                }
+            } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $exception) {
+                // Return request validation message plesae select the status first
+                throw ValidationException::withMessages(
+                    ['status' => __('Please select the status first')]
+                );
+            }
+        }
 
         $status = $attributes['status'] ?? null;
         $info = $attributes['info'] ?? null;

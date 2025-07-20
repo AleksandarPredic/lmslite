@@ -21,7 +21,10 @@ class GroupController extends Controller
     public function index(): View
     {
         return view('admin.group.index', [
-            'groups' => Group::orderBy('starting_at', 'desc')->paginate(20)->withQueryString()
+            'groups' => Group::orderBy('starting_at', 'desc')
+                             ->filterByName(request()->get('name'))
+                             ->paginate(20)
+                             ->withQueryString()
         ]);
     }
 

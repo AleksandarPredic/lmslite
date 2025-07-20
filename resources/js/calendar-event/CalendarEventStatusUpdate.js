@@ -3,6 +3,8 @@
  *
  * Ajax updates for the user status on the calendar event
  */
+
+
 export default class CalendarEventStatusUpdate {
     constructor(status) {
         const selectField = status.querySelector('select');
@@ -27,6 +29,8 @@ export default class CalendarEventStatusUpdate {
         const successUserItemParentElementCssClass = 'singular-meta__item-user-attended';
 
         const updateMessage = (text, error) => {
+            selectField.disabled = false;
+
             message.innerText = text;
             if (error) {
                 selectField.style.backgroundColor = errorBackgroundColor;
@@ -34,12 +38,14 @@ export default class CalendarEventStatusUpdate {
                 selectField.style.backgroundColor = successBackgroundColor;
             }
 
-            if (! error) {
-                setTimeout(() => {
+            setTimeout(() => {
+                // Leave the error text until it successfully update value
+                if (! error) {
                     message.innerText = '';
-                    selectField.style.backgroundColor = '';
-                }, 3000);
-            }
+                }
+
+                selectField.style.backgroundColor = '';
+            }, 3000);
         }
         message.innerText = 'saving...';
 
@@ -47,14 +53,17 @@ export default class CalendarEventStatusUpdate {
 
         const data = {};
         data[selectField.name] = selectField.value;
+        const selectFieldStartingValue = selectField.dataset.currentvalue;
+        console.log(selectField, selectFieldStartingValue);
 
         axios.patch(routeUrl, data)
             .then(function (response) {
 
+                // Set HTML attribute for fallback to the new value
+                selectField.dataset.currentvalue = selectField.value;
                 updateMessage(response.data.message, false);
-                selectField.disabled = false;
 
-                // After successfully updated, if the updated status is attended,mark the whole user meta section green
+                // After successfully updated, if the updated status is attended, mark the whole user meta section green
                 if (data.hasOwnProperty('status')) {
                     // Mark green and remove green only for status changes, we don't care about info
                     if (data.status === 'attended') {
@@ -64,13 +73,27 @@ export default class CalendarEventStatusUpdate {
                             userItemParentElement.classList.remove(successUserItemParentElementCssClass);
                         }
                     }
+
+                    if (data.status === 'none') {
+                        const infoStatus = userItemParentElement.querySelector('select[name="info"]');
+                        // set value to none and Trigger change in vanilla js on infoStatus
+                        if (infoStatus) {
+                            infoStatus.value = 'none';
+                            infoStatus.dispatchEvent(new Event('change', { bubbles: true }));
+                        }
+                    }
                 }
             })
             .catch(function (error) {
                 console.log(error.response);
 
+                // Set HTML attribute for fallback to the previous value
+                selectField.value = selectFieldStartingValue ? selectFieldStartingValue : 'none';
+
                 if (error.response && error.response.data && error.response.data.message) {
-                    updateMessage(error.response.data.message, true);
+                    const validationErrors = error.response.data.errors;
+                    const errorMessage = validationErrors.status ? validationErrors.status[0] : error.response.data.message;
+                    updateMessage(errorMessage, true);
                     return;
                 }
 

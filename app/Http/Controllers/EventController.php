@@ -23,6 +23,7 @@ class EventController extends Controller
     {
         return view('admin.event.index', [
             'events' => Event::orderBy('starting_at', 'desc')
+                             ->filterByName(request()->get('name'))
                              ->paginate(20)
                              ->withQueryString()
         ]);

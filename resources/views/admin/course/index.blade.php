@@ -8,6 +8,10 @@
             <x-admin.action-link-button href="{{ route('admin.courses.create') }}" title="{{ __('Create') }}" />
         </div>
 
+        <x-admin.resource-index-search
+            route="{{ route('admin.courses.index') }}"
+        />
+
         <x-data-cards.wrapper>
             <x-slot name="cards">
                 @php

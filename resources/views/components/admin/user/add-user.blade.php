@@ -40,6 +40,7 @@
 
     <script>
         // TODO: Rewrite this in plan JS or move it to js file, currently using ES6 but this is fine as we will use only supported browsers
+        // Uses app/Http/Controllers/UserController.php@findUsers on the backend
         function searchUsers(routeUrl) {
             const optionInitValue = '<option value="">{{ __('loading...') }}</option>';
 
@@ -73,7 +74,7 @@
                                 that.options = [`<option value="">{{ __('Click here to select user...') }}</option>`]
                                     .concat(
                                         response.data
-                                            .map((user) => `<option value="${user.id}">${user.name}</option>`)
+                                            .map((user) => `<option value="${user.id}">${user.name} - ID:${user.id}</option>`)
                                     );
 
                                 that.message = '{{ __('Select the user below and click the add user button!') }}';

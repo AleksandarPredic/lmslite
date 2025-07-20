@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\ResourceScopeFilterSearchByName;
 use App\View\Components\Admin\Form\Event\Days;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Event extends Model
 {
     use HasFactory;
+    use ResourceScopeFilterSearchByName;
 
     protected $fillable = ['group_id', 'name', 'recurring', 'days', 'occurrence', 'starting_at', 'ending_at', 'recurring_until', 'note'];
 

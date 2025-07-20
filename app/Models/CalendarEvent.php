@@ -94,6 +94,17 @@ class CalendarEvent extends Model
     }
 
     /**
+     * @param $user
+     *
+     * @return CalendarEventUserStatus
+     * @throws ModelNotFoundException
+     */
+    public function getUserStatus(User $user)
+    {
+        return $this->getCalendarUserStatus($user->id);
+    }
+
+    /**
      * Update calendar event user status, either user from parent event group or newly added user
      * Adds a record in the pivot table
      *

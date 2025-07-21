@@ -66,7 +66,10 @@ class StatisticsController extends Controller
                 $query->whereBetween('payment_date', [$startDate, $endDate])
                       ->with('group');
             }])
-            ->with('calendarEvent.event.group');
+            ->with('calendarEvent.event.group')
+            // Skip statuses none and null as we can have info set to some value without status
+            ->where('status', '!=', 'none')
+            ->whereNotNull('status');
 
         // Add user filter to scope results if the user_id is passed
         if ($userId > 0) {

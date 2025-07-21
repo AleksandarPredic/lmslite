@@ -100,34 +100,44 @@
 
                         <x-admin.singular.meta.item-wrapper class="bg-gray-100 text-lg singular-meta-user-payments__item-header">
                             {{ $group->name }}
-                            <div class="flex-1 text-right">
-                                <a href="{{ route('admin.statistics.index', [
-                                'group_id' => $group->id,
-                                'calendar_start' => $startDate->startOfDay()->format($statistics_filter_date_format),
-                                'calendar_end' => $endDate->startOfDay()->format($statistics_filter_date_format)
-                            ]) }}"
-                                   class="text-blue-600 hover:underline"
-                                   target="_blank"
-                                >
-                                    {{ __('View Statistics') }}
-                                </a>
-                            </div>
                         </x-admin.singular.meta.item-wrapper>
 
                         <x-admin.singular.meta.list-wrapper>
 
                             @foreach($months as $month)
                                 <x-admin.singular.meta.item-wrapper>
-                                    <x-admin.singular.meta.item-icon>
-                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zm-7 5h5v5h-5z"/></svg>
-                                    </x-admin.singular.meta.item-icon>
+                                    <div>
+                                        <div class="flex">
+                                            <x-admin.singular.meta.item-icon>
+                                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zm-7 5h5v5h-5z"/></svg>
+                                            </x-admin.singular.meta.item-icon>
 
-                                    <div class="font-bold text-lg">{{ $month['name'] }} | {{ lmsPricePublicFormat($group->user_price) }}</div>
+                                            <div class="font-bold text-lg">
+                                                {{ $month['name'] }} | {{ lmsPricePublicFormat($group->user_price) }}
+                                            </div>
+                                        </div>
 
+                                        <div class="text-center">
+                                            <a href="{{ route('admin.statistics.index', [
+                                                    'user_id' => $user->id,
+                                                    'group_id' => $group->id,
+                                                    'calendar_start' => $month['date']->startOfMonth()->startOfDay()->format($statistics_filter_date_format),
+                                                    'calendar_end' => $month['date']->endOfMonth()->endOfDay()->format($statistics_filter_date_format)
+                                                ]) }}"
+                                               class="text-blue-600 hover:underline"
+                                               target="_blank"
+                                            >
+                                                {{ __('View Statistics') }}
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    {{--
+                                    // Commented out temporary until removed or decided what to do
                                     <x-admin.user-payments.statusses
                                         :month="$month"
                                         :group="$group"
-                                    />
+                                    />--}}
 
                                     @php
                                         $monthKey = $month['date']->format('Y-n');

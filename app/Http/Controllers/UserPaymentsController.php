@@ -28,7 +28,7 @@ class UserPaymentsController extends Controller
     public function index(User $user): View
     {
         // Define the period for filtering
-        $startDate = Carbon::now()->subYear(); // Example: groups that started within the last year
+        $startDate = Carbon::now()->subYears(2); // Example: groups that started within the last year
         $endDate = Carbon::now()->addYear(); // Example: groups that will start within the next year
 
         // Get groups without 'active' filter, but filter by starting_at date

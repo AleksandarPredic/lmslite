@@ -38,8 +38,17 @@ class StatisticsController extends Controller
         $courseId = request()->exists('course_id') ? intval(request()->get('course_id')) : 0;
         $groupId = request()->exists('group_id') ? intval(request()->get('group_id')) : 0;
 
+        // Add this with your other filter parameters
+        $userId = request()->exists('user_id') ? intval(request()->get('user_id')) : 0;
+
+        $isFormSubmitted = request()->exists('calendar_start')
+                           || request()->exists('calendar_end')
+                           || request()->exists('course_id')
+                           || request()->exists('group_id')
+                           || request()->exists('user_id');
+
         // Return early with empty data if neither course nor group is selected
-        if ($courseId === 0 && $groupId === 0) {
+        if (! $isFormSubmitted) {
             return view('admin.statistics.index', [
                 'dateSearchStart' => $startDate->format(self::FILTER_DATE_FORMAT),
                 'dateSearchEnd' => $endDate->format(self::FILTER_DATE_FORMAT),
@@ -47,10 +56,9 @@ class StatisticsController extends Controller
                 'selectedGroupId' => $groupId,
                 'dates' => [],
                 'sortedUserStatuses' => collect([]),
-                'formErrorMessage' => __('Please select either a course or a group to view statistics.')
+                'formErrorMessage' => __('Please user the filter to view the statistics.')
             ]);
         }
-
 
         $calenarEventUserStatuses = CalendarEventUserStatus::with('user')
             // Eager load all user payments but only for the dates selected in the statistics filter
@@ -58,20 +66,28 @@ class StatisticsController extends Controller
                 $query->whereBetween('payment_date', [$startDate, $endDate])
                       ->with('group');
             }])
-           ->with('calendarEvent.event.group')
-           ->whereHas('calendarEvent', function($query) use ($startDate, $endDate, $courseId, $groupId) {
-               $query->whereBetween('starting_at', [$startDate, $endDate])
-                     ->whereHas('event.group', function($query) use ($courseId, $groupId) {
-                         if (0 !== $courseId) {
-                             $query->where('course_id', '=', $courseId);
-                         }
+            ->with('calendarEvent.event.group');
 
-                         if (0 !== $groupId) {
-                             $query->where('id', '=', $groupId);
-                         }
-                     });
-           })
-           ->get();
+        // Add user filter to scope results if the user_id is passed
+        if ($userId > 0) {
+            $calenarEventUserStatuses->where('user_id', $userId);
+        }
+
+        // Continue with the existing calendar event filters
+        $calenarEventUserStatuses = $calenarEventUserStatuses
+            ->whereHas('calendarEvent', function($query) use ($startDate, $endDate, $courseId, $groupId) {
+                $query->whereBetween('starting_at', [$startDate, $endDate])
+                      ->whereHas('event.group', function($query) use ($courseId, $groupId) {
+                          if (0 !== $courseId) {
+                              $query->where('course_id', '=', $courseId);
+                          }
+
+                          if (0 !== $groupId) {
+                              $query->where('id', '=', $groupId);
+                          }
+                      });
+            })
+            ->get();
 
         $dates = $calenarEventUserStatuses
             ->groupBy('calendar_event_id')

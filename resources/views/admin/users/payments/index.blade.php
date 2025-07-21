@@ -120,7 +120,6 @@
                                         <div class="text-center">
                                             <a href="{{ route('admin.statistics.index', [
                                                     'user_id' => $user->id,
-                                                    'group_id' => $group->id,
                                                     'calendar_start' => $month['date']->startOfMonth()->startOfDay()->format($statistics_filter_date_format),
                                                     'calendar_end' => $month['date']->endOfMonth()->endOfDay()->format($statistics_filter_date_format)
                                                 ]) }}"

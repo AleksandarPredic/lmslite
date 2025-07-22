@@ -77,7 +77,7 @@ class CalendarEventController extends Controller
         }
 
         // Collect all user ids to exclude form search, group and event users, but count in the group removed users also
-        $exclude = $groupUsers->pluck('id')->toArray();
+        $exclude = $groupUsers->concat($groupInactiveUsers)->pluck('id')->toArray();
         $exclude = $users->isNotEmpty() ? array_merge($exclude, $users->pluck('id')->toArray()) : $exclude;
         $exclude = $legacyUsers->isNotEmpty() ? array_merge($exclude, $legacyUsers->pluck('id')->toArray()) : $exclude;
 

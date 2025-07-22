@@ -155,9 +155,10 @@
                                     >
                                         {{-- # Properties --}}
                                         <x-slot name="properties">
-                                            <x-data-property>
-                                                {{ $legacyUser->name }}
-                                            </x-data-property>
+                                            <x-data-property-link
+                                                href="{{ route('admin.users.show', $legacyUser) }}"
+                                                title="{{ $legacyUser->name }}"
+                                            />
                                         </x-slot>
 
                                         {{-- # Links --}}

@@ -71,7 +71,7 @@
             />
 
             {{-- # Meta --}}
-            @if(($groupUsers) || $users->isNotEmpty() || $legacyUsers->isNotEmpty())
+            @if(($groupUsers->isNotEmpty()) || $users->isNotEmpty() || $legacyUsers->isNotEmpty())
                 <x-slot name="meta">
 
                     {{-- # Calendar event users not belonging to groups --}}
@@ -117,83 +117,63 @@
                     @endif
 
                     {{-- # Group users --}}
-                    @if($groupUsers)
-                        <x-admin.singular.meta.name
-                            name="{{ $group->name }} {{ __('group users') }}"
-                        />
+                    <x-admin.calendar-event.group-users-list
+                        title="{{ $group->name }} {{ __('group users') }}"
+                        :group="$group"
+                        :groupUsers="$groupUsers"
+                        :userIdsWithAttendedStatus="$userIdsWithAttendedStatus"
+                        :usersStatuses="$usersStatuses"
+                        :calendarEvent="$calendarEvent"
+                        :users="$users"
+                        class="pt-6 px-2"
+                    />
 
-                        <x-admin.singular.meta.list-wrapper>
-
-                            @foreach($groupUsers as $groupUser)
-                                <x-admin.singular.meta.item-user
-                                    :user="$groupUser"
-                                    class="{{ in_array($groupUser->id, $userIdsWithAttendedStatus) ? 'singular-meta__item-user-attended' : null }}"
-                                >
-                                    {{-- # Properties --}}
-                                    <x-slot name="properties">
-                                        <x-data-property-link
-                                            href="{{ route('admin.users.show', $groupUser) }}"
-                                            title="{{ $groupUser->name }}"
-                                         />
-
-                                        <x-admin.action-link-button href="{{ route('admin.users.payments.index', $groupUser) }}" title="{{ __('Payments') }}" />
-                                    </x-slot>
-
-                                    {{-- # Links --}}
-
-                                    {{--
-                                        # If this user is already in the calendar event, don't show the status
-                                        # It is already displayed up in the calenar event users
-                                    --}}
-                                    @if(! $users->find($groupUser))
-                                        <x-admin.calendar-event.user.status
-                                            :calendarEvent="$calendarEvent"
-                                            :user="$groupUser"
-                                            :userStatuses="$usersStatuses"
-                                        />
-                                    @else
-                                        <div>Added to this event while he was not a group member.</div>
-                                    @endif
-
-                                    {{-- // TODO: Add show link to user profile --}}
-                                </x-admin.singular.meta.item-user>
-                            @endforeach
-
-                        </x-admin.singular.meta.list-wrapper>
-                    @endif
+                    {{-- # Group inactive users --}}
+                    <x-admin.calendar-event.group-users-list
+                        title="{{ $group->name }} {{ __('group INACTIVE users') }}"
+                        :group="$group"
+                        :groupUsers="$groupInactiveUsers"
+                        :userIdsWithAttendedStatus="$userIdsWithAttendedStatus"
+                        :usersStatuses="$usersStatuses"
+                        :calendarEvent="$calendarEvent"
+                        :users="$users"
+                        class="mt-8 bg-indigo-50 pt-6 px-2"
+                    />
 
                     {{-- # Legacy users - users that have calendar event user status but were removed from the group --}}
-                    @if($legacyUsers->isNotEmpty())
-                        <x-admin.singular.meta.name
-                            name="{{ __('Users removed from group meanwhile') }}"
-                        />
+                    <div class="mt-8 pt-6 px-2">
+                        @if($legacyUsers->isNotEmpty())
+                            <x-admin.singular.meta.name
+                                name="{{ __('(LEGACY FEATURE) Users removed from group, but they have statuses for this event') }}"
+                            />
 
-                        <x-admin.singular.meta.list-wrapper>
+                            <x-admin.singular.meta.list-wrapper>
 
-                            @foreach($legacyUsers as $legacyUser)
-                                <x-admin.singular.meta.item-user
-                                    :user="$legacyUser"
-                                >
-                                    {{-- # Properties --}}
-                                    <x-slot name="properties">
-                                        <x-data-property>
-                                            {{ $legacyUser->name }}
-                                        </x-data-property>
-                                    </x-slot>
-
-                                    {{-- # Links --}}
-                                    <x-admin.calendar-event.user.status
-                                        :calendarEvent="$calendarEvent"
+                                @foreach($legacyUsers as $legacyUser)
+                                    <x-admin.singular.meta.item-user
                                         :user="$legacyUser"
-                                        :userStatuses="$usersStatuses"
-                                    />
+                                    >
+                                        {{-- # Properties --}}
+                                        <x-slot name="properties">
+                                            <x-data-property>
+                                                {{ $legacyUser->name }}
+                                            </x-data-property>
+                                        </x-slot>
 
-                                    {{-- // TODO: Add show link to user profile --}}
-                                </x-admin.singular.meta.item-user>
-                            @endforeach
+                                        {{-- # Links --}}
+                                        <x-admin.calendar-event.user.status
+                                            :calendarEvent="$calendarEvent"
+                                            :user="$legacyUser"
+                                            :userStatuses="$usersStatuses"
+                                        />
 
-                        </x-admin.singular.meta.list-wrapper>
-                    @endif
+                                        {{-- // TODO: Add show link to user profile --}}
+                                    </x-admin.singular.meta.item-user>
+                                @endforeach
+
+                            </x-admin.singular.meta.list-wrapper>
+                        @endif
+                    </div>
 
                 </x-slot>
             @endif

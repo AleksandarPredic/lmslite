@@ -3,6 +3,7 @@
 @php
 /**
  * @var \App\Models\User $user
+ * @var string|null $class
  */
 @endphp
 

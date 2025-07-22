@@ -33,7 +33,7 @@ class UserPaymentsController extends Controller
 
         // Get groups without 'active' filter, but filter by starting_at date
         $groups = $user->groups()
-                       ->withPivot('price_type')
+                       ->withPivot('price_type', 'inactive')
                        ->whereBetween('starting_at', [$startDate, $endDate])
                         ->orderBy('starting_at', 'desc')
                        ->get();

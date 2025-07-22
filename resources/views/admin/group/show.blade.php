@@ -82,9 +82,25 @@
                     name="{{ __('Users') }}"
                 />
 
-                <x-admin.singular.meta.list-wrapper>
+                <x-admin.singular.meta.list-wrapper class="group-users-list">
 
+                    @php
+                        $showHeadlineForInactiveUsers = true;
+                    @endphp
                     @foreach($users as $user)
+                        @php
+                            $userInactive = $user->pivot->inactive;
+                        @endphp
+
+                        @if($userInactive && $showHeadlineForInactiveUsers)
+                            <li class="group-users-list__inactive-separator mb-4 px-2">
+                                <div>{{ __('Inactive users') }}</div>
+                            </li>
+                            @php
+                                $showHeadlineForInactiveUsers = false;
+                            @endphp
+                        @endif
+
                         @php
                             /**
                              * @var \App\Models\User $user
@@ -92,6 +108,7 @@
                         @endphp
                         <x-admin.singular.meta.item-user
                             :user="$user"
+                            class="group-users-list__user {{ $userInactive ? 'group-users-list__user--inactive bg-indigo-50 border-indigo-400' : 'group-users-list__user--active' }}"
                         >
                             {{-- # Properties --}}
                             <x-slot name="properties">
@@ -100,6 +117,11 @@
                                     title="{{ $user->name }}"
                                 />
                             </x-slot>
+
+                            <x-admin.group.action-toogle-inactive-user
+                                :group="$group"
+                                :user="$user"
+                            />
 
                             {{-- Price assignment form --}}
                             <form method="POST" action="{{ route('admin.groups.users.update-price-type', [$group, $user]) }}">

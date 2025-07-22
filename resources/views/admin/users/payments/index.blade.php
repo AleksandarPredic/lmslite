@@ -86,6 +86,11 @@
                             // Use CarbonPeriod to create a period with 1 month interval
                             $period = Carbon\CarbonPeriod::create($startDate, '1 month', $endDate);
 
+                            // Check if the user is inactive for this group
+                            $userInactive = $group->pivot->inactive;
+                            $cssCLassGroupHeader = $userInactive ? 'bg-indigo-100' : 'bg-gray-100';
+                            $cssCLassGroupList = $userInactive ? 'bg-indigo-50' : '';
+
                             // Generate array of months
                             $months = [];
                             foreach ($period as $date) {
@@ -98,11 +103,11 @@
 
                         <br />
 
-                        <x-admin.singular.meta.item-wrapper class="bg-gray-100 text-lg singular-meta-user-payments__item-header">
-                            {{ $group->name }}
+                        <x-admin.singular.meta.item-wrapper class="text-lg singular-meta-user-payments__item-header {{ $cssCLassGroupHeader }}">
+                            {{ $group->name }} @if($userInactive)<strong class="ml-2">- ({{ __('Inactive') }})</strong>@endif
                         </x-admin.singular.meta.item-wrapper>
 
-                        <x-admin.singular.meta.list-wrapper>
+                        <x-admin.singular.meta.list-wrapper class="{{ $cssCLassGroupList }}">
 
                             @foreach($months as $month)
                                 <x-admin.singular.meta.item-wrapper>

@@ -100,6 +100,22 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
+        // Create some student users and set them inactive
+        $users = User::factory(10)->create();
+        foreach ($users as $user) {
+            UserRole::create([
+                'role_id' => 2,
+                'user_id' => $user->id
+            ]);
+
+            UserGroup::create([
+                'group_id' => rand(1, 2),
+                'user_id' => $user->id,
+                'price_type' => 'price_1',
+                'inactive' => true,
+            ]);
+        }
+
         // Create one single and one recurring event and assign groups
         Event::factory()->create([
             'group_id' => 1,

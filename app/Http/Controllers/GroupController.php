@@ -74,11 +74,17 @@ class GroupController extends Controller
      */
     public function show(Group $group)
     {
-        $users = $group->load(['users'])->users()->userDefaultSorting()->get();
+        //$users = $group->load(['users'])->users()->userDefaultSorting()->get();
+
+        $users = $group->load(['users'])->users()
+                       ->orderByRaw('COALESCE(user_groups.inactive, 0) ASC')  // False (0) values first
+                       ->orderBy('users.name', 'asc')  // Then sort by name alphabetically
+                       ->get();
 
         return view('admin.group.show', [
             'group' => $group,
             'users' => $users,
+            // Exclude all group users from the search for adding new users to the group
             'exclude' => $users ? $users->pluck('id')->toArray() : []
         ]);
     }
@@ -238,6 +244,35 @@ class GroupController extends Controller
                 )
             );
         }
+    }
+
+    /**
+     * Toggle user inactive status in the group
+     *
+     * @param Group $group
+     * @param User $user
+     *
+     * @return RedirectResponse
+     */
+    public function toggleUserInactive(Group $group, User $user)
+    {
+        $currentStatus = $group->users()->where('user_id', $user->id)->first()->pivot->inactive ?? false;
+        $newStatus = !$currentStatus;
+
+        $group->users()->updateExistingPivot($user->id, [
+            'inactive' => $newStatus,
+        ]);
+
+        $statusText = $newStatus ? 'inactive' : 'active';
+
+        return back()->with(
+            'admin.message.success',
+            sprintf(
+                __('User %s marked as %s in this group.'),
+                $user->name,
+                $statusText
+            )
+        );
     }
 
     /**

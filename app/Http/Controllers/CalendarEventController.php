@@ -31,7 +31,24 @@ class CalendarEventController extends Controller
         $event = $calendarEvent->event;
         // This relationship cam be null as it is nullable in migration
         $group = $event->group;
-        $groupUsers = $group ? $group->users()->userDefaultSorting()->get() : null;
+
+        if ($group) {
+            // Get all group users with their pivot data (includes inactive status)
+            $allGroupUsers = $group->users()->userDefaultSorting()->withPivot('inactive')->get();
+
+            // Filter into active and inactive collections
+            $groupUsers = $allGroupUsers->filter(function($user) {
+                return ! $user->pivot->inactive;
+            });
+
+            $groupInactiveUsers = $allGroupUsers->filter(function($user) {
+                return $user->pivot->inactive;
+            });
+        } else {
+            $groupUsers = new Collection();
+            $groupInactiveUsers = new Collection();
+        }
+
         $usersStatuses = $calendarEvent->userStatuses ? $calendarEvent->userStatuses->map(fn($user) => $user->pivot)->toArray() : [];
         $userIdsWithAttendedStatus = array_map(
             fn($status) => $status['user_id'],
@@ -60,7 +77,7 @@ class CalendarEventController extends Controller
         }
 
         // Collect all user ids to exclude form search, group and event users, but count in the group removed users also
-        $exclude = $groupUsers ? $groupUsers->pluck('id')->toArray() : [];
+        $exclude = $groupUsers->concat($groupInactiveUsers)->pluck('id')->toArray();
         $exclude = $users->isNotEmpty() ? array_merge($exclude, $users->pluck('id')->toArray()) : $exclude;
         $exclude = $legacyUsers->isNotEmpty() ? array_merge($exclude, $legacyUsers->pluck('id')->toArray()) : $exclude;
 
@@ -70,6 +87,7 @@ class CalendarEventController extends Controller
             'event' => $event,
             'group' => $group,
             'groupUsers' => $groupUsers,
+            'groupInactiveUsers' => $groupInactiveUsers,
             'legacyUsers' => $legacyUsers,
             'usersStatuses' => $usersStatuses,
             'userIdsWithAttendedStatus' => $userIdsWithAttendedStatus,

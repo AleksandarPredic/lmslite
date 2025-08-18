@@ -58,6 +58,7 @@ Route::name('admin.')->middleware('can:admin')->group(function () {
     Route::get('/admin/users/{user}/next-calendar-events', [UserController::class, 'nextCalendarEvents'])->name('users.nextCalendarEvents');
     Route::get('/admin/users/{user}/courses-history', [UserController::class, 'showGroupsHistory'])->name('users.groups-history');
     Route::post('/admin/users/find', [UserController::class, 'findUsers'])->name('users.find');
+    Route::post('/admin/users/find-statuses-eligible-for-compensation', [UserController::class, 'findUsersWithStatusesEligibleForCompensation'])->name('users.find-statuses-eligible-for-compensation');
 
     // User payments - using only specific resource methods
     Route::resource('/admin/users/{user}/payments', UserPaymentsController::class)->only(['index', 'store', 'destroy'])->names('users.payments');

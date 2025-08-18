@@ -2,6 +2,7 @@ require('./bootstrap');
 
 import Alpine from 'alpinejs';
 import CalendarEventStatusUpdate from "./calendar-event/CalendarEventStatusUpdate";
+import CalendarEventAddCompensation from "./calendar-event/CalendarEventAddCompensation";
 
 window.Alpine = Alpine;
 
@@ -16,5 +17,13 @@ if (calendarEventStatusses.length) {
     for (let calendarEventStatus of calendarEventStatusses) {
         new CalendarEventStatusUpdate(calendarEventStatus);
     }
+}
+
+/*
+ * Ajax adding compensation user on the calendar event
+ * @see resources/views/admin/calendar-event/show.blade.php
+ */
+if (document.getElementsByClassName('cal-event-user-status').length) {
+    new CalendarEventAddCompensation();
 }
 

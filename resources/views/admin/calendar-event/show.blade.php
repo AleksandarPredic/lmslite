@@ -41,7 +41,7 @@
                     :value="$grupLink"
                 />
                 <x-admin.singular.info
-                    name="{{ __('Number of attendees') }}"
+                    name="{{ __('Number of attendees for this event') }}"
                     :value="$numberOfusers"
                 />
             </x-slot>
@@ -64,6 +64,80 @@
                 />
             </x-slot>
 
+            {{-- # USER COMPENSATION START --}}
+            <h2 class="mb-2">Add compensation user</h2>
+            <div class="cal-event-compensation mb-6">
+                <div class="cal-event-compensation__find-user">
+                    <x-admin.form.field>
+                        <x-admin.form.label for="find-compensation-user" :value="__('Type user name')" />
+                        <input
+                            id="find-compensation-user"
+                            class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            type="text"
+                            placeholder="{{ __('Type user name here...') }}"
+                            value=""
+                            data-routeusers="{{ route('admin.users.find') }}"
+                            data-routestatuses="{{ route('admin.users.find-statuses-eligible-for-compensation') }}"
+                            data-exclude="{{ ! empty($exclude) ? implode(',', $exclude) : '' }}"
+                            data-calendareventid="{{ $calendarEvent->id }}"
+                            required
+                        />
+                    </x-admin.form.field>
+                </div>
+
+                <div class="cal-event-compensation__user-select">
+                    <x-admin.form.field>
+                        <select
+                            name="compensation_user_id"
+                            class="block mt-1 w-full"
+                            required
+                        >
+                            <option>{{ __('Waiting...') }}</option>
+                        </select>
+                    </x-admin.form.field>
+                </div>
+
+                <div class="mb-4 mt-4 py-1 text text-red-600 cal-event-compensation__ajax-error-msg"></div>
+
+                {{-- display list of statusses to select for compensation --}}
+                <div class="cal-event-compensation__statuses-list"></div>
+
+                {{-- # Form to add compensation --}}
+                <x-admin.form.wrapper
+                    action="{{ '' }}"
+                    method="post"
+                    button-text="{{ __('Add compensation') }}"
+                >
+                    <x-admin.form.field>
+                        <x-admin.form.input
+                            name="compensation_user_id"
+                            label="{{ __('Compensation user id') }}"
+                            type="text"
+                            value=""
+                            required
+                        />
+
+                        {{-- TODO: Maybe remove this error field as this will be hidden input --}}
+                        <x-admin.form.error name="compensation_user_id" />
+
+                        <x-admin.form.input
+                            name="compensation_calendar_event_user_status_id"
+                            label="{{ __('Status id') }}"
+                            type="text"
+                            value=""
+                            required
+                        />
+
+                        {{-- TODO: Maybe remove this error field as this will be hidden input --}}
+                        <x-admin.form.error name="compensation_calendar_event_user_status_id" />
+                    </x-admin.form.field>
+                </x-admin.form.wrapper>
+            </div>
+            {{-- # USER COMPENSATION END --}}
+
+            <h2>Add non group user</h2>
+            <div class="text-sm text-gray-500">Add users that will be only on this event.</div>
+            <div class="text-sm mb-4 text-gray-500">Do not add compensation user here.</div>
             {{-- # Slot - add users form --}}
             <x-admin.user.add-user
                 route="{{ route('admin.calendar-events.users.store', [$calendarEvent, $group]) }}"

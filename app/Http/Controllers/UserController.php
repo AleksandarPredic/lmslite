@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\RequestValidationRulesTrait;
+use App\Models\CalendarEventUserStatus;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -294,6 +295,7 @@ class UserController extends Controller
     {
         $attributes = request()->validate([
             'name' => ['required', 'min:3'],
+            // Exclude users that are already on the the calendar event for example
             'exclude' => ['nullable', 'array']
         ]);
 
@@ -309,5 +311,39 @@ class UserController extends Controller
         }
 
         return $users->get(['id', 'name'])->toArray();
+    }
+
+    /**
+     * Find users with statuses eligible for compensation
+     *
+     * @see resources/js/calendar-event/CalendarEventAddCompensation.js
+     *
+     * @return array
+     */
+    public function findUsersWithStatusesEligibleForCompensation()
+    {
+        $attributes = request()->validate([
+            'user_id' => ['required', 'numeric', 'exists:users,id'],
+            'calendar_event_id' => ['required', 'numeric', 'exists:calendar_events,id'],
+        ]);
+
+        $calendarEventUserStatuses = User::find($attributes['user_id'])
+            ->calendarEventStatuses()
+            ->with(['calendarEvent', 'calendarEvent.event'])
+            ->whereIn('status', ['canceled', 'no-show'])
+            ->get();
+
+        /**
+         * Map statuses to a simple array with calendar event and status
+         * @var CalendarEventUserStatus $status
+         */
+        return $calendarEventUserStatuses->map(function ($status) {
+            return [
+                'event' => $status->calendarEvent->event->name,
+                'status_id' => $status->id,
+                'calendar_event_date' => lmsCarbonDateFormat($status->calendarEvent->starting_at),
+                'status' => $status->status,
+            ];
+        })->toArray();
     }
 }

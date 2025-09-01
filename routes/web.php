@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CalendarEventController;
+use App\Http\Controllers\CalendarEventUserFreeCompensationController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\GroupController;
@@ -44,6 +45,19 @@ Route::name('admin.')->middleware('can:admin')->group(function () {
          ->name('calendar-events.users.destroy');
     Route::patch('/admin/calendar-events/{calendarEvent}/users/status/{user}', [CalendarEventController::class, 'updateUserStatus'])
          ->name('calendar-events.users.status.update');
+
+    // Calendar event - Free Compensation routes with specific URL parameters
+    Route::post('/admin/calendar-events/{calendarEvent}/free-compensations/',
+        [CalendarEventUserFreeCompensationController::class, 'store'])
+         ->name('calendar-events.free-compensations.store');
+
+    /*Route::put('admin/calendar-events/{calendarEvent}/users/{user}/free-compensations/{calendarEventUserFreeCompensation}',
+        [CalendarEventUserFreeCompensationController::class, 'update'])
+         ->name('calendar-events.users.free-compensations.update');
+
+    Route::delete('admin/calendar-events/{calendarEvent}/users/{user}/free-compensations/{calendarEventUserFreeCompensation}',
+        [CalendarEventUserFreeCompensationController::class, 'destroy'])
+         ->name('calendar-events.users.free-compensations.destroy');*/
 
     // Group
     Route::resource('/admin/groups', GroupController::class);

@@ -316,7 +316,7 @@ class UserController extends Controller
     /**
      * Find users with statuses eligible for compensation
      *
-     * @see resources/js/calendar-event/CalendarEventAddCompensation.js
+     * @see resources/js/calendar-event/CalendarEventAddFreeCompensation.js
      *
      * @return array
      */
@@ -327,11 +327,29 @@ class UserController extends Controller
             'calendar_event_id' => ['required', 'numeric', 'exists:calendar_events,id'],
         ]);
 
+        $user = User::find($attributes['user_id']);
+        $calendarEventid = $attributes['calendar_event_id'];
+
+        // First check if the user already has Free Compensation for this Calendar Event
+        if ($user->hasFreeCompensationForCalendarEvent($calendarEventid)) {
+            return [];
+        }
+
+        /*
+         * Find users statuses for:
+         * - Users taht are not on this event, as we are adding them async via ajax.
+         *      Even if we have free compensation attached, we can have user with multiple statuses that are eligible for the free compensation
+         * - Users who has no free compensation already attached to this event
+         */
         $calendarEventUserStatuses = User::find($attributes['user_id'])
-            ->calendarEventStatuses()
-            ->with(['calendarEvent', 'calendarEvent.event'])
-            ->whereIn('status', ['canceled', 'no-show'])
-            ->get();
+                                         ->calendarEventStatuses()
+                                         ->with(['calendarEvent', 'calendarEvent.event'])
+                                         ->whereIn('status', ['canceled'])
+                                        // Exclude statuses which already have relationship for this calendar event
+                                         ->whereDoesntHave('freeCompensations', function ($query) use ($calendarEventid) {
+                                             $query->where('calendar_event_id', $calendarEventid);
+                                         })
+                                         ->get();
 
         /**
          * Map statuses to a simple array with calendar event and status

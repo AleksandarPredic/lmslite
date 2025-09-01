@@ -2,7 +2,7 @@ require('./bootstrap');
 
 import Alpine from 'alpinejs';
 import CalendarEventStatusUpdate from "./calendar-event/CalendarEventStatusUpdate";
-import CalendarEventAddCompensation from "./calendar-event/CalendarEventAddCompensation";
+import CalendarEventAddFreeCompensation from "./calendar-event/CalendarEventAddFreeCompensation";
 
 window.Alpine = Alpine;
 
@@ -24,6 +24,6 @@ if (calendarEventStatusses.length) {
  * @see resources/views/admin/calendar-event/show.blade.php
  */
 if (document.getElementsByClassName('cal-event-user-status').length) {
-    new CalendarEventAddCompensation();
+    new CalendarEventAddFreeCompensation();
 }
 

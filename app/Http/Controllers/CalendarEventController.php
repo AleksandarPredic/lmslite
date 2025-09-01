@@ -76,10 +76,18 @@ class CalendarEventController extends Controller
             // After this we have our legacy group users that had on the calendar event user status but were removed form the group later
         }
 
+        // Get all users that are added as free compensation for this calendar event
+        $freeCompensationUsers = $calendarEvent->usersWithFreeCompensation;
+
         // Collect all user ids to exclude form search, group and event users, but count in the group removed users also
         $exclude = $groupUsers->concat($groupInactiveUsers)->pluck('id')->toArray();
         $exclude = $users->isNotEmpty() ? array_merge($exclude, $users->pluck('id')->toArray()) : $exclude;
         $exclude = $legacyUsers->isNotEmpty() ? array_merge($exclude, $legacyUsers->pluck('id')->toArray()) : $exclude;
+        $exclude = $freeCompensationUsers->isNotEmpty() ? array_merge($exclude, $freeCompensationUsers->pluck('id')->toArray()) : $exclude;
+
+        // Collect all user ids to exclude form search in free compensation
+        // Just remove $groupInactiveUsers from the $exclude array
+        $excludeFreeCompensation = array_diff($exclude, $groupInactiveUsers->pluck('id')->toArray());
 
         return view('admin.calendar-event.show', [
             'calendarEvent' => $calendarEvent,
@@ -89,9 +97,11 @@ class CalendarEventController extends Controller
             'groupUsers' => $groupUsers,
             'groupInactiveUsers' => $groupInactiveUsers,
             'legacyUsers' => $legacyUsers,
+            'freeCompensationUsers' => $freeCompensationUsers,
             'usersStatuses' => $usersStatuses,
             'userIdsWithAttendedStatus' => $userIdsWithAttendedStatus,
             'exclude' => $exclude,
+            'excludeFreeCompensation' => $excludeFreeCompensation,
             'numberOfusers' => count($exclude)
         ]);
     }

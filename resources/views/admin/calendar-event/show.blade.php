@@ -66,8 +66,8 @@
 
             {{-- # USER COMPENSATION START --}}
             <h2 class="mb-2">Add compensation user</h2>
-            <div class="cal-event-compensation mb-6">
-                <div class="cal-event-compensation__find-user">
+            <div class="cal-event-free-compensation mb-12">
+                <div class="cal-event-free-compensation__find-user">
                     <x-admin.form.field>
                         <x-admin.form.label for="find-compensation-user" :value="__('Type user name')" />
                         <input
@@ -78,17 +78,16 @@
                             value=""
                             data-routeusers="{{ route('admin.users.find') }}"
                             data-routestatuses="{{ route('admin.users.find-statuses-eligible-for-compensation') }}"
-                            data-exclude="{{ ! empty($exclude) ? implode(',', $exclude) : '' }}"
+                            data-exclude="{{ ! empty($excludeFreeCompensation) ? implode(',', $excludeFreeCompensation) : '' }}"
                             data-calendareventid="{{ $calendarEvent->id }}"
                             required
                         />
                     </x-admin.form.field>
                 </div>
 
-                <div class="cal-event-compensation__user-select">
+                <div class="cal-event-free-compensation__user-select">
                     <x-admin.form.field>
                         <select
-                            name="compensation_user_id"
                             class="block mt-1 w-full"
                             required
                         >
@@ -97,42 +96,56 @@
                     </x-admin.form.field>
                 </div>
 
-                <div class="mb-4 mt-4 py-1 text text-red-600 cal-event-compensation__ajax-error-msg"></div>
+                <div class="mb-4 mt-4 py-1 text text-red-600 cal-event-free-compensation__ajax-error-msg"></div>
 
                 {{-- display list of statusses to select for compensation --}}
-                <div class="cal-event-compensation__statuses-list"></div>
+                <div class="cal-event-free-compensation__statuses-list"></div>
 
                 {{-- # Form to add compensation --}}
                 <x-admin.form.wrapper
-                    action="{{ '' }}"
-                    method="post"
-                    button-text="{{ __('Add compensation') }}"
+                    action="{{ route('admin.calendar-events.free-compensations.store', $calendarEvent) }}"
+                    method="POST"
+                    button-text=""
+                    class="cal-event-free-compensation__form"
                 >
                     <x-admin.form.field>
                         <x-admin.form.input
-                            name="compensation_user_id"
-                            label="{{ __('Compensation user id') }}"
-                            type="text"
+                            name="cal_event_free_compensation_user_id"
+                            label=""
+                            type="hidden"
                             value=""
                             required
                         />
-
-                        {{-- TODO: Maybe remove this error field as this will be hidden input --}}
-                        <x-admin.form.error name="compensation_user_id" />
 
                         <x-admin.form.input
-                            name="compensation_calendar_event_user_status_id"
-                            label="{{ __('Status id') }}"
-                            type="text"
+                            name="cal_event_free_compensation_calendar_event_user_status_id"
+                            label=""
+                            type="hidden"
                             value=""
                             required
                         />
 
-                        {{-- TODO: Maybe remove this error field as this will be hidden input --}}
-                        <x-admin.form.error name="compensation_calendar_event_user_status_id" />
+                        @if($errors->freecompensation->any())
+                            @foreach($errors->freecompensation->toArray() as $field => $messages)
+                                @foreach($messages as $message)
+                                    <p class="text-red-600 text-xs mt-2">{{ $message }}</p>
+                                @endforeach
+                            @endforeach
+                        @endif
+
                     </x-admin.form.field>
                 </x-admin.form.wrapper>
             </div>
+
+            {{-- // TODO: Print free compensation users here --}}
+            @if($freeCompensationUsers->isNotEmpty())
+                @foreach($freeCompensationUsers as $freeCompensationUser)
+                    <div>{{ $freeCompensationUser->name }}</div>
+                @endforeach
+            @endif
+            <br />
+            <br />
+            <br />
             {{-- # USER COMPENSATION END --}}
 
             <h2>Add non group user</h2>

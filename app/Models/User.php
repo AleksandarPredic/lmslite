@@ -93,6 +93,11 @@ class User extends Authenticatable
         return $this->hasMany(Payment::class);
     }
 
+    public function freeCompensations()
+    {
+        return $this->hasMany(CalendarEventUserFreeCompensation::class);
+    }
+
     /**
      * Create user role
      *
@@ -233,5 +238,18 @@ class User extends Authenticatable
                 return $calendarEvents->merge($groupCalendarEvents)->sortBy('starting_at')->take($limit);
             }
         );
+    }
+
+    /**
+     * Check if user has free compensation for a calendar event
+     *
+     * @param int $calendarEventId
+     * @return bool
+     */
+    public function hasFreeCompensationForCalendarEvent($calendarEventId)
+    {
+        return $this->hasOne(CalendarEventUserFreeCompensation::class)
+                    ->where('calendar_event_id', $calendarEventId)
+                    ->exists();
     }
 }

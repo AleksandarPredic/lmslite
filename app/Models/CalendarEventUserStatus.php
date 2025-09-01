@@ -26,6 +26,11 @@ class CalendarEventUserStatus extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function freeCompensations()
+    {
+        return $this->hasMany(CalendarEventUserFreeCompensation::class, 'calendar_event_user_status_id');
+    }
+
     public static function getStatuses(): array
     {
         $statuses = [];

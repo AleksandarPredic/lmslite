@@ -5,20 +5,25 @@
  */
 import axios from 'axios';
 
-export default class CalendarEventAddCompensation {
+export default class CalendarEventAddFreeCompensation {
     constructor() {
         this.searchInput = document.getElementById('find-compensation-user');
-        this.userSelect = document.querySelector('.cal-event-compensation__user-select select');
+        this.userSelect = document.querySelector('.cal-event-free-compensation__user-select select');
 
         this.searchUsersRoute = this.searchInput ? this.searchInput.dataset.routeusers : null;
         this.searchStatusesRoute = this.searchInput ? this.searchInput.dataset.routestatuses : null;
         this.excludeUserIds = this.searchInput ? this.searchInput.dataset.exclude : null;
         this.calendarEventId = this.searchInput ? this.searchInput.dataset.calendareventid : null;
-        this.statusesMessage = document.querySelector('.cal-event-compensation__statuses-message');
-        this.statusesList = document.querySelector('.cal-event-compensation__statuses-list');
-        this.ajaxErrorMessage = document.querySelector('.cal-event-compensation__ajax-error-msg');
+        this.statusesMessage = document.querySelector('.cal-event-free-compensation__statuses-message');
+        this.statusesList = document.querySelector('.cal-event-free-compensation__statuses-list');
+        this.ajaxErrorMessage = document.querySelector('.cal-event-free-compensation__ajax-error-msg');
         this.debounceTimeout = null;
         this.debounceDelay = 500;
+
+        // Hidden inputs and form
+        this.form = document.querySelector('.cal-event-free-compensation__form');
+        this.hiddenUserIdInput = document.getElementById('cal_event_free_compensation_user_id');
+        this.hiddenSUserStatusIdInput = document.getElementById('cal_event_free_compensation_calendar_event_user_status_id');
 
         this.init();
     }
@@ -147,7 +152,7 @@ export default class CalendarEventAddCompensation {
             // Create list items for each status
             responseData.forEach((item, index) => {
                 const li = document.createElement('li');
-                li.classList.add('status-item', 'mb-4', 'p-2', 'border', 'rounded', 'bg-indigo-100');
+                li.classList.add('status-item', 'status-item--item', 'mb-4', 'p-2', 'border', 'rounded', 'bg-indigo-100');
                 li.dataset.statusId = item.id; // Store the status ID if available
 
                 li.innerHTML = `
@@ -164,7 +169,7 @@ export default class CalendarEventAddCompensation {
         } else {
             // No statuses available
             const li = document.createElement('li');
-            li.classList.add('status-item', 'p-2', 'border', 'rounded', 'bg-gray-800', 'text-white');
+            li.classList.add('status-item', 'status-item--empty', 'p-2', 'border', 'rounded', 'bg-gray-800', 'text-white');
             li.textContent = 'No eligible statuses found';
             ul.appendChild(li);
         }
@@ -175,6 +180,8 @@ export default class CalendarEventAddCompensation {
 
     populateHiddenInputs(statusId, userId) {
         console.log(statusId, userId)
-        // TODO: Continue here
+        this.hiddenUserIdInput.value = userId;
+        this.hiddenSUserStatusIdInput.value = statusId;
+        this.form.submit();
     }
 }

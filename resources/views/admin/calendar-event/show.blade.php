@@ -137,15 +137,54 @@
                 </x-admin.form.wrapper>
             </div>
 
-            {{-- // TODO: Print free compensation users here --}}
+            {{-- # Free compensation users --}}
             @if($freeCompensationUsers->isNotEmpty())
-                @foreach($freeCompensationUsers as $freeCompensationUser)
-                    <div>{{ $freeCompensationUser->name }}</div>
-                @endforeach
+                <div class="mb-12 pb-3">
+                    <x-admin.singular.meta.name
+                        name="{{ __('Free compensation users') }}"
+                    />
+
+                    <x-admin.singular.meta.list-wrapper>
+                        @foreach($freeCompensationUsers as $freeCompensationUser)
+                            <x-admin.singular.meta.item-user
+                                :user="$freeCompensationUser"
+                                {{-- // TODO: make this green if it is marked as attended --}}
+                                {{--class="{{ in_array($freeCompensationUser->id, $userIdsWithAttendedStatus) ? 'singular-meta__item-user-attended' : null }}"--}}
+                            >
+                                {{-- # Properties --}}
+                                <x-slot name="properties">
+                                    <x-data-property-link
+                                        href="{{ route('admin.users.show', $freeCompensationUser) }}"
+                                        title="{{ $freeCompensationUser->name }}"
+                                    />
+
+                                    <x-data-property-free-compensation
+                                        calendarEventId="{{ $freeCompensationUser->freeCompensations->first()->calendarEventUserStatus->calendarEvent->id }}"
+                                        linkText="{{ __('Compensation') }}"
+                                    />
+
+                                </x-slot>
+
+                                {{-- # Links --}}
+                                {{--<x-admin.calendar-event.user.status
+                                    :calendarEvent="$calendarEvent"
+                                    :user="$user"
+                                    :userStatuses="$usersStatuses"
+                                />--}}
+
+                                <x-admin.action-delete-button
+                                    class="px-2 py-1"
+                                    action="{{ route('admin.calendar-events.free-compensations.destroy', [$calendarEvent, $freeCompensationUser->pivot]) }}"
+                                    button-text="{{ __('Remove')}}"
+                                />
+
+                                {{-- // TODO: Add show link to user profile --}}
+                            </x-admin.singular.meta.item-user>
+                        @endforeach
+
+                    </x-admin.singular.meta.list-wrapper>
+                </div>
             @endif
-            <br />
-            <br />
-            <br />
             {{-- # USER COMPENSATION END --}}
 
             <h2>Add non group user</h2>

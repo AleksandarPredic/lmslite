@@ -34,7 +34,11 @@ class CalendarEventController extends Controller
 
         if ($group) {
             // Get all group users with their pivot data (includes inactive status)
-            $allGroupUsers = $group->users()->userDefaultSorting()->withPivot('inactive')->get();
+            $allGroupUsers = $group->users()
+                                   ->userDefaultSorting()
+                                   ->withPivot('inactive')
+                                   ->with('freeCompensations')
+                                   ->get();
 
             // Filter into active and inactive collections
             $groupUsers = $allGroupUsers->filter(function($user) {
@@ -77,7 +81,12 @@ class CalendarEventController extends Controller
         }
 
         // Get all users that are added as free compensation for this calendar event
-        $freeCompensationUsers = $calendarEvent->usersWithFreeCompensation;
+        $freeCompensationUsers = $calendarEvent->usersWithFreeCompensation()
+            ->with([
+                'freeCompensations.calendarEventUserStatus',
+                'freeCompensations.calendarEventUserStatus.calendarEvent'
+            ])
+            ->get();
 
         // Collect all user ids to exclude form search, group and event users, but count in the group removed users also
         $exclude = $groupUsers->concat($groupInactiveUsers)->pluck('id')->toArray();

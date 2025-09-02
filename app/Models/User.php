@@ -252,4 +252,17 @@ class User extends Authenticatable
                     ->where('calendar_event_id', $calendarEventId)
                     ->exists();
     }
+
+    /**
+     * Get user's free compensation for a specific calendar event
+     *
+     * @param int $calendarEventUserStatusId
+     * @return CalendarEventUserFreeCompensation|null
+     */
+    public function getFreeCompensationForCalendarEventUserStatus($calendarEventUserStatusId)
+    {
+        return $this->freeCompensations()
+                    ->where('calendar_event_user_status_id', $calendarEventUserStatusId)
+                    ->first();
+    }
 }

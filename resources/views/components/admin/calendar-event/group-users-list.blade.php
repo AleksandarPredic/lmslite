@@ -30,6 +30,16 @@
                         />
 
                         <x-admin.action-link-button href="{{ route('admin.users.payments.index', $groupUser) }}" title="{{ __('Payments') }}" />
+
+
+
+                        @if($groupUser->freeCompensations->isNotEmpty())
+                            <x-data-property-free-compensation
+                                calendarEventId="{{ $groupUser->freeCompensations->first()->calendar_event_id }}"
+                                linkText="{{ __('Compensated') }}"
+                            />
+                        @endif
+
                     </x-slot>
 
                     {{-- # Links --}}

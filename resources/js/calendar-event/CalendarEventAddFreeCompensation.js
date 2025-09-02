@@ -91,7 +91,7 @@ export default class CalendarEventAddFreeCompensation {
         if (users.length === 0) {
             const option = document.createElement('option');
             option.value = '';
-            option.textContent = 'No users found';
+            option.textContent = 'No users with appropriate statuses found or user already added here';
             this.userSelect.appendChild(option);
             return;
         }
@@ -106,7 +106,7 @@ export default class CalendarEventAddFreeCompensation {
         users.forEach(user => {
             const option = document.createElement('option');
             option.value = user.id;
-            option.textContent = user.name;
+            option.textContent = `${user.name} - ID:${user.id}`;
             this.userSelect.appendChild(option);
         });
     }

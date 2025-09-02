@@ -78,7 +78,7 @@ class CalendarEventUserFreeCompensationController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\CalendarEventUserFreeCompensation  $calendarEventUserFreeCompensation
+     * @param  CalendarEventUserFreeCompensation  $calendarEventUserFreeCompensation
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, CalendarEventUserFreeCompensation $calendarEventUserFreeCompensation)
@@ -89,11 +89,32 @@ class CalendarEventUserFreeCompensationController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\CalendarEventUserFreeCompensation  $calendarEventUserFreeCompensation
-     * @return \Illuminate\Http\Response
+     * @param  CalendarEvent  $calendarEvent
+     * @param  CalendarEventUserFreeCompensation  $freeCompensation
+     * @return RedirectResponse
      */
-    public function destroy(CalendarEventUserFreeCompensation $calendarEventUserFreeCompensation)
+    public function destroy(CalendarEvent $calendarEvent, CalendarEventUserFreeCompensation $freeCompensation)
     {
-        //
+        // We have $calendarEvent var here only to keep the route consistent with othe CRUD operations, we don't use it
+        $resultBool = $freeCompensation->delete();
+        $user = $freeCompensation->user;
+
+        if (! $resultBool) {
+            return redirect()->back()->with(
+                'admin.message.error',
+                sprintf(
+                    'Error, something went wrong removing free compensation for the user %s. You should talk to the support.',
+                    $user->name
+                )
+            );
+        }
+
+        return redirect()->back()->with(
+            'admin.message.success',
+            sprintf(
+                'Free compensation removed for the user %s',
+                $user->name
+            )
+        );
     }
 }

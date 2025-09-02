@@ -13,6 +13,8 @@ class UserController extends Controller
 {
     use RequestValidationRulesTrait;
 
+    private const FREE_COMPENSATION_SEARCH_RANGE_IN_MONTHS = 3;
+
     /**
      * Display a listing of the resource.
      *
@@ -328,10 +330,10 @@ class UserController extends Controller
         ]);
 
         $user = User::find($attributes['user_id']);
-        $calendarEventid = $attributes['calendar_event_id'];
+        $calendarEventId = $attributes['calendar_event_id'];
 
         // First check if the user already has Free Compensation for this Calendar Event
-        if ($user->hasFreeCompensationForCalendarEvent($calendarEventid)) {
+        if ($user->hasFreeCompensationForCalendarEvent($calendarEventId)) {
             return [];
         }
 
@@ -340,16 +342,24 @@ class UserController extends Controller
          * - Users taht are not on this event, as we are adding them async via ajax.
          *      Even if we have free compensation attached, we can have user with multiple statuses that are eligible for the free compensation
          * - Users who has no free compensation already attached to this event
+         * - Users who has no free compensation relationship attached to the calendarEventStatus
          */
         $calendarEventUserStatuses = User::find($attributes['user_id'])
-                                         ->calendarEventStatuses()
-                                         ->with(['calendarEvent', 'calendarEvent.event'])
-                                         ->whereIn('status', ['canceled'])
-                                        // Exclude statuses which already have relationship for this calendar event
-                                         ->whereDoesntHave('freeCompensations', function ($query) use ($calendarEventid) {
-                                             $query->where('calendar_event_id', $calendarEventid);
-                                         })
-                                         ->get();
+            ->calendarEventStatuses()
+            ->with(['calendarEvent', 'calendarEvent.event'])
+            ->whereIn('status', ['canceled'])
+            // Filter statuses whose calendar events occurred between now and 3 months ago
+            ->whereHas('calendarEvent', function($query) {
+            $query->where('starting_at', '<=', now())
+            ->where('starting_at', '>=', now()->subMonths(3));
+            })
+            // Exclude statuses which already have relationship for this calendar event
+            ->whereDoesntHave('freeCompensations', function ($query) use ($calendarEventId) {
+            $query->where('calendar_event_id', $calendarEventId);
+            })
+            // Exclude statuses which have any free compensation relationships
+            ->whereDoesntHave('freeCompensations')
+            ->get();
 
         /**
          * Map statuses to a simple array with calendar event and status

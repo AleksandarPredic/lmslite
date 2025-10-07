@@ -34,10 +34,16 @@ class CalendarEventController extends Controller
 
         if ($group) {
             // Get all group users with their pivot data (includes inactive status)
+            // Get all group users with their pivot data (includes inactive status)
             $allGroupUsers = $group->users()
                                    ->userDefaultSorting()
                                    ->withPivot('inactive')
-                                   ->with('compensations')
+                                   ->with([
+                                       'compensations',
+                                       'compensations.calendarEventUserStatus',
+                                       'compensations.calendarEventUserStatus.calendarEvent',
+                                       'compensations.calendarEvent'
+                                   ])
                                    ->get();
 
             // Filter into active and inactive collections

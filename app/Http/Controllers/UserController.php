@@ -13,7 +13,7 @@ class UserController extends Controller
 {
     use RequestValidationRulesTrait;
 
-    private const COMPENSATION_SEARCH_RANGE_IN_MONTHS = 3;
+    public const COMPENSATION_SEARCH_RANGE_IN_MONTHS = 3;
 
     /**
      * Display a listing of the resource.

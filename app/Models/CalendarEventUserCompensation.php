@@ -19,6 +19,20 @@ class CalendarEventUserCompensation extends Model
         'note'
     ];
 
+    /**
+     * Get all available status values
+     *
+     * @return array
+     */
+    public static function getStatusEnumValues(): array
+    {
+        return [
+            'attended',
+            'no-show',
+            'canceled'
+        ];
+    }
+
     public function calendarEventUserStatus(): BelongsTo
     {
         return $this->belongsTo(CalendarEventUserStatus::class);

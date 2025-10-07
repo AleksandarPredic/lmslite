@@ -51,9 +51,9 @@ Route::name('admin.')->middleware('can:admin')->group(function () {
         [CalendarEventUserCompensationController::class, 'store'])
          ->name('calendar-events.compensations.store');
 
-    /*Route::put('admin/calendar-events/{calendarEvent}/users/{user}/compensations/{compensation}',
-        [CalendarEventUserFreeCompensationController::class, 'update'])
-         ->name('calendar-events.users.free-compensations.update');*/
+    Route::put('admin/calendar-events/{calendarEvent}/compensations/{compensation}',
+        [CalendarEventUserCompensationController::class, 'update'])
+         ->name('calendar-events.compensations.update');
 
     Route::delete('admin/calendar-events/{calendarEvent}/compensations/{compensation}',
         [CalendarEventUserCompensationController::class, 'destroy'])

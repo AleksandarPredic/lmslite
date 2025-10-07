@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\RequestValidationRulesTrait;
 use App\Models\CalendarEvent;
+use App\Models\CalendarEventUserCompensation;
 use App\Models\CalendarEventUserStatus;
 use App\Models\Group;
 use App\Models\User;
@@ -104,6 +105,11 @@ class CalendarEventController extends Controller
         // Just remove $groupInactiveUsers from the $exclude array
         $excludeCompensation = array_diff($exclude, $groupInactiveUsers->pluck('id')->toArray());
 
+        $compensationStatusEnumValues = ['none' => __('None')];
+        foreach (CalendarEventUserCompensation::getStatusEnumValues() as $statusEnumValue) {
+            $compensationStatusEnumValues[$statusEnumValue] = ucfirst($statusEnumValue);
+        }
+
         return view('admin.calendar-event.show', [
             'calendarEvent' => $calendarEvent,
             'users' => $users,
@@ -117,7 +123,8 @@ class CalendarEventController extends Controller
             'userIdsWithAttendedStatus' => $userIdsWithAttendedStatus,
             'exclude' => $exclude,
             'excludeCompensation' => $excludeCompensation,
-            'numberOfusers' => count($exclude)
+            'numberOfusers' => count($exclude),
+            'compensationStatusEnumValues' => $compensationStatusEnumValues
         ]);
     }
 

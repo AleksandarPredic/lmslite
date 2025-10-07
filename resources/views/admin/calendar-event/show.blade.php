@@ -147,10 +147,12 @@
 
                     <x-admin.singular.meta.list-wrapper>
                         @foreach($compensationUsers as $compensationUser)
+                            @php($compensationForThisCalendarEvent = $compensationUser->compensations()->where('calendar_event_id', $calendarEvent->id)->first())
+
                             <x-admin.singular.meta.item-user
                                 :user="$compensationUser"
                                 {{-- // TODO: make this green if it is marked as attended --}}
-                                {{--class="{{ in_array($compensationUser->id, $userIdsWithAttendedStatus) ? 'singular-meta__item-user-attended' : null }}"--}}
+                                class="{{ $compensationForThisCalendarEvent->status === 'attended' ? 'singular-meta__item-user-attended' : '' }}"
                             >
                                 {{-- # Properties --}}
                                 <x-slot name="properties">
@@ -160,7 +162,7 @@
                                     />
 
                                     {{-- // This is list of added compensation users below the add form. Below we ling to compensation -> linked calendar event user status -> calendar event --}}
-                                    @if($compensationUser->compensations->isNotEmpty() && $compensationForThisCalendarEvent = $compensationUser->compensations()->where('calendar_event_id', $calendarEvent->id)->first())
+                                    @if($compensationUser->compensations->isNotEmpty() && $compensationForThisCalendarEvent)
                                         <x-data-property-compensation
                                             :calendarEvent="$compensationForThisCalendarEvent->calendarEventUserStatus->calendarEvent"
                                             linkText="{{ __('From ') }}"
@@ -169,19 +171,40 @@
 
                                 </x-slot>
 
-                                {{-- # Links --}}
-                                {{--<x-admin.calendar-event.user.status
-                                    :calendarEvent="$calendarEvent"
-                                    :user="$user"
-                                    :userStatuses="$usersStatuses"
-                                />--}}
-
                                 <x-admin.action-delete-button
                                     class="px-2 py-1"
                                     action="{{ route('admin.calendar-events.compensations.destroy', [$calendarEvent, $compensationUser->pivot]) }}"
                                     button-text="{{ __('Remove')}}"
                                 />
                             </x-admin.singular.meta.item-user>
+                            {{-- Compensation status and note Form --}}
+                            <div class="mt-4 p-3 mb-12">
+                                <x-admin.form.wrapper
+                                    action="{{ route('admin.calendar-events.compensations.update', [$calendarEvent, $compensationForThisCalendarEvent]) }}"
+                                    method="POST"
+                                    button-text="{{ __('Update') }}"
+                                    class="flex items-center"
+                                >
+                                    @method('PUT')
+
+                                    <x-admin.form.select
+                                        name="status"
+                                        value="{{ $compensationForThisCalendarEvent->status ?? '' }}"
+                                        label="{{ __('Status') }}"
+                                        :options="$compensationStatusEnumValues"
+                                        class="mr-2"
+                                    />
+
+                                    <x-admin.form.input
+                                        name="note"
+                                        label="{{ __('Note (max 300 chars)') }}"
+                                        type="text"
+                                        value="{{ $compensationForThisCalendarEvent->note ?? '' }}"
+                                        class="mr-2 flex-1"
+                                    />
+
+                                </x-admin.form.wrapper>
+                            </div>
                         @endforeach
 
                     </x-admin.singular.meta.list-wrapper>

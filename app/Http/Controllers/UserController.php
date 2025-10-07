@@ -13,7 +13,7 @@ class UserController extends Controller
 {
     use RequestValidationRulesTrait;
 
-    private const FREE_COMPENSATION_SEARCH_RANGE_IN_MONTHS = 3;
+    private const COMPENSATION_SEARCH_RANGE_IN_MONTHS = 3;
 
     /**
      * Display a listing of the resource.
@@ -318,7 +318,7 @@ class UserController extends Controller
     /**
      * Find users with statuses eligible for compensation
      *
-     * @see resources/js/calendar-event/CalendarEventAddFreeCompensation.js
+     * @see resources/js/calendar-event/CalendarEventAddCompensation.js
      *
      * @return array
      */
@@ -332,17 +332,17 @@ class UserController extends Controller
         $user = User::find($attributes['user_id']);
         $calendarEventId = $attributes['calendar_event_id'];
 
-        // First check if the user already has Free Compensation for this Calendar Event
-        if ($user->hasFreeCompensationForCalendarEvent($calendarEventId)) {
+        // First check if the user already has Compensation for this Calendar Event
+        if ($user->hasCompensationForCalendarEvent($calendarEventId)) {
             return [];
         }
 
         /*
          * Find users statuses for:
-         * - Users taht are not on this event, as we are adding them async via ajax.
-         *      Even if we have free compensation attached, we can have user with multiple statuses that are eligible for the free compensation
-         * - Users who has no free compensation already attached to this event
-         * - Users who has no free compensation relationship attached to the calendarEventStatus
+         * - Users that are not on this event, as we are adding them async via ajax.
+         *      Even if we have compensation attached, we can have user with multiple statuses that are eligible for the compensation
+         * - Users who has no compensation already attached to this event
+         * - Users who has no compensation relationship attached to the calendarEventStatus
          */
         $calendarEventUserStatuses = User::find($attributes['user_id'])
             ->calendarEventStatuses()
@@ -351,14 +351,14 @@ class UserController extends Controller
             // Filter statuses whose calendar events occurred between now and 3 months ago
             ->whereHas('calendarEvent', function($query) {
             $query->where('starting_at', '<=', now())
-            ->where('starting_at', '>=', now()->subMonths(3));
+            ->where('starting_at', '>=', now()->subMonths(self::COMPENSATION_SEARCH_RANGE_IN_MONTHS));
             })
             // Exclude statuses which already have relationship for this calendar event
-            ->whereDoesntHave('freeCompensations', function ($query) use ($calendarEventId) {
+            ->whereDoesntHave('compensations', function ($query) use ($calendarEventId) {
             $query->where('calendar_event_id', $calendarEventId);
             })
-            // Exclude statuses which have any free compensation relationships
-            ->whereDoesntHave('freeCompensations')
+            // Exclude statuses which have any compensation relationships
+            ->whereDoesntHave('compensations')
             ->get();
 
         /**

@@ -37,7 +37,7 @@ class CalendarEventController extends Controller
             $allGroupUsers = $group->users()
                                    ->userDefaultSorting()
                                    ->withPivot('inactive')
-                                   ->with('freeCompensations')
+                                   ->with('compensations')
                                    ->get();
 
             // Filter into active and inactive collections
@@ -80,11 +80,11 @@ class CalendarEventController extends Controller
             // After this we have our legacy group users that had on the calendar event user status but were removed form the group later
         }
 
-        // Get all users that are added as free compensation for this calendar event
-        $freeCompensationUsers = $calendarEvent->usersWithFreeCompensation()
+        // Get all users that are added as compensation for this calendar event
+        $compensationUsers = $calendarEvent->usersWithCompensation()
             ->with([
-                'freeCompensations.calendarEventUserStatus',
-                'freeCompensations.calendarEventUserStatus.calendarEvent'
+                'compensations.calendarEventUserStatus',
+                'compensations.calendarEventUserStatus.calendarEvent'
             ])
             ->get();
 
@@ -92,11 +92,11 @@ class CalendarEventController extends Controller
         $exclude = $groupUsers->concat($groupInactiveUsers)->pluck('id')->toArray();
         $exclude = $users->isNotEmpty() ? array_merge($exclude, $users->pluck('id')->toArray()) : $exclude;
         $exclude = $legacyUsers->isNotEmpty() ? array_merge($exclude, $legacyUsers->pluck('id')->toArray()) : $exclude;
-        $exclude = $freeCompensationUsers->isNotEmpty() ? array_merge($exclude, $freeCompensationUsers->pluck('id')->toArray()) : $exclude;
+        $exclude = $compensationUsers->isNotEmpty() ? array_merge($exclude, $compensationUsers->pluck('id')->toArray()) : $exclude;
 
-        // Collect all user ids to exclude form search in free compensation
+        // Collect all user ids to exclude form search in compensation
         // Just remove $groupInactiveUsers from the $exclude array
-        $excludeFreeCompensation = array_diff($exclude, $groupInactiveUsers->pluck('id')->toArray());
+        $excludeCompensation = array_diff($exclude, $groupInactiveUsers->pluck('id')->toArray());
 
         return view('admin.calendar-event.show', [
             'calendarEvent' => $calendarEvent,
@@ -106,11 +106,11 @@ class CalendarEventController extends Controller
             'groupUsers' => $groupUsers,
             'groupInactiveUsers' => $groupInactiveUsers,
             'legacyUsers' => $legacyUsers,
-            'freeCompensationUsers' => $freeCompensationUsers,
+            'compensationUsers' => $compensationUsers,
             'usersStatuses' => $usersStatuses,
             'userIdsWithAttendedStatus' => $userIdsWithAttendedStatus,
             'exclude' => $exclude,
-            'excludeFreeCompensation' => $excludeFreeCompensation,
+            'excludeCompensation' => $excludeCompensation,
             'numberOfusers' => count($exclude)
         ]);
     }

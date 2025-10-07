@@ -31,13 +31,21 @@
 
                         <x-admin.action-link-button href="{{ route('admin.users.payments.index', $groupUser) }}" title="{{ __('Payments') }}" />
 
+                        {{-- Link to compensation Calendar event as this is where the compensation is added --}}
+                        @if($groupUser->compensations->isNotEmpty())
+                            @php
+                                $filteredCompensations = $groupUser->compensations->filter(function ($compensation) use ($calendarEvent) {
+                                    /* Compare with calendarEventUserStatus->calendar_event_id as this is how we know which compensation status is bined to this calendar event */
+                                    return $compensation->calendarEventUserStatus->calendar_event_id === $calendarEvent->id;
+                                });
+                            @endphp
 
-
-                        @if($groupUser->freeCompensations->isNotEmpty())
-                            <x-data-property-free-compensation
-                                calendarEventId="{{ $groupUser->freeCompensations->first()->calendar_event_id }}"
-                                linkText="{{ __('Compensated') }}"
-                            />
+                            @if($filteredCompensations->isNotEmpty())
+                                <x-data-property-compensation
+                                    :calendarEvent="$filteredCompensations->first()->calendarEvent"
+                                    linkText="{{ __('Compensated on') }}"
+                                />
+                            @endif
                         @endif
 
                     </x-slot>

@@ -5,16 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class CalendarEventUserFreeCompensation extends Model
+class CalendarEventUserCompensation extends Model
 {
     // Must specify table explicitly as Laravel has bug for name resolution for compensation
-    protected $table = 'calendar_event_user_free_compensations';
+    protected $table = 'calendar_event_user_compensations';
 
     protected $fillable = [
         'calendar_event_user_status_id',
         'calendar_event_id',
         'user_id',
-        'status'
+        'status',
+        'paid',
+        'note'
     ];
 
     public function calendarEventUserStatus(): BelongsTo

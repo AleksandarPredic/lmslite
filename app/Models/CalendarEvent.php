@@ -56,14 +56,14 @@ class CalendarEvent extends Model
     }
 
     /**
-     * Get all users who have free compensation for this calendar event
+     * Get all users who have compensation for this calendar event
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function usersWithFreeCompensation()
+    public function usersWithCompensation()
     {
-        return $this->belongsToMany(User::class, 'calendar_event_user_free_compensations')
-                    ->withPivot(['id', 'calendar_event_user_status_id', 'status', 'created_at', 'updated_at']);
+        return $this->belongsToMany(User::class, 'calendar_event_user_compensations')
+                    ->withPivot(['id', 'calendar_event_user_status_id', 'status', 'paid', 'note', 'created_at', 'updated_at']);
     }
 
     /**

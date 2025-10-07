@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\CalendarEventController;
-use App\Http\Controllers\CalendarEventUserFreeCompensationController;
+use App\Http\Controllers\CalendarEventUserCompensationController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\GroupController;
@@ -46,18 +46,18 @@ Route::name('admin.')->middleware('can:admin')->group(function () {
     Route::patch('/admin/calendar-events/{calendarEvent}/users/status/{user}', [CalendarEventController::class, 'updateUserStatus'])
          ->name('calendar-events.users.status.update');
 
-    // Calendar event - Free Compensation routes with specific URL parameters
-    Route::post('/admin/calendar-events/{calendarEvent}/free-compensations/',
-        [CalendarEventUserFreeCompensationController::class, 'store'])
-         ->name('calendar-events.free-compensations.store');
+    // Calendar event - Compensation routes with specific URL parameters
+    Route::post('/admin/calendar-events/{calendarEvent}/compensations/',
+        [CalendarEventUserCompensationController::class, 'store'])
+         ->name('calendar-events.compensations.store');
 
-    /*Route::put('admin/calendar-events/{calendarEvent}/users/{user}/free-compensations/{freeCompensation}',
+    /*Route::put('admin/calendar-events/{calendarEvent}/users/{user}/compensations/{compensation}',
         [CalendarEventUserFreeCompensationController::class, 'update'])
          ->name('calendar-events.users.free-compensations.update');*/
 
-    Route::delete('admin/calendar-events/{calendarEvent}/free-compensations/{freeCompensation}',
-        [CalendarEventUserFreeCompensationController::class, 'destroy'])
-         ->name('calendar-events.free-compensations.destroy');
+    Route::delete('admin/calendar-events/{calendarEvent}/compensations/{compensation}',
+        [CalendarEventUserCompensationController::class, 'destroy'])
+         ->name('calendar-events.compensations.destroy');
 
     // Group
     Route::resource('/admin/groups', GroupController::class);

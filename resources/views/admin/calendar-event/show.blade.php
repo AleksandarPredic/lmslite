@@ -66,8 +66,8 @@
 
             {{-- # USER COMPENSATION START --}}
             <h2 class="mb-2">Add compensation user</h2>
-            <div class="cal-event-free-compensation mb-12">
-                <div class="cal-event-free-compensation__find-user">
+            <div class="cal-event-compensation mb-12">
+                <div class="cal-event-compensation__find-user">
                     <x-admin.form.field>
                         <x-admin.form.label for="find-compensation-user" :value="__('Type user name')" />
                         <input
@@ -78,14 +78,14 @@
                             value=""
                             data-routeusers="{{ route('admin.users.find') }}"
                             data-routestatuses="{{ route('admin.users.find-statuses-eligible-for-compensation') }}"
-                            data-exclude="{{ ! empty($excludeFreeCompensation) ? implode(',', $excludeFreeCompensation) : '' }}"
+                            data-exclude="{{ ! empty($excludeCompensation) ? implode(',', $excludeCompensation) : '' }}"
                             data-calendareventid="{{ $calendarEvent->id }}"
                             required
                         />
                     </x-admin.form.field>
                 </div>
 
-                <div class="cal-event-free-compensation__user-select">
+                <div class="cal-event-compensation__user-select">
                     <x-admin.form.field>
                         <select
                             class="block mt-1 w-full"
@@ -96,21 +96,21 @@
                     </x-admin.form.field>
                 </div>
 
-                <div class="mb-4 mt-4 py-1 text text-red-600 cal-event-free-compensation__ajax-error-msg"></div>
+                <div class="mb-4 mt-4 py-1 text text-red-600 cal-event-compensation__ajax-error-msg"></div>
 
                 {{-- display list of statusses to select for compensation --}}
-                <div class="cal-event-free-compensation__statuses-list"></div>
+                <div class="cal-event-compensation__statuses-list"></div>
 
                 {{-- # Form to add compensation --}}
                 <x-admin.form.wrapper
-                    action="{{ route('admin.calendar-events.free-compensations.store', $calendarEvent) }}"
+                    action="{{ route('admin.calendar-events.compensations.store', $calendarEvent) }}"
                     method="POST"
                     button-text=""
-                    class="cal-event-free-compensation__form"
+                    class="cal-event-compensation__form"
                 >
                     <x-admin.form.field>
                         <x-admin.form.input
-                            name="cal_event_free_compensation_user_id"
+                            name="cal_event_compensation_user_id"
                             label=""
                             type="hidden"
                             value=""
@@ -118,15 +118,15 @@
                         />
 
                         <x-admin.form.input
-                            name="cal_event_free_compensation_calendar_event_user_status_id"
+                            name="cal_event_compensation_calendar_event_user_status_id"
                             label=""
                             type="hidden"
                             value=""
                             required
                         />
 
-                        @if($errors->freecompensation->any())
-                            @foreach($errors->freecompensation->toArray() as $field => $messages)
+                        @if($errors->compensation->any())
+                            @foreach($errors->compensation->toArray() as $field => $messages)
                                 @foreach($messages as $message)
                                     <p class="text-red-600 text-xs mt-2">{{ $message }}</p>
                                 @endforeach
@@ -137,31 +137,34 @@
                 </x-admin.form.wrapper>
             </div>
 
-            {{-- # Free compensation users --}}
-            @if($freeCompensationUsers->isNotEmpty())
+            {{-- # Compensation users --}}
+            @if($compensationUsers->isNotEmpty())
                 <div class="mb-12 pb-3">
                     <x-admin.singular.meta.name
-                        name="{{ __('Free compensation users') }}"
+                        name="{{ __('Compensation users') }}"
                     />
 
                     <x-admin.singular.meta.list-wrapper>
-                        @foreach($freeCompensationUsers as $freeCompensationUser)
+                        @foreach($compensationUsers as $compensationUser)
                             <x-admin.singular.meta.item-user
-                                :user="$freeCompensationUser"
+                                :user="$compensationUser"
                                 {{-- // TODO: make this green if it is marked as attended --}}
-                                {{--class="{{ in_array($freeCompensationUser->id, $userIdsWithAttendedStatus) ? 'singular-meta__item-user-attended' : null }}"--}}
+                                {{--class="{{ in_array($compensationUser->id, $userIdsWithAttendedStatus) ? 'singular-meta__item-user-attended' : null }}"--}}
                             >
                                 {{-- # Properties --}}
                                 <x-slot name="properties">
                                     <x-data-property-link
-                                        href="{{ route('admin.users.show', $freeCompensationUser) }}"
-                                        title="{{ $freeCompensationUser->name }}"
+                                        href="{{ route('admin.users.show', $compensationUser) }}"
+                                        title="{{ $compensationUser->name }}"
                                     />
 
-                                    <x-data-property-free-compensation
-                                        calendarEventId="{{ $freeCompensationUser->freeCompensations->first()->calendarEventUserStatus->calendarEvent->id }}"
-                                        linkText="{{ __('Compensation') }}"
-                                    />
+                                    {{-- // This is list of added compensation users below the add form. Below we ling to compensation -> linked calendar event user status -> calendar event --}}
+                                    @if($compensationUser->compensations->isNotEmpty() && $compensationForThisCalendarEvent = $compensationUser->compensations()->where('calendar_event_id', $calendarEvent->id)->first())
+                                        <x-data-property-compensation
+                                            :calendarEvent="$compensationForThisCalendarEvent->calendarEventUserStatus->calendarEvent"
+                                            linkText="{{ __('From ') }}"
+                                        />
+                                    @endif
 
                                 </x-slot>
 
@@ -174,11 +177,9 @@
 
                                 <x-admin.action-delete-button
                                     class="px-2 py-1"
-                                    action="{{ route('admin.calendar-events.free-compensations.destroy', [$calendarEvent, $freeCompensationUser->pivot]) }}"
+                                    action="{{ route('admin.calendar-events.compensations.destroy', [$calendarEvent, $compensationUser->pivot]) }}"
                                     button-text="{{ __('Remove')}}"
                                 />
-
-                                {{-- // TODO: Add show link to user profile --}}
                             </x-admin.singular.meta.item-user>
                         @endforeach
 

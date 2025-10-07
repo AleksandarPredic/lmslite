@@ -93,9 +93,9 @@ class User extends Authenticatable
         return $this->hasMany(Payment::class);
     }
 
-    public function freeCompensations()
+    public function compensations()
     {
-        return $this->hasMany(CalendarEventUserFreeCompensation::class);
+        return $this->hasMany(CalendarEventUserCompensation::class);
     }
 
     /**
@@ -241,27 +241,28 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if user has free compensation for a calendar event
+     * Check if user has compensation for a calendar event
      *
      * @param int $calendarEventId
      * @return bool
      */
-    public function hasFreeCompensationForCalendarEvent($calendarEventId)
+    public function hasCompensationForCalendarEvent($calendarEventId)
     {
-        return $this->hasOne(CalendarEventUserFreeCompensation::class)
+        return $this->hasOne(CalendarEventUserCompensation::class)
                     ->where('calendar_event_id', $calendarEventId)
                     ->exists();
     }
 
     /**
-     * Get user's free compensation for a specific calendar event
+     * Get user's compensation for a specific calendar event
      *
      * @param int $calendarEventUserStatusId
-     * @return CalendarEventUserFreeCompensation|null
+     *
+     * @return CalendarEventUserCompensation|null
      */
-    public function getFreeCompensationForCalendarEventUserStatus($calendarEventUserStatusId)
+    public function getCompensationForCalendarEventUserStatus($calendarEventUserStatusId)
     {
-        return $this->freeCompensations()
+        return $this->compensations()
                     ->where('calendar_event_user_status_id', $calendarEventUserStatusId)
                     ->first();
     }

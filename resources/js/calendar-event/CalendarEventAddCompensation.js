@@ -5,25 +5,25 @@
  */
 import axios from 'axios';
 
-export default class CalendarEventAddFreeCompensation {
+export default class CalendarEventAddCompensation {
     constructor() {
         this.searchInput = document.getElementById('find-compensation-user');
-        this.userSelect = document.querySelector('.cal-event-free-compensation__user-select select');
+        this.userSelect = document.querySelector('.cal-event-compensation__user-select select');
 
         this.searchUsersRoute = this.searchInput ? this.searchInput.dataset.routeusers : null;
         this.searchStatusesRoute = this.searchInput ? this.searchInput.dataset.routestatuses : null;
         this.excludeUserIds = this.searchInput ? this.searchInput.dataset.exclude : null;
         this.calendarEventId = this.searchInput ? this.searchInput.dataset.calendareventid : null;
-        this.statusesMessage = document.querySelector('.cal-event-free-compensation__statuses-message');
-        this.statusesList = document.querySelector('.cal-event-free-compensation__statuses-list');
-        this.ajaxErrorMessage = document.querySelector('.cal-event-free-compensation__ajax-error-msg');
+        this.statusesMessage = document.querySelector('.cal-event-compensation__statuses-message');
+        this.statusesList = document.querySelector('.cal-event-compensation__statuses-list');
+        this.ajaxErrorMessage = document.querySelector('.cal-event-compensation__ajax-error-msg');
         this.debounceTimeout = null;
         this.debounceDelay = 500;
 
         // Hidden inputs and form
-        this.form = document.querySelector('.cal-event-free-compensation__form');
-        this.hiddenUserIdInput = document.getElementById('cal_event_free_compensation_user_id');
-        this.hiddenSUserStatusIdInput = document.getElementById('cal_event_free_compensation_calendar_event_user_status_id');
+        this.form = document.querySelector('.cal-event-compensation__form');
+        this.hiddenUserIdInput = document.getElementById('cal_event_compensation_user_id');
+        this.hiddenSUserStatusIdInput = document.getElementById('cal_event_compensation_calendar_event_user_status_id');
 
         this.init();
     }

@@ -1,7 +1,7 @@
-.cal-event-free-compensation .status-item {
+.cal-event-compensation .status-item {
     cursor: pointer;
 }
 
-.cal-event-free-compensation .status-item--item:hover {
+.cal-event-compensation .status-item--item:hover {
     background-color: white;
 }

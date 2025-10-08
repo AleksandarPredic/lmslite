@@ -66,7 +66,7 @@
 
             {{-- # USER COMPENSATION START --}}
             <h2 class="mb-1">Add compensation user</h2>
-            <div class="mb-4 text-sm text-gray-500">Search users which are eligible for compensation between now and last {{ \App\Http\Controllers\UserController::COMPENSATION_SEARCH_RANGE_IN_MONTHS }} months.</div>
+            <div class="mb-4 text-sm text-gray-500">Search users which are eligible for compensation between {{ \App\Http\Controllers\UserController::COMPENSATION_SEARCH_RANGE_IN_MONTHS_FUTURE }} month ahead and last {{ \App\Http\Controllers\UserController::COMPENSATION_SEARCH_RANGE_IN_MONTHS_PAST }} months.</div>
             <div class="cal-event-compensation mb-12">
                 <div class="cal-event-compensation__find-user">
                     <x-admin.form.field>

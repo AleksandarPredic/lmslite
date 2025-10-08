@@ -13,7 +13,8 @@ class UserController extends Controller
 {
     use RequestValidationRulesTrait;
 
-    public const COMPENSATION_SEARCH_RANGE_IN_MONTHS = 3;
+    public const COMPENSATION_SEARCH_RANGE_IN_MONTHS_PAST = 3;
+    public const COMPENSATION_SEARCH_RANGE_IN_MONTHS_FUTURE = 1;
 
     private const CALENDAR_EVENT_USER_STATUS_STATUSES_FOR_FREE_COMPENSATION = ['canceled'];
     private const CALENDAR_EVENT_USER_STATUS_STATUSES_FOR_PAID_COMPENSATION = ['no-show'];
@@ -359,8 +360,8 @@ class UserController extends Controller
             )
             // Filter statuses whose calendar events occurred between now and 3 months ago
             ->whereHas('calendarEvent', function($query) {
-            $query->where('starting_at', '<=', now())
-            ->where('starting_at', '>=', now()->subMonths(self::COMPENSATION_SEARCH_RANGE_IN_MONTHS));
+            $query->where('starting_at', '<=', now()->addMonths(self::COMPENSATION_SEARCH_RANGE_IN_MONTHS_FUTURE))
+            ->where('starting_at', '>=', now()->subMonths(self::COMPENSATION_SEARCH_RANGE_IN_MONTHS_PAST));
             })
             // Exclude statuses which already have relationship for this calendar event
             ->whereDoesntHave('compensations', function ($query) use ($calendarEventId) {

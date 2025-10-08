@@ -25,11 +25,14 @@ class CalendarEventUserCompensationController extends Controller
         $validator = Validator::make($request->all(), [
             'cal_event_compensation_calendar_event_user_status_id' => 'required|exists:calendar_event_user_statuses,id',
             'cal_event_compensation_user_id'                       => 'required|exists:users,id',
+            'cal_event_compensation_paid'                          => 'required|string|in:yes,no'
         ], [
             'cal_event_compensation_calendar_event_user_status_id.required' => 'Error, the event status is required.',
             'cal_event_compensation_calendar_event_user_status_id.exists'   => 'Error, the event status is invalid.',
             'cal_event_compensation_user_id.required'                       => 'Error, the user is required.',
             'cal_event_compensation_user_id.exists'                         => 'Error, the selected user is invalid.',
+            'cal_event_compensation_paid.required'                          => 'Error, the paid field is required.',
+            'cal_event_compensation_paid.boolean'                           => 'Error, the paid field must be yes or no value.',
         ]);
 
         // Return manually with key as on the frontend we are getting the error without key names for the fields
@@ -64,6 +67,7 @@ class CalendarEventUserCompensationController extends Controller
             'calendar_event_id'             => $calendarEvent->id,
             'user_id'                       => $user->id,
             'status'                        => null, // Initially null, can be updated later
+            'paid'                          => $validated['cal_event_compensation_paid'] === 'yes'
         ]);
 
         return redirect()->back()->with(

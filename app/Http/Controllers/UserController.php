@@ -15,6 +15,9 @@ class UserController extends Controller
 
     public const COMPENSATION_SEARCH_RANGE_IN_MONTHS = 3;
 
+    private const CALENDAR_EVENT_USER_STATUS_STATUSES_FOR_FREE_COMPENSATION = ['canceled'];
+    private const CALENDAR_EVENT_USER_STATUS_STATUSES_FOR_PAID_COMPENSATION = ['no-show'];
+
     /**
      * Display a listing of the resource.
      *
@@ -347,7 +350,13 @@ class UserController extends Controller
         $calendarEventUserStatuses = User::find($attributes['user_id'])
             ->calendarEventStatuses()
             ->with(['calendarEvent', 'calendarEvent.event'])
-            ->whereIn('status', ['canceled'])
+            ->whereIn(
+                'status',
+                array_merge(
+                    self::CALENDAR_EVENT_USER_STATUS_STATUSES_FOR_FREE_COMPENSATION,
+                    self::CALENDAR_EVENT_USER_STATUS_STATUSES_FOR_PAID_COMPENSATION
+                )
+            )
             // Filter statuses whose calendar events occurred between now and 3 months ago
             ->whereHas('calendarEvent', function($query) {
             $query->where('starting_at', '<=', now())
@@ -371,6 +380,7 @@ class UserController extends Controller
                 'status_id' => $status->id,
                 'calendar_event_date' => lmsCarbonDateFormat($status->calendarEvent->starting_at),
                 'status' => $status->status,
+                'paid' => in_array($status->status, self::CALENDAR_EVENT_USER_STATUS_STATUSES_FOR_PAID_COMPENSATION),
             ];
         })->toArray();
     }

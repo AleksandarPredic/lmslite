@@ -126,6 +126,14 @@
                             required
                         />
 
+                        <x-admin.form.input
+                            name="cal_event_compensation_paid"
+                            label=""
+                            type="hidden"
+                            value=""
+                            required
+                        />
+
                         @if($errors->compensation->any())
                             @foreach($errors->compensation->toArray() as $field => $messages)
                                 @foreach($messages as $message)

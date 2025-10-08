@@ -14,7 +14,6 @@ export default class CalendarEventAddCompensation {
         this.searchStatusesRoute = this.searchInput ? this.searchInput.dataset.routestatuses : null;
         this.excludeUserIds = this.searchInput ? this.searchInput.dataset.exclude : null;
         this.calendarEventId = this.searchInput ? this.searchInput.dataset.calendareventid : null;
-        this.statusesMessage = document.querySelector('.cal-event-compensation__statuses-message');
         this.statusesList = document.querySelector('.cal-event-compensation__statuses-list');
         this.ajaxErrorMessage = document.querySelector('.cal-event-compensation__ajax-error-msg');
         this.debounceTimeout = null;
@@ -23,7 +22,8 @@ export default class CalendarEventAddCompensation {
         // Hidden inputs and form
         this.form = document.querySelector('.cal-event-compensation__form');
         this.hiddenUserIdInput = document.getElementById('cal_event_compensation_user_id');
-        this.hiddenSUserStatusIdInput = document.getElementById('cal_event_compensation_calendar_event_user_status_id');
+        this.hiddenUserStatusIdInput = document.getElementById('cal_event_compensation_calendar_event_user_status_id');
+        this.hiddenCompensationInput = document.getElementById('cal_event_compensation_paid');
 
         this.init();
     }
@@ -155,13 +155,15 @@ export default class CalendarEventAddCompensation {
                 li.classList.add('status-item', 'status-item--item', 'mb-4', 'p-2', 'border', 'rounded', 'bg-indigo-100');
                 li.dataset.statusId = item.id; // Store the status ID if available
 
+                const titleLabel = item.paid ? `<span class="text-red-600">[PAID]</span>` : `<span>[FREE]</span>`;
+
                 li.innerHTML = `
-                <div class="mb-1"><strong>Event: ${item.event}</strong></div>
+                <div class="mb-1"><strong>Event: ${item.event}</strong> - ${titleLabel}</div>
                 <div class="mb-1"><span>Date:</span> ${item.calendar_event_date}</div>
                 <div><span>Status:</span> ${item.status}</div>`;
 
                 // Add click event listener to each list item
-                li.addEventListener('click', () => this.populateHiddenInputs(item.status_id, userId));
+                li.addEventListener('click', () => this.populateHiddenInputs(item.status_id, userId, item.paid));
 
                 // Add the list item to the list
                 ul.appendChild(li);
@@ -178,10 +180,11 @@ export default class CalendarEventAddCompensation {
         statusesContainer.appendChild(ul);
     }
 
-    populateHiddenInputs(statusId, userId) {
+    populateHiddenInputs(statusId, userId, paid) {
         console.log(statusId, userId)
         this.hiddenUserIdInput.value = userId;
-        this.hiddenSUserStatusIdInput.value = statusId;
+        this.hiddenUserStatusIdInput.value = statusId;
+        this.hiddenCompensationInput.value = paid ? 'yes' : 'no';
         this.form.submit();
     }
 }

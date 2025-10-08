@@ -164,7 +164,7 @@
                                     {{-- // This is list of added compensation users below the add form. Below we ling to compensation -> linked calendar event user status -> calendar event --}}
                                     @if($compensationUser->compensations->isNotEmpty() && $compensationForThisCalendarEvent)
                                         <x-data-property-compensation
-                                            :calendarEvent="$compensationForThisCalendarEvent->calendarEventUserStatus->calendarEvent"
+                                            :compensation="$compensationForThisCalendarEvent"
                                             linkText="{{ __('From ') }}"
                                         />
                                     @endif

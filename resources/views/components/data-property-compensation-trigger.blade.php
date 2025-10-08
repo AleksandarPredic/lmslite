@@ -1,12 +1,13 @@
 @php
     /**
-     * This component is used to show the compensation in the calendar event where the compensation is used at.
+     * This component is used to show the compensation link next to the Calendar Event User Status that triggered it.
+     * The Calendar Event User Status with cancelled or no-show status based on which we added compensation to other Calendar Event
      * @var \App\Models\CalendarEventUserCompensation $compensation
      */
 @endphp
 @props(['compensation', 'linkText'])
 
-@php($calendarEvent = $compensation->calendarEventUserStatus->calendarEvent)
+@php($calendarEvent = $compensation->calendarEvent)
 
 <x-data-property
     class="ml-4 admin-form__inner-field--flex flex"

@@ -43,6 +43,7 @@ class CalendarEventController extends Controller
                                        'compensations',
                                        'compensations.calendarEventUserStatus',
                                        'compensations.calendarEventUserStatus.calendarEvent',
+                                       'compensations.calendarEventUserStatus.calendarEvent.event',
                                        'compensations.calendarEvent'
                                    ])
                                    ->get();
@@ -90,8 +91,11 @@ class CalendarEventController extends Controller
         // Get all users that are added as compensation for this calendar event
         $compensationUsers = $calendarEvent->usersWithCompensation()
             ->with([
+                'compensations',
                 'compensations.calendarEventUserStatus',
-                'compensations.calendarEventUserStatus.calendarEvent'
+                'compensations.calendarEventUserStatus.calendarEvent',
+                'compensations.calendarEventUserStatus.calendarEvent.event',
+                'compensations.calendarEvent'
             ])
             ->get();
 

@@ -41,8 +41,8 @@
                             @endphp
 
                             @if($filteredCompensations->isNotEmpty())
-                                <x-data-property-compensation
-                                    :calendarEvent="$filteredCompensations->first()->calendarEvent"
+                                <x-data-property-compensation-trigger
+                                    :compensation="$filteredCompensations->first()"
                                     linkText="{{ __('Compensated on') }}"
                                 />
                             @endif

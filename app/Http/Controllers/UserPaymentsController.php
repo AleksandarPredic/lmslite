@@ -39,9 +39,14 @@ class UserPaymentsController extends Controller
                        ->get();
 
         // Get all calendar events with user statuses for this user
-        $calendarEventUserStatuses = CalendarEventUserStatus::with(['calendarEvent.event.group'])
-                                                            ->where('user_id', $user->id)
-                                                            ->get();
+        $calendarEventUserStatuses = CalendarEventUserStatus::with([
+            'calendarEvent.event.group',
+            'compensations',
+            'compensations.calendarEventUserStatus',
+            'compensations.calendarEventUserStatus.calendarEvent',
+            'compensations.calendarEventUserStatus.calendarEvent.event',
+            'compensations.calendarEvent'
+        ])->where('user_id', $user->id)->get();
 
         foreach ($groups as $group) {
             // Get all payments for this user and group
@@ -97,14 +102,18 @@ class UserPaymentsController extends Controller
                     $monthlyStatuses[$month]['no-show'][] = $status->calendar_event_id;
                 }
 
-                // Count compensation info separately
-                if ($status->info === 'compensation') {
-                    if ($status->status === 'attended') {
-                        $monthlyStatuses[$month]['compensation']['attended'][] = $status->calendar_event_id;
-                    } elseif ($status->status === 'canceled') {
-                        $monthlyStatuses[$month]['compensation']['canceled'][] = $status->calendar_event_id;
-                    } elseif ($status->status === 'no-show') {
-                        $monthlyStatuses[$month]['compensation']['no-show'][] = $status->calendar_event_id;
+                // Add compensations separately
+                if ($status->compensations->isNotEmpty()) {
+                    foreach ($status->compensations as $compensation) {
+                        if ($compensation->status === 'attended') {
+                            $monthlyStatuses[$month]['compensation']['attended'][] = $compensation;
+                        } elseif ($compensation->status === 'canceled') {
+                            $monthlyStatuses[$month]['compensation']['canceled'][] = $compensation;
+                        } elseif ($compensation->status === 'no-show') {
+                            $monthlyStatuses[$month]['compensation']['no-show'][] = $compensation;
+                        } elseif ($compensation->status === null) {
+                            $monthlyStatuses[$month]['compensation']['unmarked'][] = $compensation;
+                        }
                     }
                 }
             }

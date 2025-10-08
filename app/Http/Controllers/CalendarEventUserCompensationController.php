@@ -106,9 +106,9 @@ class CalendarEventUserCompensationController extends Controller
             $validated['note'] = strip_tags($validated['note']);
         }
 
-        // Prevent saving none
+        // Prevent saving none and allow reverting back to none
         if ($validated['status'] === 'none') {
-            unset($validated['status']);
+            $validated['status'] = null;
         }
 
         $compensation->update($validated);

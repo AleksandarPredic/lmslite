@@ -13,8 +13,16 @@
         <li class="font-medium text-blue-600">{{ __('Compensation') }}:
             @if(! empty($monthlyStatus['compensation']))
                 <ul class="ml-4">
-                    @foreach($monthlyStatus['compensation'] as $status => $compensation)
-                        <li class="font-medium">{{ $status }}: {{ count($compensation) }}</li>
+                    @foreach($monthlyStatus['compensation'] as $status => $compensationsCollection)
+                        <li class="font-medium">
+                            <span>{{ $status }}: {{ count($compensationsCollection) }}</span>
+                            @foreach($compensationsCollection as $compensation)
+                                <x-data-property-compensation-trigger
+                                    :compensation="$compensation"
+                                    linkText="{{ __('Compensated on') }}"
+                                />
+                            @endforeach
+                        </li>
                     @endforeach
                 </ul>
             @else 0 @endif

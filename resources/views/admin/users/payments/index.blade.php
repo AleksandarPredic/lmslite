@@ -136,12 +136,10 @@
                                         </div>
                                     </div>
 
-                                    {{--
-                                    // Commented out temporary until removed or decided what to do
                                     <x-admin.user-payments.statusses
                                         :month="$month"
                                         :group="$group"
-                                    />--}}
+                                    />
 
                                     @php
                                         $monthKey = $month['date']->format('Y-n');

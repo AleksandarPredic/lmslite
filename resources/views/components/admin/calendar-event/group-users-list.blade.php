@@ -43,7 +43,6 @@
                             @if($filteredCompensations->isNotEmpty())
                                 <x-data-property-compensation-trigger
                                     :compensation="$filteredCompensations->first()"
-                                    linkText="{{ __('Compensated on') }}"
                                 />
                             @endif
                         @endif

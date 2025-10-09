@@ -96,7 +96,7 @@
                             foreach ($period as $date) {
                                 $months[] = [
                                     'date' => $date->copy(),
-                                    'name' => $date->format('F Y')
+                                    'name' => $date->format('M Y')
                                 ];
                             }
                         @endphp
@@ -197,7 +197,7 @@
                                                 </div>
 
                                                 <button type="submit" class="font-bold py-2 px-4 rounded bg-gray-100 mb-2 mt-2">
-                                                    {{ __('Record Payment') }}
+                                                    {{ __('Add Payment') }}
                                                 </button>
                                             </form>
                                         @endif

@@ -28,7 +28,9 @@
             <x-admin.action-delete-button action="{{ route('admin.calendar-events.destroy', $calendarEvent) }}" />
         </div>
 
-        <x-admin.singular.wrapper>
+        <x-admin.singular.wrapper
+            class="lms-calendar-event"
+        >
             {{-- # Header --}}
             <x-slot name="info">
                 <x-admin.singular.name
@@ -179,7 +181,7 @@
                                 </x-slot>
 
                                 {{-- Compensation status and payment completed Form --}}
-                                <div class="mt-4 p-3 mb-12 cal-event-compensation__update">
+                                <div class="mt-4 mb-12 cal-event-compensation__update">
                                     <x-admin.form.wrapper
                                         action="{{ route('admin.calendar-events.compensations.update', [$calendarEvent, $compensationForThisCalendarEvent]) }}"
                                         method="POST"
@@ -194,7 +196,7 @@
                                                 label="{{ __('Payment Completed') }}"
                                                 :options="['no' => __('No'), 'yes' => __('Yes')]"
                                                 {{-- // Hide payment completed for free compensations as they don't need this option --}}
-                                                class="mr-4 mb-0{{ $compensationForThisCalendarEvent->free ? ' hidden' : ''  }}"
+                                                class="lms-x-admin-form-select mr-4 mb-0{{ $compensationForThisCalendarEvent->free ? ' hidden' : ''  }}"
                                             />
 
                                             <x-admin.form.select
@@ -202,7 +204,7 @@
                                                 value="{{ $compensationForThisCalendarEvent->status ?? '' }}"
                                                 label="{{ __('Status') }}"
                                                 :options="$compensationStatusEnumValues"
-                                                class="mr-2 mb-0"
+                                                class="lms-x-admin-form-select mr-2 mb-0"
                                             />
                                         </div>
 

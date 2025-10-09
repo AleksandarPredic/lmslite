@@ -2,6 +2,14 @@
  * HELPER CSS CLASSES
  **********************************/
 
+.lms-x-admin-form-select label{
+    text-align: center;
+}
+
+.lms-x-admin-form-select select{
+    padding: .2rem 2rem .2rem .7rem;
+}
+
 @media (max-width: 768px) {
     .sm--lms-mb-10 {
         margin-bottom: 10px !important;

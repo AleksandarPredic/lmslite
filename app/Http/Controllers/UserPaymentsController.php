@@ -82,10 +82,10 @@ class UserPaymentsController extends Controller
             foreach ($period as $date) {
                 $monthKey = $date->format('Y-m');
                 $monthlyStatuses[$monthKey] = [
-                    'attended' => [],
-                    'canceled' => [],
-                    'no-show' => [],
-                    'compensation' => []
+                    'attended' => ['count' => []],
+                    'canceled' => ['count' => []],
+                    'no-show' => ['count' => []],
+                    'compensation' => ['count' => []]
                 ];
             }
 
@@ -95,23 +95,35 @@ class UserPaymentsController extends Controller
 
                 // Count regular statuses
                 if ($status->status === 'attended') {
-                    $monthlyStatuses[$month]['attended'][] = $status->calendar_event_id;
-                } elseif ($status->status === 'canceled') {
-                    $monthlyStatuses[$month]['canceled'][] = $status->calendar_event_id;
-                } elseif ($status->status === 'no-show') {
-                    $monthlyStatuses[$month]['no-show'][] = $status->calendar_event_id;
-                }
+                    $monthlyStatuses[$month]['attended']['count'][] = $status->calendar_event_id;
 
-                // Add compensations separately
-                if ($status->compensations->isNotEmpty()) {
-                    foreach ($status->compensations as $compensation) {
-                        if ($compensation->status === 'attended') {
-                            $monthlyStatuses[$month]['compensation']['attended'][] = $compensation;
-                        } elseif ($compensation->status === 'no-show') {
-                            $monthlyStatuses[$month]['compensation']['no-show'][] = $compensation;
-                        } elseif ($compensation->status === null) {
-                            $monthlyStatuses[$month]['compensation']['unmarked'][] = $compensation;
+                    if ($status->compensations->isNotEmpty()) {
+                        // Initialize as empty collection if not exists
+                        if (!isset($monthlyStatuses[$month]['attended']['compensations'])) {
+                            $monthlyStatuses[$month]['attended']['compensations'] = collect([]);
                         }
+
+                        $monthlyStatuses[$month]['attended']['compensations'] = $monthlyStatuses[$month]['attended']['compensations']->merge($status->compensations);
+                    }
+                } elseif ($status->status === 'canceled') {
+                    $monthlyStatuses[$month]['canceled']['count'][] = $status->calendar_event_id;
+
+                    if ($status->compensations->isNotEmpty()) {
+                        // Initialize as empty collection if not exists
+                        if (!isset($monthlyStatuses[$month]['canceled']['compensations'])) {
+                            $monthlyStatuses[$month]['canceled']['compensations'] = collect([]);
+                        }
+                        $monthlyStatuses[$month]['canceled']['compensations'] = $monthlyStatuses[$month]['canceled']['compensations']->merge($status->compensations);
+                    }
+                } elseif ($status->status === 'no-show') {
+                    $monthlyStatuses[$month]['no-show']['count'][] = $status->calendar_event_id;
+
+                    if ($status->compensations->isNotEmpty()) {
+                        // Initialize as empty collection if not exists
+                        if (!isset($monthlyStatuses[$month]['no-show']['compensations'])) {
+                            $monthlyStatuses[$month]['no-show']['compensations'] = collect([]);
+                        }
+                        $monthlyStatuses[$month]['no-show']['compensations'] = $monthlyStatuses[$month]['no-show']['compensations']->merge($status->compensations);
                     }
                 }
             }

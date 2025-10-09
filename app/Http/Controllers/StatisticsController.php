@@ -66,7 +66,14 @@ class StatisticsController extends Controller
                 $query->whereBetween('payment_date', [$startDate, $endDate])
                       ->with('group');
             }])
-            ->with('calendarEvent.event.group')
+            ->with(
+                'calendarEvent.event.group',
+                'compensations',
+                'compensations.calendarEventUserStatus',
+                'compensations.calendarEventUserStatus.calendarEvent',
+                'compensations.calendarEventUserStatus.calendarEvent.event',
+                'compensations.calendarEvent'
+            )
             // Skip statuses none and null as we can have info set to some value without status
             ->where('status', '!=', 'none')
             ->whereNotNull('status');
@@ -183,12 +190,18 @@ class StatisticsController extends Controller
                     ->setMonth($monthNum)
                     ->setDay(1);
 
+                $compensationsCount = 0;
+                foreach ($month['calendarEventUserStatuses'] as $calendarEventUserStatus) {
+                    $compensationsCount += $calendarEventUserStatus->compensations->count();
+                }
+
                 $processedMonths[$keyForSortingMonthsAsTimestamp->timestamp] = [
                     'month' => $monthAsMonthSlashYearString,
                     'statuses' => [
                         'attended' => $values['attended'] ?? 0,
                         'canceled' => $values['canceled'] ?? 0,
                         'no-show' => $values['no-show'] ?? 0,
+                        'compensations' => $compensationsCount,
                     ],
                     'sortedCalendarEventUserStatuses' => $reMappedCalendarEventUserStatuses,
                     'payments' => $payments

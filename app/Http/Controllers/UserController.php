@@ -6,6 +6,7 @@ use App\Http\Controllers\Traits\RequestValidationRulesTrait;
 use App\Models\CalendarEventUserStatus;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 
@@ -321,10 +322,9 @@ class UserController extends Controller
 
     /**
      * Find users with statuses eligible for compensation
-     *
      * @see resources/js/calendar-event/CalendarEventAddCompensation.js
      *
-     * @return array
+     * @return JsonResponse
      */
     public function findUsersWithStatusesEligibleForCompensation()
     {
@@ -338,7 +338,7 @@ class UserController extends Controller
 
         // First check if the user already has Compensation for this Calendar Event
         if ($user->hasCompensationForCalendarEvent($calendarEventId)) {
-            return [];
+            response()->json([]);
         }
 
         /*
@@ -375,7 +375,7 @@ class UserController extends Controller
          * Map statuses to a simple array with calendar event and status
          * @var CalendarEventUserStatus $status
          */
-        return $calendarEventUserStatuses->map(function ($status) {
+        $results = $calendarEventUserStatuses->map(function ($status) {
             return [
                 'event' => $status->calendarEvent->event->name,
                 'status_id' => $status->id,
@@ -384,5 +384,7 @@ class UserController extends Controller
                 'paid_compensation' => in_array($status->status, self::CALENDAR_EVENT_USER_STATUS_STATUSES_FOR_PAID_COMPENSATION),
             ];
         })->toArray();
+
+        return response()->json($results);
     }
 }

@@ -3,6 +3,7 @@ require('./bootstrap');
 import Alpine from 'alpinejs';
 import CalendarEventStatusUpdate from "./calendar-event/CalendarEventStatusUpdate";
 import CalendarEventAddCompensation from "./calendar-event/CalendarEventAddCompensation";
+import CalendarEventUpdateCompensation from "./calendar-event/CalendarEventUpdateCompensation";
 
 window.Alpine = Alpine;
 
@@ -26,4 +27,12 @@ if (calendarEventStatusses.length) {
 if (document.getElementsByClassName('cal-event-user-status').length) {
     new CalendarEventAddCompensation();
 }
+
+/*
+ * Ajax updating compensation status and payment_completed on the calendar event
+ * @see resources/views/admin/calendar-event/show.blade.php
+ */
+document.querySelectorAll('.cal-event-compensation__update').forEach(container => {
+    new CalendarEventUpdateCompensation(container);
+});
 

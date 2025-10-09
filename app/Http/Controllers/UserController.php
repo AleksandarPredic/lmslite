@@ -381,7 +381,7 @@ class UserController extends Controller
                 'status_id' => $status->id,
                 'calendar_event_date' => lmsCarbonDateFormat($status->calendarEvent->starting_at),
                 'status' => $status->status,
-                'paid' => in_array($status->status, self::CALENDAR_EVENT_USER_STATUS_STATUSES_FOR_PAID_COMPENSATION),
+                'paid_compensation' => in_array($status->status, self::CALENDAR_EVENT_USER_STATUS_STATUSES_FOR_PAID_COMPENSATION),
             ];
         })->toArray();
     }

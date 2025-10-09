@@ -107,8 +107,6 @@ class UserPaymentsController extends Controller
                     foreach ($status->compensations as $compensation) {
                         if ($compensation->status === 'attended') {
                             $monthlyStatuses[$month]['compensation']['attended'][] = $compensation;
-                        } elseif ($compensation->status === 'canceled') {
-                            $monthlyStatuses[$month]['compensation']['canceled'][] = $compensation;
                         } elseif ($compensation->status === 'no-show') {
                             $monthlyStatuses[$month]['compensation']['no-show'][] = $compensation;
                         } elseif ($compensation->status === null) {

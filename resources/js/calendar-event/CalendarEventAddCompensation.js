@@ -23,7 +23,7 @@ export default class CalendarEventAddCompensation {
         this.form = document.querySelector('.cal-event-compensation__form');
         this.hiddenUserIdInput = document.getElementById('cal_event_compensation_user_id');
         this.hiddenUserStatusIdInput = document.getElementById('cal_event_compensation_calendar_event_user_status_id');
-        this.hiddenCompensationInput = document.getElementById('cal_event_compensation_paid');
+        this.hiddenCompensationPaymentCompletedInput = document.getElementById('cal_event_compensation_payment_completed');
 
         this.init();
     }
@@ -155,7 +155,7 @@ export default class CalendarEventAddCompensation {
                 li.classList.add('status-item', 'status-item--item', 'mb-4', 'p-2', 'border', 'rounded', 'bg-indigo-100');
                 li.dataset.statusId = item.id; // Store the status ID if available
 
-                const titleLabel = item.paid ? `<span class="text-red-600">[PAID]</span>` : `<span>[FREE]</span>`;
+                const titleLabel = item.paid_compensation ? `<span class="text-red-600">[PAID]</span>` : `<span>[FREE]</span>`;
 
                 li.innerHTML = `
                 <div class="mb-1"><strong>Event: ${item.event}</strong> - ${titleLabel}</div>
@@ -163,7 +163,7 @@ export default class CalendarEventAddCompensation {
                 <div><span>Status:</span> ${item.status}</div>`;
 
                 // Add click event listener to each list item
-                li.addEventListener('click', () => this.populateHiddenInputs(item.status_id, userId, item.paid));
+                li.addEventListener('click', () => this.populateHiddenInputs(item.status_id, userId, item.paid_compensation));
 
                 // Add the list item to the list
                 ul.appendChild(li);
@@ -180,11 +180,11 @@ export default class CalendarEventAddCompensation {
         statusesContainer.appendChild(ul);
     }
 
-    populateHiddenInputs(statusId, userId, paid) {
+    populateHiddenInputs(statusId, userId, paid_compensation) {
         console.log(statusId, userId)
         this.hiddenUserIdInput.value = userId;
         this.hiddenUserStatusIdInput.value = statusId;
-        this.hiddenCompensationInput.value = paid ? 'yes' : 'no';
+        this.hiddenCompensationPaymentCompletedInput.value = paid_compensation ? 'yes' : 'no';
         this.form.submit();
     }
 }

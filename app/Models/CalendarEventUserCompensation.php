@@ -15,8 +15,8 @@ class CalendarEventUserCompensation extends Model
         'calendar_event_id',
         'user_id',
         'status',
-        'paid',
-        'note'
+        'free',
+        'payment_completed'
     ];
 
     /**
@@ -29,7 +29,6 @@ class CalendarEventUserCompensation extends Model
         return [
             'attended',
             'no-show',
-            'canceled'
         ];
     }
 

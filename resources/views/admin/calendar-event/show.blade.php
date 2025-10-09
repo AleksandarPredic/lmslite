@@ -127,7 +127,7 @@
                         />
 
                         <x-admin.form.input
-                            name="cal_event_compensation_paid"
+                            name="cal_event_compensation_payment_completed"
                             label=""
                             type="hidden"
                             value=""
@@ -159,7 +159,6 @@
 
                             <x-admin.singular.meta.item-user
                                 :user="$compensationUser"
-                                {{-- // TODO: make this green if it is marked as attended --}}
                                 class="{{ $compensationForThisCalendarEvent->status === 'attended' ? 'singular-meta__item-user-attended' : '' }}"
                             >
                                 {{-- # Properties --}}
@@ -179,40 +178,45 @@
 
                                 </x-slot>
 
+                                {{-- Compensation status and payment completed Form --}}
+                                <div class="mt-4 p-3 mb-12 cal-event-compensation__update">
+                                    <x-admin.form.wrapper
+                                        action="{{ route('admin.calendar-events.compensations.update', [$calendarEvent, $compensationForThisCalendarEvent]) }}"
+                                        method="POST"
+                                        button-text=""
+                                    >
+                                        @method('PUT')
+
+                                        <div class="flex items-center">
+                                            <x-admin.form.select
+                                                name="payment_completed"
+                                                value="{{ $compensationForThisCalendarEvent->payment_completed ? 'yes' : 'no' }}"
+                                                label="{{ __('Payment Completed') }}"
+                                                :options="['no' => __('No'), 'yes' => __('Yes')]"
+                                                {{-- // Hide payment completed for free compensations as they don't need this option --}}
+                                                class="mr-4 mb-0{{ $compensationForThisCalendarEvent->free ? ' hidden' : ''  }}"
+                                            />
+
+                                            <x-admin.form.select
+                                                name="status"
+                                                value="{{ $compensationForThisCalendarEvent->status ?? '' }}"
+                                                label="{{ __('Status') }}"
+                                                :options="$compensationStatusEnumValues"
+                                                class="mr-2 mb-0"
+                                            />
+                                        </div>
+
+                                        <div class="cal-event-compensation__update-processing-message"></div>
+
+                                    </x-admin.form.wrapper>
+                                </div>
+
                                 <x-admin.action-delete-button
                                     class="px-2 py-1"
                                     action="{{ route('admin.calendar-events.compensations.destroy', [$calendarEvent, $compensationUser->pivot]) }}"
                                     button-text="{{ __('Remove')}}"
                                 />
                             </x-admin.singular.meta.item-user>
-                            {{-- Compensation status and note Form --}}
-                            <div class="mt-4 p-3 mb-12">
-                                <x-admin.form.wrapper
-                                    action="{{ route('admin.calendar-events.compensations.update', [$calendarEvent, $compensationForThisCalendarEvent]) }}"
-                                    method="POST"
-                                    button-text="{{ __('Update') }}"
-                                    class="flex items-center"
-                                >
-                                    @method('PUT')
-
-                                    <x-admin.form.select
-                                        name="status"
-                                        value="{{ $compensationForThisCalendarEvent->status ?? '' }}"
-                                        label="{{ __('Status') }}"
-                                        :options="$compensationStatusEnumValues"
-                                        class="mr-2"
-                                    />
-
-                                    <x-admin.form.input
-                                        name="note"
-                                        label="{{ __('Note (max 300 chars)') }}"
-                                        type="text"
-                                        value="{{ $compensationForThisCalendarEvent->note ?? '' }}"
-                                        class="mr-2 flex-1"
-                                    />
-
-                                </x-admin.form.wrapper>
-                            </div>
                         @endforeach
 
                     </x-admin.singular.meta.list-wrapper>

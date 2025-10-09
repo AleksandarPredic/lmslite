@@ -25,14 +25,14 @@ class CalendarEventUserCompensationController extends Controller
         $validator = Validator::make($request->all(), [
             'cal_event_compensation_calendar_event_user_status_id' => 'required|exists:calendar_event_user_statuses,id',
             'cal_event_compensation_user_id'                       => 'required|exists:users,id',
-            'cal_event_compensation_paid'                          => 'required|string|in:yes,no'
+            'cal_event_compensation_payment_completed'             => 'required|string|in:yes,no'
         ], [
             'cal_event_compensation_calendar_event_user_status_id.required' => 'Error, the event status is required.',
             'cal_event_compensation_calendar_event_user_status_id.exists'   => 'Error, the event status is invalid.',
             'cal_event_compensation_user_id.required'                       => 'Error, the user is required.',
             'cal_event_compensation_user_id.exists'                         => 'Error, the selected user is invalid.',
-            'cal_event_compensation_paid.required'                          => 'Error, the paid field is required.',
-            'cal_event_compensation_paid.boolean'                           => 'Error, the paid field must be yes or no value.',
+            'cal_event_compensation_payment_completed.required'                          => 'Error, the paid field is required.',
+            'cal_event_compensation_payment_completed.string'                           => 'Error, the paid field must be yes or no value.',
         ]);
 
         // Return manually with key as on the frontend we are getting the error without key names for the fields
@@ -67,7 +67,8 @@ class CalendarEventUserCompensationController extends Controller
             'calendar_event_id'             => $calendarEvent->id,
             'user_id'                       => $user->id,
             'status'                        => null, // Initially null, can be updated later
-            'paid'                          => $validated['cal_event_compensation_paid'] === 'yes'
+            'free'                          => $validated['cal_event_compensation_payment_completed'] !== 'yes',
+            'payment_completed'             => false, // Initially null, can be updated later
         ]);
 
         return redirect()->back()->with(
@@ -80,30 +81,34 @@ class CalendarEventUserCompensationController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the status and payment completed for compensation
+     * Triggered via ajax in resources/js/calendar-event/CalendarEventUpdateCompensation.js
      *
      * @param \Illuminate\Http\Request $request
      * @param CalendarEvent $calendarEvent
      * @param CalendarEventUserCompensation $compensation
      *
-     * @return RedirectResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, CalendarEvent $calendarEvent, CalendarEventUserCompensation $compensation)
     {
         $validator = Validator::make($request->all(), [
             'status' => ['nullable', 'string', Rule::in(array_merge(CalendarEventUserCompensation::getStatusEnumValues(), ['none']))],
-            'note'   => 'nullable|string|max:500',
+            'payment_completed'   => 'nullable|string|in:yes,no'
         ]);
 
         if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
+            return response()->json([
+                'message' => 'Validation error',
+                'errors' => $validator->errors()
+            ], 422);
         }
 
         $validated = $validator->validated();
 
         // Sanitize note if present
-        if (isset($validated['note'])) {
-            $validated['note'] = strip_tags($validated['note']);
+        if (isset($validated['payment_completed'])) {
+            $validated['payment_completed'] = $validated['payment_completed'] === 'yes';
         }
 
         // Prevent saving none and allow reverting back to none
@@ -113,13 +118,12 @@ class CalendarEventUserCompensationController extends Controller
 
         $compensation->update($validated);
 
-        return redirect()->back()->with(
-            'admin.message.success',
-            sprintf(
+        return response()->json([
+            'message' => sprintf(
                 'Compensation updated for the user %s',
                 $compensation->user->name
             )
-        );
+        ]);
     }
 
     /**

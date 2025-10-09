@@ -51,7 +51,7 @@ Route::name('admin.')->middleware('can:admin')->group(function () {
         [CalendarEventUserCompensationController::class, 'store'])
          ->name('calendar-events.compensations.store');
 
-    Route::put('admin/calendar-events/{calendarEvent}/compensations/{compensation}',
+    Route::patch('admin/calendar-events/{calendarEvent}/compensations/{compensation}',
         [CalendarEventUserCompensationController::class, 'update'])
          ->name('calendar-events.compensations.update');
 

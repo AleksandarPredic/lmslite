@@ -63,7 +63,7 @@ class CalendarEvent extends Model
     public function usersWithCompensation()
     {
         return $this->belongsToMany(User::class, 'calendar_event_user_compensations')
-                    ->withPivot(['id', 'calendar_event_user_status_id', 'status', 'paid', 'note', 'created_at', 'updated_at']);
+                    ->withPivot(['id', 'calendar_event_user_status_id', 'status', 'free', 'payment_completed', 'created_at', 'updated_at']);
     }
 
     /**

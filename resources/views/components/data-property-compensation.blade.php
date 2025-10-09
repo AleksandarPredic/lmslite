@@ -11,6 +11,6 @@
 <x-data-property
     class="ml-4 admin-form__inner-field--flex flex"
 >
-    <strong class="mr-2">{{ $compensation->paid ? '[PAID]' : '[FREE]' }}</strong>
+    <strong class="mr-2">{{ $compensation->free ? '[FREE]' :  '[PAID]' }}</strong>
     <a href="{{ route('admin.calendar-events.show', $calendarEvent) }}">{{ $linkText }} {{ lmsCarbonDateFormat($calendarEvent->starting_at) }}</a>
 </x-data-property>

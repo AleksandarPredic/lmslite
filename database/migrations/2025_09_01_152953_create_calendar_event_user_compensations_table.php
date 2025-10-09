@@ -18,9 +18,9 @@ class CreateCalendarEventUserCompensationsTable extends Migration
             $table->foreignId('calendar_event_user_status_id')->constrained()->cascadeOnDelete()->name('calevent_user_comp_cale_user_status_id_fk');;
             $table->foreignId('calendar_event_id')->nullable()->constrained()->nullOnDelete(); // Useful for easier queries
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();  // Useful for easier queries
-            $table->enum('status', ['attended', 'no-show', 'canceled'])->nullable();
-            $table->boolean('paid')->default(false);
-            $table->text('note')->nullable();
+            $table->enum('status', ['attended', 'no-show'])->nullable();
+            $table->boolean('free')->default(true);
+            $table->boolean('payment_completed')->default(false);
             $table->timestamps();
         });
     }

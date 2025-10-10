@@ -68,7 +68,9 @@
 
             {{-- # USER COMPENSATION START --}}
             <h2 class="mb-1">Add compensation user</h2>
-            <div class="mb-4 text-sm text-gray-500">Search users which are eligible for compensation between {{ \App\Models\CalendarEventUserCompensation::getCompensationSearchRangeInMonthsFuture() }} month ahead and last {{ \App\Models\CalendarEventUserCompensation::getCompensationSearchRangeInMonthsPast() }} months.</div>
+            <x-compensation.partials.compesation-period-search-info
+                textWithPlaceholders="{{ __('Search users which are eligible for compensation between %1$s month ahead and last %2$s months.') }}"
+            />
             <div class="cal-event-compensation mb-12">
                 <div class="cal-event-compensation__find-user">
                     <x-admin.form.field>

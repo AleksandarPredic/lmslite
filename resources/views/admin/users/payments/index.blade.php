@@ -108,6 +108,9 @@
                                 name="{{ $group->name . ' - ' . __('unused compensations') }}"
                                 class="font-bold pl-0 mb-1"
                             />
+                            <x-compensation.partials.compesation-period-search-info
+                                textWithPlaceholders="{{ __('Unused compenstions between %1$s month ahead and last %2$s months.') }}"
+                            />
                             @if($groupUnusedCompensations = $unusedCompensationsMappedByGroupId[$group->id] ?? null)
                                 <ul>
                                     <li class="mb-2">Total number: {{ count($groupUnusedCompensations) }}</li>
@@ -122,7 +125,7 @@
                                 </ul>
                             @else
                                 <ul>
-                                    <li>{{ __('None!') }}</li>
+                                    <li>{{ __('No compensations available.') }}</li>
                                 </ul>
                             @endif
                         </div>

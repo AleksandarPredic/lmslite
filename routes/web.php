@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CalendarEventController;
+use App\Http\Controllers\CalendarEventUserCompensationController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\GroupController;
@@ -45,6 +46,19 @@ Route::name('admin.')->middleware('can:admin')->group(function () {
     Route::patch('/admin/calendar-events/{calendarEvent}/users/status/{user}', [CalendarEventController::class, 'updateUserStatus'])
          ->name('calendar-events.users.status.update');
 
+    // Calendar event - Compensation routes with specific URL parameters
+    Route::post('/admin/calendar-events/{calendarEvent}/compensations/',
+        [CalendarEventUserCompensationController::class, 'store'])
+         ->name('calendar-events.compensations.store');
+
+    Route::patch('admin/calendar-events/{calendarEvent}/compensations/{compensation}',
+        [CalendarEventUserCompensationController::class, 'update'])
+         ->name('calendar-events.compensations.update');
+
+    Route::delete('admin/calendar-events/{calendarEvent}/compensations/{compensation}',
+        [CalendarEventUserCompensationController::class, 'destroy'])
+         ->name('calendar-events.compensations.destroy');
+
     // Group
     Route::resource('/admin/groups', GroupController::class);
     Route::post('/admin/groups/{group}/users', [GroupController::class, 'addUser'])->name('groups.users.store');
@@ -58,6 +72,7 @@ Route::name('admin.')->middleware('can:admin')->group(function () {
     Route::get('/admin/users/{user}/next-calendar-events', [UserController::class, 'nextCalendarEvents'])->name('users.nextCalendarEvents');
     Route::get('/admin/users/{user}/courses-history', [UserController::class, 'showGroupsHistory'])->name('users.groups-history');
     Route::post('/admin/users/find', [UserController::class, 'findUsers'])->name('users.find');
+    Route::post('/admin/users/find-statuses-eligible-for-compensation-for-event', [UserController::class, 'findUserStatusesEligibleForCompensationForCalendarEvent'])->name('users.find-statuses-eligible-for-compensation-for-event');
 
     // User payments - using only specific resource methods
     Route::resource('/admin/users/{user}/payments', UserPaymentsController::class)->only(['index', 'store', 'destroy'])->names('users.payments');

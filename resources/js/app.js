@@ -2,6 +2,9 @@ require('./bootstrap');
 
 import Alpine from 'alpinejs';
 import CalendarEventStatusUpdate from "./calendar-event/CalendarEventStatusUpdate";
+import CalendarEventAddCompensation from "./calendar-event/CalendarEventAddCompensation";
+import CalendarEventUpdateCompensation from "./calendar-event/CalendarEventUpdateCompensation";
+import GroupUsersListCollapsable from "./calendar-event/GroupUsersListCollapsable";
 
 window.Alpine = Alpine;
 
@@ -17,4 +20,27 @@ if (calendarEventStatusses.length) {
         new CalendarEventStatusUpdate(calendarEventStatus);
     }
 }
+
+/*
+ * Ajax adding compensation user on the calendar event
+ * @see resources/views/admin/calendar-event/show.blade.php
+ */
+if (document.getElementsByClassName('cal-event-user-status').length) {
+    new CalendarEventAddCompensation();
+}
+
+/*
+ * Ajax updating compensation status and payment_completed on the calendar event
+ * @see resources/views/admin/calendar-event/show.blade.php
+ */
+document.querySelectorAll('.cal-event-compensation__update').forEach(container => {
+    new CalendarEventUpdateCompensation(container);
+});
+
+/*
+ * Collapsable group users list on the calendar event
+ * @see resources/views/components/admin/calendar-event/group-users-list.blade.php
+ * @see resources/views/admin/calendar-event/show.blade.php
+ */
+GroupUsersListCollapsable();
 

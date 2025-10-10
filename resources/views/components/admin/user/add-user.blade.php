@@ -42,7 +42,7 @@
         // TODO: Rewrite this in plan JS or move it to js file, currently using ES6 but this is fine as we will use only supported browsers
         // Uses app/Http/Controllers/UserController.php@findUsers on the backend
         function searchUsers(routeUrl) {
-            const optionInitValue = '<option value="">{{ __('loading...') }}</option>';
+            const optionInitValue = '<option value="">{{ __('Waiting...') }}</option>';
 
             return {
                 routeUrl: routeUrl.url,

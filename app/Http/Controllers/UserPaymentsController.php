@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CalendarEventUserCompensation;
 use App\Models\CalendarEventUserStatus;
 use App\Models\Payment;
 use App\Models\User;
@@ -39,9 +40,14 @@ class UserPaymentsController extends Controller
                        ->get();
 
         // Get all calendar events with user statuses for this user
-        $calendarEventUserStatuses = CalendarEventUserStatus::with(['calendarEvent.event.group'])
-                                                            ->where('user_id', $user->id)
-                                                            ->get();
+        $calendarEventUserStatuses = CalendarEventUserStatus::with([
+            'calendarEvent.event.group',
+            'compensations',
+            'compensations.calendarEventUserStatus',
+            'compensations.calendarEventUserStatus.calendarEvent',
+            'compensations.calendarEventUserStatus.calendarEvent.event',
+            'compensations.calendarEvent'
+        ])->where('user_id', $user->id)->get();
 
         foreach ($groups as $group) {
             // Get all payments for this user and group
@@ -77,10 +83,10 @@ class UserPaymentsController extends Controller
             foreach ($period as $date) {
                 $monthKey = $date->format('Y-m');
                 $monthlyStatuses[$monthKey] = [
-                    'attended' => [],
-                    'canceled' => [],
-                    'no-show' => [],
-                    'compensation' => []
+                    'attended' => ['count' => []],
+                    'canceled' => ['count' => []],
+                    'no-show' => ['count' => []],
+                    'compensation' => ['count' => []]
                 ];
             }
 
@@ -90,21 +96,35 @@ class UserPaymentsController extends Controller
 
                 // Count regular statuses
                 if ($status->status === 'attended') {
-                    $monthlyStatuses[$month]['attended'][] = $status->calendar_event_id;
-                } elseif ($status->status === 'canceled') {
-                    $monthlyStatuses[$month]['canceled'][] = $status->calendar_event_id;
-                } elseif ($status->status === 'no-show') {
-                    $monthlyStatuses[$month]['no-show'][] = $status->calendar_event_id;
-                }
+                    $monthlyStatuses[$month]['attended']['count'][] = $status->calendar_event_id;
 
-                // Count compensation info separately
-                if ($status->info === 'compensation') {
-                    if ($status->status === 'attended') {
-                        $monthlyStatuses[$month]['compensation']['attended'][] = $status->calendar_event_id;
-                    } elseif ($status->status === 'canceled') {
-                        $monthlyStatuses[$month]['compensation']['canceled'][] = $status->calendar_event_id;
-                    } elseif ($status->status === 'no-show') {
-                        $monthlyStatuses[$month]['compensation']['no-show'][] = $status->calendar_event_id;
+                    if ($status->compensations->isNotEmpty()) {
+                        // Initialize as empty collection if not exists
+                        if (!isset($monthlyStatuses[$month]['attended']['compensations'])) {
+                            $monthlyStatuses[$month]['attended']['compensations'] = collect([]);
+                        }
+
+                        $monthlyStatuses[$month]['attended']['compensations'] = $monthlyStatuses[$month]['attended']['compensations']->merge($status->compensations);
+                    }
+                } elseif ($status->status === 'canceled') {
+                    $monthlyStatuses[$month]['canceled']['count'][] = $status->calendar_event_id;
+
+                    if ($status->compensations->isNotEmpty()) {
+                        // Initialize as empty collection if not exists
+                        if (!isset($monthlyStatuses[$month]['canceled']['compensations'])) {
+                            $monthlyStatuses[$month]['canceled']['compensations'] = collect([]);
+                        }
+                        $monthlyStatuses[$month]['canceled']['compensations'] = $monthlyStatuses[$month]['canceled']['compensations']->merge($status->compensations);
+                    }
+                } elseif ($status->status === 'no-show') {
+                    $monthlyStatuses[$month]['no-show']['count'][] = $status->calendar_event_id;
+
+                    if ($status->compensations->isNotEmpty()) {
+                        // Initialize as empty collection if not exists
+                        if (!isset($monthlyStatuses[$month]['no-show']['compensations'])) {
+                            $monthlyStatuses[$month]['no-show']['compensations'] = collect([]);
+                        }
+                        $monthlyStatuses[$month]['no-show']['compensations'] = $monthlyStatuses[$month]['no-show']['compensations']->merge($status->compensations);
                     }
                 }
             }
@@ -113,10 +133,34 @@ class UserPaymentsController extends Controller
             $group->monthlyStatuses = $monthlyStatuses;
         }
 
+        $unusedCompensationsPerGroup = CalendarEventUserCompensation::getUserStatusesEligibleForCompensation($user);
+        // Eager load the required relationships
+        $unusedCompensationsPerGroup->load([
+            'compensations',
+            'compensations.calendarEventUserStatus',
+            'compensations.calendarEventUserStatus.calendarEvent',
+            'compensations.calendarEventUserStatus.calendarEvent.event',
+            'compensations.calendarEvent',
+            'compensations.calendarEvent.event'
+        ]);
+
+        // Remap all by event group id
+        $unusedCompensationsMappedByGroupId = [];
+        foreach ($unusedCompensationsPerGroup as $compensation) {
+            $groupId = optional($compensation->calendarEvent->event)->group_id;
+            if ($groupId) {
+                if (!isset($unusedCompensationsMappedByGroupId[$groupId])) {
+                    $unusedCompensationsMappedByGroupId[$groupId] = [];
+                }
+                $unusedCompensationsMappedByGroupId[$groupId][] = $compensation;
+            }
+        }
+
         return view('admin.users.payments.index', [
             'user' => $user,
             'groups' => $groups,
-            'statistics_filter_date_format' => StatisticsController::getDateFormat()
+            'statistics_filter_date_format' => StatisticsController::getDateFormat(),
+            'unusedCompensationsMappedByGroupId' => $unusedCompensationsMappedByGroupId
         ]);
     }
 

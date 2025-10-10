@@ -1,0 +1,39 @@
+.calendar-event-group-users--collapsed {
+    padding-top: 0;
+}
+
+.calendar-event-group-users--collapsed .calendar-event-group-users__title {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    margin-bottom: 0;
+    position: relative;
+    z-index: 2;
+    cursor: pointer;
+}
+
+.calendar-event-group-users--collapsed .calendar-event-group-users__title::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 2rem;
+    width: 0.7rem;
+    height: 0.7rem;
+    pointer-events: none;
+    transform: rotate(45deg) translate(-50%, 0);
+    z-index: 1;
+    border-left: 0.2rem solid grey;
+    border-top: 0.2rem solid grey;
+    transition: transform 0.5s ease;
+}
+
+.calendar-event-group-users--collapsed .singular-meta__items-wrapper {
+    display: none;
+}
+
+.calendar-event-group-users--collapsed.calendar-event-group-users--expanded .singular-meta__items-wrapper {
+    display: block;
+}
+
+.calendar-event-group-users--collapsed.calendar-event-group-users--expanded .calendar-event-group-users__title::after {
+    transform: rotate(-135deg) translate(calc(-50% + 17px), 0);
+}

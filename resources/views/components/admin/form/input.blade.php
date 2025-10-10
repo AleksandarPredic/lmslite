@@ -1,6 +1,8 @@
-@props(['name', 'value', 'label', 'required' => false, 'type' => 'text', 'step' => false])
+@props(['name', 'value', 'label', 'required' => false, 'type' => 'text', 'step' => false, 'class' => ''])
 
-<x-admin.form.field>
+<x-admin.form.field
+    class="{{ $class }}"
+>
     <x-admin.form.label for="{{ $name }}" :value="$label" />
 
     @php

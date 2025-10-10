@@ -28,7 +28,9 @@
             <x-admin.action-delete-button action="{{ route('admin.calendar-events.destroy', $calendarEvent) }}" />
         </div>
 
-        <x-admin.singular.wrapper>
+        <x-admin.singular.wrapper
+            class="lms-calendar-event"
+        >
             {{-- # Header --}}
             <x-slot name="info">
                 <x-admin.singular.name
@@ -41,7 +43,7 @@
                     :value="$grupLink"
                 />
                 <x-admin.singular.info
-                    name="{{ __('Number of attendees') }}"
+                    name="{{ __('Number of attendees for this event') }}"
                     :value="$numberOfusers"
                 />
             </x-slot>
@@ -64,6 +66,171 @@
                 />
             </x-slot>
 
+            {{-- # USER COMPENSATION START --}}
+            <h2 class="mb-1">Add compensation user</h2>
+            <x-compensation.partials.compesation-period-search-info
+                textWithPlaceholders="{{ __('Search users which are eligible for compensation between %1$s month ahead and last %2$s months.') }}"
+            />
+            <div class="cal-event-compensation mb-12">
+                <div class="cal-event-compensation__find-user">
+                    <x-admin.form.field>
+                        <x-admin.form.label for="find-compensation-user" :value="__('Type user name')" />
+                        <input
+                            id="find-compensation-user"
+                            class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            type="text"
+                            placeholder="{{ __('Type user name here...') }}"
+                            value=""
+                            data-routeusers="{{ route('admin.users.find') }}"
+                            data-routestatuses="{{ route('admin.users.find-statuses-eligible-for-compensation-for-event') }}"
+                            data-exclude="{{ ! empty($excludeCompensation) ? implode(',', $excludeCompensation) : '' }}"
+                            data-calendareventid="{{ $calendarEvent->id }}"
+                            required
+                        />
+                    </x-admin.form.field>
+                </div>
+
+                <div class="cal-event-compensation__user-select">
+                    <x-admin.form.field>
+                        <select
+                            class="block mt-1 w-full"
+                            required
+                        >
+                            <option>{{ __('Waiting...') }}</option>
+                        </select>
+                    </x-admin.form.field>
+                </div>
+
+                <div class="mb-4 mt-4 py-1 text text-red-600 cal-event-compensation__ajax-error-msg"></div>
+
+                {{-- display list of statusses to select for compensation --}}
+                <div class="cal-event-compensation__statuses-list"></div>
+
+                {{-- # Form to add compensation --}}
+                <x-admin.form.wrapper
+                    action="{{ route('admin.calendar-events.compensations.store', $calendarEvent) }}"
+                    method="POST"
+                    button-text=""
+                    class="cal-event-compensation__form"
+                >
+                    <x-admin.form.field>
+                        <x-admin.form.input
+                            name="cal_event_compensation_user_id"
+                            label=""
+                            type="hidden"
+                            value=""
+                            required
+                        />
+
+                        <x-admin.form.input
+                            name="cal_event_compensation_calendar_event_user_status_id"
+                            label=""
+                            type="hidden"
+                            value=""
+                            required
+                        />
+
+                        <x-admin.form.input
+                            name="cal_event_compensation_payment_completed"
+                            label=""
+                            type="hidden"
+                            value=""
+                            required
+                        />
+
+                        @if($errors->compensation->any())
+                            @foreach($errors->compensation->toArray() as $field => $messages)
+                                @foreach($messages as $message)
+                                    <p class="text-red-600 text-xs mt-2">{{ $message }}</p>
+                                @endforeach
+                            @endforeach
+                        @endif
+
+                    </x-admin.form.field>
+                </x-admin.form.wrapper>
+            </div>
+
+            {{-- # Compensation users --}}
+            @if($compensationUsers->isNotEmpty())
+                <div class="mb-12 pb-3">
+                    <x-admin.singular.meta.name
+                        name="{{ __('Compensation users') }}"
+                    />
+
+                    <x-admin.singular.meta.list-wrapper>
+                        @foreach($compensationUsers as $compensationUser)
+                            @php($compensationForThisCalendarEvent = $compensationUser->compensations()->where('calendar_event_id', $calendarEvent->id)->first())
+
+                            <x-admin.singular.meta.item-user
+                                :user="$compensationUser"
+                                class="{{ $compensationForThisCalendarEvent->status === 'attended' ? 'singular-meta__item-user-attended' : '' }}"
+                            >
+                                {{-- # Properties --}}
+                                <x-slot name="properties">
+                                    <x-data-property-link
+                                        href="{{ route('admin.users.show', $compensationUser) }}"
+                                        title="{{ $compensationUser->name }}"
+                                    />
+
+                                    {{-- // This is list of added compensation users below the add form. Below we ling to compensation -> linked calendar event user status -> calendar event --}}
+                                    @if($compensationUser->compensations->isNotEmpty() && $compensationForThisCalendarEvent)
+                                        <x-compensation.compensation-used
+                                            :compensation="$compensationForThisCalendarEvent"
+                                            linkText="{{ __('From ') }}"
+                                        />
+                                    @endif
+
+                                </x-slot>
+
+                                {{-- Compensation status and payment completed Form --}}
+                                <div class="mt-4 mb-12 cal-event-compensation__update">
+                                    <x-admin.form.wrapper
+                                        action="{{ route('admin.calendar-events.compensations.update', [$calendarEvent, $compensationForThisCalendarEvent]) }}"
+                                        method="POST"
+                                        button-text=""
+                                    >
+                                        @method('PUT')
+
+                                        <div class="flex items-center">
+                                            <x-admin.form.select
+                                                name="payment_completed"
+                                                value="{{ $compensationForThisCalendarEvent->payment_completed ? 'yes' : 'no' }}"
+                                                label="{{ __('Payment Completed') }}"
+                                                :options="['no' => __('No'), 'yes' => __('Yes')]"
+                                                {{-- // Hide payment completed for free compensations as they don't need this option --}}
+                                                class="lms-x-admin-form-select mr-4 mb-0{{ $compensationForThisCalendarEvent->free ? ' hidden' : ''  }}"
+                                            />
+
+                                            <x-admin.form.select
+                                                name="status"
+                                                value="{{ $compensationForThisCalendarEvent->status ?? '' }}"
+                                                label="{{ __('Status') }}"
+                                                :options="$compensationStatusEnumValues"
+                                                class="lms-x-admin-form-select mr-2 mb-0"
+                                            />
+                                        </div>
+
+                                        <div class="cal-event-compensation__update-processing-message"></div>
+
+                                    </x-admin.form.wrapper>
+                                </div>
+
+                                <x-admin.action-delete-button
+                                    class="px-2 py-1"
+                                    action="{{ route('admin.calendar-events.compensations.destroy', [$calendarEvent, $compensationUser->pivot]) }}"
+                                    button-text="{{ __('Remove')}}"
+                                />
+                            </x-admin.singular.meta.item-user>
+                        @endforeach
+
+                    </x-admin.singular.meta.list-wrapper>
+                </div>
+            @endif
+            {{-- # USER COMPENSATION END --}}
+
+            <h2>Add non group user</h2>
+            <div class="text-sm text-gray-500">Add users that will be only on this event.</div>
+            <div class="text-sm mb-4 text-gray-500">Do not add compensation user here.</div>
             {{-- # Slot - add users form --}}
             <x-admin.user.add-user
                 route="{{ route('admin.calendar-events.users.store', [$calendarEvent, $group]) }}"
@@ -137,7 +304,7 @@
                         :usersStatuses="$usersStatuses"
                         :calendarEvent="$calendarEvent"
                         :users="$users"
-                        class="mt-8 bg-indigo-50 pt-6 px-2"
+                        class="mt-8 bg-indigo-50 pt-6 px-2 calendar-event-group-users--collapsed"
                     />
 
                     {{-- # Legacy users - users that have calendar event user status but were removed from the group --}}
@@ -168,7 +335,6 @@
                                             :userStatuses="$usersStatuses"
                                         />
 
-                                        {{-- // TODO: Add show link to user profile --}}
                                     </x-admin.singular.meta.item-user>
                                 @endforeach
 

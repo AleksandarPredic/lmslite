@@ -96,12 +96,39 @@
                             foreach ($period as $date) {
                                 $months[] = [
                                     'date' => $date->copy(),
-                                    'name' => $date->format('F Y')
+                                    'name' => $date->format('M Y')
                                 ];
                             }
                         @endphp
 
                         <br />
+
+                        <div class="singular-meta-user-payments__group-unused-compensations border p-2 rounded mb-4">
+                            <x-admin.singular.meta.name
+                                name="{{ $group->name . ' - ' . __('unused compensations') }}"
+                                class="font-bold pl-0 mb-1"
+                            />
+                            <x-compensation.partials.compesation-period-search-info
+                                textWithPlaceholders="{{ __('Unused compenstions between %1$s month ahead and last %2$s months.') }}"
+                            />
+                            @if($groupUnusedCompensations = $unusedCompensationsMappedByGroupId[$group->id] ?? null)
+                                <ul>
+                                    <li class="mb-2">Total number: {{ count($groupUnusedCompensations) }}</li>
+                                    @foreach($groupUnusedCompensations as $unusedGroupCompensation)
+                                        <li class="mb-2">
+                                            <x-compensation.compensation-unused
+                                                :calendarEventUserStatus="$unusedGroupCompensation"
+                                                :linkText="__('From ')"
+                                            />
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @else
+                                <ul>
+                                    <li>{{ __('No compensations available.') }}</li>
+                                </ul>
+                            @endif
+                        </div>
 
                         <x-admin.singular.meta.item-wrapper class="text-lg singular-meta-user-payments__item-header {{ $cssCLassGroupHeader }}">
                             {{ $group->name }} @if($userInactive)<strong class="ml-2">- ({{ __('Inactive') }})</strong>@endif
@@ -136,12 +163,10 @@
                                         </div>
                                     </div>
 
-                                    {{--
-                                    // Commented out temporary until removed or decided what to do
                                     <x-admin.user-payments.statusses
                                         :month="$month"
                                         :group="$group"
-                                    />--}}
+                                    />
 
                                     @php
                                         $monthKey = $month['date']->format('Y-n');
@@ -198,8 +223,8 @@
                                                     <input type="text" name="note" class="text-sm rounded-md border-gray-300" placeholder="Note (optional)">
                                                 </div>
 
-                                                <button type="submit" class="font-bold py-2 px-4 rounded bg-gray-100 mb-2 mt-2">
-                                                    {{ __('Record Payment') }}
+                                                <button type="submit" class="font-bold py-2 px-2 rounded bg-gray-100 mb-2 mt-2">
+                                                    {{ __('Add Payment') }}
                                                 </button>
                                             </form>
                                         @endif

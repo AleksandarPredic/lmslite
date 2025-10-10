@@ -1,6 +1,18 @@
 /**
  User payments view: admin/users/{user_id}/payments
  */
+.singular-meta-user-payments__group-unused-compensations .lms-compensation {
+    width: max-content;
+}
+
+.singular-meta-user-payments .singular-meta-user-payments__statuses {
+    margin-left: 20px;
+}
+
+.singular-meta-user-payments .singular-meta-user-payments__statuses .data-cards_property .lms-compensation-status-date {
+    max-width: 118px;
+}
+
 @media (max-width: 1024px) {
     .singular-meta-user-payments .singular-meta-user-payments__item-header {
         list-style-type: none;

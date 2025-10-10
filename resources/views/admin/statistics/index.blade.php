@@ -4,94 +4,6 @@
     </x-admin.header>
 
     <x-admin.main>
-
-        {{-- TODO: Move this to css --}}
-        <style>
-            .statistics__table-wrapper {
-                overflow-x: auto;
-                width: 100%;
-                -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS devices */
-            }
-
-            table {
-                border: 1px solid;
-                border-collapse: collapse;
-                width: auto; /* Allow table to expand based on content */
-            }
-
-            table th,
-            table td {
-                width: 300px;
-                border: 1px solid;
-                text-align: center;
-                padding: 10px;
-            }
-
-            td.statistics__table-data {
-                min-width: 280px;
-                width: 250px;
-            }
-
-            table td hr {
-                border-color: darkgrey;
-            }
-
-            .statistics__group-payments ul li {
-                display: flex;
-                margin-bottom: 8px;
-                text-align: left;
-                justify-content: center;
-            }
-
-            .statistics__group-payments ul li > span:last-child{
-                font-weight: bold;
-                color: green;
-            }
-
-            .statistics__group-payments:not(.statistics__group-payments--show) ul li > span:first-child{
-                width: 175px;
-                text-overflow: ellipsis;
-                overflow: hidden;
-                white-space: nowrap;
-                color: gray;
-            }
-
-            .statistics__group-payments--show ul li {
-                display: block;
-                padding: 5px 10px;
-                background-color: #e0e8f7;
-                border-radius: 5px;
-            }
-
-            /* Add the zebra striping for alternate rows */
-            table tbody tr:nth-child(even) {
-                background-color: #e0e8f7;
-            }
-
-            .statistics__details-calendar-event-list a:hover,
-            .statistics__details-month-trigger:hover {
-                color: blue;
-                font-weight: bold;
-            }
-
-            .statistics__details-month {
-                display: none;
-                position: fixed;
-                top: 50px;
-                left: 50%;
-                transform: translate(-50%, 0);
-                width: 300px;
-                height: auto;
-                max-height: calc(100vh - 80px);
-                background-color: white;
-                overflow-y: auto;
-            }
-
-            .statistics__details-month--show {
-                display: block;
-            }
-        </style>
-
         <script>
             window.addEventListener('load', () => {
                 // Show modal for event attendance
@@ -137,7 +49,7 @@
         </script>
 
         <div>
-            <strong>Legend: 1st digit -> attended, 2nd -> canceled, 3rd -> no-show</strong>
+            <strong>Legend: 1st digit -> attended | 2nd -> canceled | 3rd -> no-show | 4th -> compensations</strong>
         </div>
         <br />
         <br />
@@ -204,10 +116,11 @@
                             <td class="statistics__table-data">
                                 @php
                                     $printStatuses = sprintf(
-                                        '%s | %s | %s',
+                                        '%s | %s | %s | %s',
                                         $monthPreview['statuses']['attended'],
                                         $monthPreview['statuses']['canceled'],
-                                        $monthPreview['statuses']['no-show']
+                                        $monthPreview['statuses']['no-show'],
+                                        $monthPreview['statuses']['compensations'],
                                     );
 
                                     $payments = $monthPreview['payments'];
@@ -258,12 +171,23 @@
                                                                 /**
                                                                 * @var \App\Models\CalendarEventUserStatus $status
                                                                  */
-                                                                $status = $calendarEventUserStatus->userStatus
+                                                                $status = $calendarEventUserStatus->userStatus;
                                                             @endphp
                                                             <li class="text-sm">
                                                                 <a href="{{ route('admin.calendar-events.show', $status->calendarEvent) }}" class="mb-1">
                                                                     {{ $status->calendarEvent->starting_at->format('D, d.m.Y') }} - {{ $status->info ?? 'none'}}
                                                                 </a>
+                                                                @if($status->compensations->isNotEmpty())
+                                                                    <ul class="statistics__details-calendar-event-list-compensations">
+                                                                        @foreach($status->compensations as $calendarEventUserStatusCompensation)
+                                                                            <li class="text-sm">
+                                                                                <x-compensation.compensation-trigger
+                                                                                    :compensation="$calendarEventUserStatusCompensation"
+                                                                                />
+                                                                            </li>
+                                                                        @endforeach
+                                                                    </ul>
+                                                                @endif
                                                             </li>
                                                         @endforeach
                                                     </ul>

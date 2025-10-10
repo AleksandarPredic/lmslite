@@ -1,0 +1,48 @@
+.cal-event-compensation .status-item {
+    cursor: pointer;
+}
+
+.cal-event-compensation .status-item--item:hover {
+    background-color: white;
+}
+
+.lms-calendar-event .singular-meta__item {
+    position: relative;
+}
+
+@media (max-width: 1024px) {
+    .lms-calendar-event .singular-meta__item .singular-meta__item-properties .data-cards_property {
+        max-width: max-content;
+        margin-left: 0;
+    }
+
+    .lms-calendar-event .singular-meta__item .singular-meta__item-properties > a {
+        margin: 10px 0;
+        display: inline-block;
+    }
+
+    .lms-calendar-event .singular-meta__item .singular-meta__item-links {
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+        position: static;
+    }
+
+    .lms-calendar-event .singular-meta__item .singular-meta__item-links .cal-event-user-status {
+        margin-right: 15px;
+    }
+
+    .lms-calendar-event .singular-meta__item .singular-meta__item-links button[type="submit"]{
+        margin-bottom: 0;
+        margin-left: 20px;
+    }
+}
+
+@media (max-width: 767px) {
+    .lms-calendar-event .singular-meta__item .singular-meta__item-links .delete-model-form {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        z-index: 2;
+    }
+}

@@ -5,9 +5,11 @@
 
     {{ $slot }}
 
-    <div class="admin-form__button flex items-center justify-end mt-4">
-        <x-button class="ml-4">
-            {{ $buttonText }}
-        </x-button>
-    </div>
+    @if($buttonText)
+        <div class="admin-form__button flex items-center justify-end mt-4">
+            <x-button class="ml-4">
+                {{ $buttonText }}
+            </x-button>
+        </div>
+    @endif
 </form>

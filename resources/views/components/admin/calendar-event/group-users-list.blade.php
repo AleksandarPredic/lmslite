@@ -10,9 +10,10 @@
 
 {{-- # Group users list, active and inactive users from the group --}}
 @if($groupUsers->isNotEmpty())
-    <div {!! $attributes->merge(['class' => 'calendar-event-grup-users']) !!}>
+    <div {!! $attributes->merge(['class' => 'calendar-event-group-users']) !!}>
         <x-admin.singular.meta.name
             name="{{ $title}}"
+            class="calendar-event-group-users__title"
         />
 
         <x-admin.singular.meta.list-wrapper>
@@ -30,6 +31,23 @@
                         />
 
                         <x-admin.action-link-button href="{{ route('admin.users.payments.index', $groupUser) }}" title="{{ __('Payments') }}" />
+
+                        {{-- Link to compensation Calendar event as this is where the compensation is added --}}
+                        @if($groupUser->compensations->isNotEmpty())
+                            @php
+                                $filteredCompensations = $groupUser->compensations->filter(function ($compensation) use ($calendarEvent) {
+                                    /* Compare with calendarEventUserStatus->calendar_event_id as this is how we know which compensation status is bined to this calendar event */
+                                    return $compensation->calendarEventUserStatus->calendar_event_id === $calendarEvent->id;
+                                });
+                            @endphp
+
+                            @if($filteredCompensations->isNotEmpty())
+                                <x-compensation.compensation-trigger
+                                    :compensation="$filteredCompensations->first()"
+                                />
+                            @endif
+                        @endif
+
                     </x-slot>
 
                     {{-- # Links --}}

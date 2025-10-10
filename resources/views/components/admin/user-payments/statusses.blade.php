@@ -5,19 +5,41 @@
     $monthYearKey = $month['date']->format('Y-m');
     $monthlyStatus = $group->monthlyStatuses[$monthYearKey];
 @endphp
-<div class="mr-2 mb-2 mt-2 ml-12 text-sm singular-meta-user-payments__statuses">
+
+<div class="mr-2 mb-2 mt-2 text-sm singular-meta-user-payments__statuses">
     <ul>
-        <li class="font-medium text-green-600">{{ __('Attended') }}: {{ count($monthlyStatus['attended']) }}</li>
-        <li class="font-medium text-red-600">{{ __('Canceled') }}: {{ count($monthlyStatus['canceled']) }}</li>
-        <li class="font-medium text-yellow-600">{{ __('No-show') }}: {{ count($monthlyStatus['no-show']) }}</li>
-        <li class="font-medium text-blue-600">{{ __('Compensation') }}:
-            @if(! empty($monthlyStatus['compensation']))
-                <ul class="ml-4">
-                    @foreach($monthlyStatus['compensation'] as $status => $compensation)
-                        <li class="font-medium">{{ $status }}: {{ count($compensation) }}</li>
+        <li class="font-medium text-green-600">
+            <span>{{ __('Attended') }}: {{ count($monthlyStatus['attended']['count']) }}</span>
+        </li>
+        <li class="font-medium text-red-600">
+            <span>{{ __('Canceled') }}: {{ count($monthlyStatus['canceled']['count']) }}</span>
+
+            @if($canceledCompensations = $monthlyStatus['canceled']['compensations'] ?? null)
+                <ul>
+                    @foreach($canceledCompensations as $canceledCompensation)
+                        <li>
+                            <x-compensation.compensation-trigger
+                                :compensation="$canceledCompensation"
+                            />
+                        </li>
                     @endforeach
                 </ul>
-            @else 0 @endif
+            @endif
+        </li>
+        <li class="font-medium text-yellow-600">
+            <span>{{ __('No-show') }}: {{ count($monthlyStatus['no-show']['count']) }}</span>
+
+            @if($noShowCompensations = $monthlyStatus['no-show']['compensations'] ?? null)
+                <ul>
+                    @foreach($noShowCompensations as $noShowCompensation)
+                        <li>
+                            <x-compensation.compensation-trigger
+                                :compensation="$noShowCompensation"
+                            />
+                        </li>
+                    @endforeach
+                </ul>
+            @endif
         </li>
     </ul>
 </div>

@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\RequestValidationRulesTrait;
+use App\Models\CalendarEventUserCompensation;
+use App\Models\CalendarEventUserStatus;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 
@@ -294,6 +297,7 @@ class UserController extends Controller
     {
         $attributes = request()->validate([
             'name' => ['required', 'min:3'],
+            // Exclude users that are already on the the calendar event for example
             'exclude' => ['nullable', 'array']
         ]);
 
@@ -309,5 +313,53 @@ class UserController extends Controller
         }
 
         return $users->get(['id', 'name'])->toArray();
+    }
+
+    /**
+     * Find users with statuses eligible for compensation
+     * @see resources/js/calendar-event/CalendarEventAddCompensation.js
+     *
+     * @return JsonResponse
+     */
+    public function findUserStatusesEligibleForCompensationForCalendarEvent()
+    {
+        $attributes = request()->validate([
+            'user_id' => ['required', 'numeric', 'exists:users,id'],
+            'calendar_event_id' => ['required', 'numeric', 'exists:calendar_events,id'],
+        ]);
+
+        $user = User::find($attributes['user_id']);
+        $calendarEventId = $attributes['calendar_event_id'];
+
+        /*
+         * Find users statuses for:
+         * - Users that are not on this event, as we are adding them async via ajax.
+         *      Even if we have compensation attached, we can have user with multiple statuses that are eligible for the compensation
+         * - Users who has no compensation already attached to this event
+         * - Users who has no compensation relationship attached to the calendarEventStatus
+         */
+
+        // First check if the user already has Compensation for this Calendar Event
+        if ($user->hasCompensationForCalendarEvent($calendarEventId)) {
+            response()->json([]);
+        }
+
+        $calendarEventUserStatuses = CalendarEventUserCompensation::getUserStatusesEligibleForCompensation($user);
+
+        /**
+         * Map statuses to a simple array with calendar event and status
+         * @var CalendarEventUserStatus $status
+         */
+        $results = $calendarEventUserStatuses->map(function ($status) {
+            return [
+                'event' => $status->calendarEvent->event->name,
+                'status_id' => $status->id,
+                'calendar_event_date' => lmsCarbonDateFormat($status->calendarEvent->starting_at),
+                'status' => $status->status,
+                'paid_compensation' => in_array($status->status, CalendarEventUserCompensation::getCalendarEventUserStatusesForPaidCompensation()),
+            ];
+        })->toArray();
+
+        return response()->json($results);
     }
 }

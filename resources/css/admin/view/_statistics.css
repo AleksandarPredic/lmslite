@@ -1,0 +1,104 @@
+.statistics__table-wrapper {
+    overflow-x: auto;
+    width: 100%;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS devices */
+}
+
+.statistics__table-wrapper table {
+    border: 1px solid;
+    border-collapse: collapse;
+    width: auto; /* Allow table to expand based on content */
+}
+
+.statistics__table-wrapper table th,
+.statistics__table-wrapper table td {
+    width: 300px;
+    border: 1px solid;
+    text-align: center;
+    padding: 10px;
+}
+
+.statistics__table-wrapper td.statistics__table-data {
+    min-width: 280px;
+    width: 250px;
+}
+
+.statistics__table-wrapper table td hr {
+    border-color: darkgrey;
+}
+
+.statistics__group-payments ul li {
+    display: flex;
+    margin-bottom: 8px;
+    text-align: left;
+    justify-content: center;
+}
+
+.statistics__group-payments ul li > span:last-child{
+    font-weight: bold;
+    color: green;
+}
+
+.statistics__group-payments:not(.statistics__group-payments--show) ul li > span:first-child{
+    width: 175px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    color: gray;
+}
+
+.statistics__group-payments--show ul li {
+    display: block;
+    padding: 5px 10px;
+    background-color: #e0e8f7;
+    border-radius: 5px;
+}
+
+/* Add the zebra striping for alternate rows */
+table tbody tr:nth-child(even) {
+    background-color: #e0e8f7;
+}
+
+.statistics__details-calendar-event-list a:hover,
+.statistics__details-month-trigger:hover {
+    color: blue;
+    font-weight: bold;
+}
+
+.statistics__details-month {
+    display: none;
+    position: fixed;
+    top: 50px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: 300px;
+    height: auto;
+    max-height: calc(100vh - 80px);
+    background-color: white;
+    overflow-y: auto;
+}
+
+.statistics__details-calendar-event-list {
+    > li {
+        margin-bottom: 10px;
+    }
+}
+
+.statistics__details-calendar-event-list-compensations {
+    list-style-type: disc;
+    padding-left: 30px;
+    margin-top: 10px;
+
+    > li {
+        padding-bottom: 5px;
+
+        .data-cards_property {
+            background-color: transparent;
+            border-color: #d4d4d4;
+        }
+    }
+}
+
+.statistics__details-month--show {
+    display: block;
+}

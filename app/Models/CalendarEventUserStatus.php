@@ -26,6 +26,11 @@ class CalendarEventUserStatus extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function compensations()
+    {
+        return $this->hasMany(CalendarEventUserCompensation::class, 'calendar_event_user_status_id');
+    }
+
     public static function getStatuses(): array
     {
         $statuses = [];
@@ -62,6 +67,11 @@ class CalendarEventUserStatus extends Model
     {
         try {
             $values = self::getEnumValues('info', self::CACHE_TTL);
+            // Remove compensation array value - this is deprecated as we now have a separate entity in DB for compensations
+            // Keep the original compensation enum for the info as we have this data in the past that may be needed.
+            if (($key = array_search('compensation', $values)) !== false) {
+                unset($values[$key]);
+            }
         } catch (\Exception $exception) {
             report($exception);
             return [];

@@ -56,6 +56,17 @@ class CalendarEvent extends Model
     }
 
     /**
+     * Get all users who have compensation for this calendar event
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function usersWithCompensation()
+    {
+        return $this->belongsToMany(User::class, 'calendar_event_user_compensations')
+                    ->withPivot(['id', 'calendar_event_user_status_id', 'status', 'free', 'payment_completed', 'created_at', 'updated_at']);
+    }
+
+    /**
      * Add the user to the calendar event.
      * Adds a record in the pivot table
      * This is not connected to parent event group users, only for newly added users to this calendar event

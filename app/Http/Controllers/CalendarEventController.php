@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\RequestValidationRulesTrait;
 use App\Models\CalendarEvent;
+use App\Models\CalendarEventUserCompensation;
 use App\Models\CalendarEventUserStatus;
 use App\Models\Group;
 use App\Models\User;
@@ -34,7 +35,18 @@ class CalendarEventController extends Controller
 
         if ($group) {
             // Get all group users with their pivot data (includes inactive status)
-            $allGroupUsers = $group->users()->userDefaultSorting()->withPivot('inactive')->get();
+            // Get all group users with their pivot data (includes inactive status)
+            $allGroupUsers = $group->users()
+                                   ->userDefaultSorting()
+                                   ->withPivot('inactive')
+                                   ->with([
+                                       'compensations',
+                                       'compensations.calendarEventUserStatus',
+                                       'compensations.calendarEventUserStatus.calendarEvent',
+                                       'compensations.calendarEventUserStatus.calendarEvent.event',
+                                       'compensations.calendarEvent'
+                                   ])
+                                   ->get();
 
             // Filter into active and inactive collections
             $groupUsers = $allGroupUsers->filter(function($user) {
@@ -76,10 +88,31 @@ class CalendarEventController extends Controller
             // After this we have our legacy group users that had on the calendar event user status but were removed form the group later
         }
 
+        // Get all users that are added as compensation for this calendar event
+        $compensationUsers = $calendarEvent->usersWithCompensation()
+            ->with([
+                'compensations',
+                'compensations.calendarEventUserStatus',
+                'compensations.calendarEventUserStatus.calendarEvent',
+                'compensations.calendarEventUserStatus.calendarEvent.event',
+                'compensations.calendarEvent'
+            ])
+            ->get();
+
         // Collect all user ids to exclude form search, group and event users, but count in the group removed users also
         $exclude = $groupUsers->concat($groupInactiveUsers)->pluck('id')->toArray();
         $exclude = $users->isNotEmpty() ? array_merge($exclude, $users->pluck('id')->toArray()) : $exclude;
         $exclude = $legacyUsers->isNotEmpty() ? array_merge($exclude, $legacyUsers->pluck('id')->toArray()) : $exclude;
+        $exclude = $compensationUsers->isNotEmpty() ? array_merge($exclude, $compensationUsers->pluck('id')->toArray()) : $exclude;
+
+        // Collect all user ids to exclude form search in compensation
+        // Just remove $groupInactiveUsers from the $exclude array
+        $excludeCompensation = array_diff($exclude, $groupInactiveUsers->pluck('id')->toArray());
+
+        $compensationStatusEnumValues = ['none' => __('None')];
+        foreach (CalendarEventUserCompensation::getStatusEnumValues() as $statusEnumValue) {
+            $compensationStatusEnumValues[$statusEnumValue] = ucfirst($statusEnumValue);
+        }
 
         return view('admin.calendar-event.show', [
             'calendarEvent' => $calendarEvent,
@@ -89,10 +122,13 @@ class CalendarEventController extends Controller
             'groupUsers' => $groupUsers,
             'groupInactiveUsers' => $groupInactiveUsers,
             'legacyUsers' => $legacyUsers,
+            'compensationUsers' => $compensationUsers,
             'usersStatuses' => $usersStatuses,
             'userIdsWithAttendedStatus' => $userIdsWithAttendedStatus,
             'exclude' => $exclude,
-            'numberOfusers' => count($exclude)
+            'excludeCompensation' => $excludeCompensation,
+            'numberOfusers' => count($exclude),
+            'compensationStatusEnumValues' => $compensationStatusEnumValues
         ]);
     }
 

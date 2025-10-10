@@ -302,7 +302,7 @@
                         :usersStatuses="$usersStatuses"
                         :calendarEvent="$calendarEvent"
                         :users="$users"
-                        class="mt-8 bg-indigo-50 pt-6 px-2"
+                        class="mt-8 bg-indigo-50 pt-6 px-2 calendar-event-group-users--collapsed"
                     />
 
                     {{-- # Legacy users - users that have calendar event user status but were removed from the group --}}

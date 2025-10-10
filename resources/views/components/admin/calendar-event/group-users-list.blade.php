@@ -10,9 +10,10 @@
 
 {{-- # Group users list, active and inactive users from the group --}}
 @if($groupUsers->isNotEmpty())
-    <div {!! $attributes->merge(['class' => 'calendar-event-grup-users']) !!}>
+    <div {!! $attributes->merge(['class' => 'calendar-event-group-users']) !!}>
         <x-admin.singular.meta.name
             name="{{ $title}}"
+            class="calendar-event-group-users__title"
         />
 
         <x-admin.singular.meta.list-wrapper>

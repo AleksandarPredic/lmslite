@@ -16,6 +16,7 @@
 @import "components/_cal-event-user-status.css";
 @import "components/calendar/_week.css";
 @import "components/_pagination.css";
+@import "components/calendar-event/_group-users-list.css";
 
 /*******************
  * ADMIN

@@ -4,6 +4,7 @@ import Alpine from 'alpinejs';
 import CalendarEventStatusUpdate from "./calendar-event/CalendarEventStatusUpdate";
 import CalendarEventAddCompensation from "./calendar-event/CalendarEventAddCompensation";
 import CalendarEventUpdateCompensation from "./calendar-event/CalendarEventUpdateCompensation";
+import GroupUsersListCollapsable from "./calendar-event/GroupUsersListCollapsable";
 
 window.Alpine = Alpine;
 
@@ -35,4 +36,11 @@ if (document.getElementsByClassName('cal-event-user-status').length) {
 document.querySelectorAll('.cal-event-compensation__update').forEach(container => {
     new CalendarEventUpdateCompensation(container);
 });
+
+/*
+ * Collapsable group users list on the calendar event
+ * @see resources/views/components/admin/calendar-event/group-users-list.blade.php
+ * @see resources/views/admin/calendar-event/show.blade.php
+ */
+GroupUsersListCollapsable();
 

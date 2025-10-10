@@ -333,7 +333,6 @@
                                             :userStatuses="$usersStatuses"
                                         />
 
-                                        {{-- // TODO: Add show link to user profile --}}
                                     </x-admin.singular.meta.item-user>
                                 @endforeach
 

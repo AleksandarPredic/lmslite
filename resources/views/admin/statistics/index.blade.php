@@ -181,7 +181,7 @@
                                                                     <ul class="statistics__details-calendar-event-list-compensations">
                                                                         @foreach($status->compensations as $calendarEventUserStatusCompensation)
                                                                             <li class="text-sm">
-                                                                                <x-data-property-compensation-trigger
+                                                                                <x-compensation.compensation-trigger
                                                                                     :compensation="$calendarEventUserStatusCompensation"
                                                                                 />
                                                                             </li>

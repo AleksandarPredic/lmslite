@@ -68,7 +68,7 @@
 
             {{-- # USER COMPENSATION START --}}
             <h2 class="mb-1">Add compensation user</h2>
-            <div class="mb-4 text-sm text-gray-500">Search users which are eligible for compensation between {{ \App\Http\Controllers\UserController::COMPENSATION_SEARCH_RANGE_IN_MONTHS_FUTURE }} month ahead and last {{ \App\Http\Controllers\UserController::COMPENSATION_SEARCH_RANGE_IN_MONTHS_PAST }} months.</div>
+            <div class="mb-4 text-sm text-gray-500">Search users which are eligible for compensation between {{ \App\Models\CalendarEventUserCompensation::getCompensationSearchRangeInMonthsFuture() }} month ahead and last {{ \App\Models\CalendarEventUserCompensation::getCompensationSearchRangeInMonthsPast() }} months.</div>
             <div class="cal-event-compensation mb-12">
                 <div class="cal-event-compensation__find-user">
                     <x-admin.form.field>
@@ -80,7 +80,7 @@
                             placeholder="{{ __('Type user name here...') }}"
                             value=""
                             data-routeusers="{{ route('admin.users.find') }}"
-                            data-routestatuses="{{ route('admin.users.find-statuses-eligible-for-compensation') }}"
+                            data-routestatuses="{{ route('admin.users.find-statuses-eligible-for-compensation-for-event') }}"
                             data-exclude="{{ ! empty($excludeCompensation) ? implode(',', $excludeCompensation) : '' }}"
                             data-calendareventid="{{ $calendarEvent->id }}"
                             required
@@ -172,7 +172,7 @@
 
                                     {{-- // This is list of added compensation users below the add form. Below we ling to compensation -> linked calendar event user status -> calendar event --}}
                                     @if($compensationUser->compensations->isNotEmpty() && $compensationForThisCalendarEvent)
-                                        <x-data-property-compensation
+                                        <x-compensation.compensation-used
                                             :compensation="$compensationForThisCalendarEvent"
                                             linkText="{{ __('From ') }}"
                                         />

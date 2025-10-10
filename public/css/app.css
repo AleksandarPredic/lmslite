@@ -649,6 +649,9 @@ select {
 .ml-4 {
   margin-left: 1rem;
 }
+.mr-2 {
+  margin-right: 0.5rem;
+}
 .mb-4 {
   margin-bottom: 1rem;
 }
@@ -657,9 +660,6 @@ select {
 }
 .mt-3 {
   margin-top: 0.75rem;
-}
-.mr-2 {
-  margin-right: 0.5rem;
 }
 .mb-1 {
   margin-bottom: 0.25rem;
@@ -1000,6 +1000,9 @@ select {
 }
 .pb-4 {
   padding-bottom: 1rem;
+}
+.pl-0 {
+  padding-left: 0px;
 }
 .pt-8 {
   padding-top: 2rem;
@@ -1504,9 +1507,10 @@ select {
 /**
  User payments view: admin/users/{user_id}/payments
  */
-.singular-meta-user-payments .singular-meta-user-payments__statuses .data-cards_property {
-    background-color: transparent;
-    border-color: #d4d4d4;
+.singular-meta-user-payments__group-unused-compensations .lms-compensation {
+    width: -webkit-max-content;
+    width: -moz-max-content;
+    width: max-content;
 }
 .singular-meta-user-payments .singular-meta-user-payments__statuses {
     margin-left: 20px;

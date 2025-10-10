@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CalendarEventUserCompensation;
 use App\Models\CalendarEventUserStatus;
 use App\Models\Payment;
 use App\Models\User;
@@ -132,10 +133,34 @@ class UserPaymentsController extends Controller
             $group->monthlyStatuses = $monthlyStatuses;
         }
 
+        $unusedCompensationsPerGroup = CalendarEventUserCompensation::getUserStatusesEligibleForCompensation($user);
+        // Eager load the required relationships
+        $unusedCompensationsPerGroup->load([
+            'compensations',
+            'compensations.calendarEventUserStatus',
+            'compensations.calendarEventUserStatus.calendarEvent',
+            'compensations.calendarEventUserStatus.calendarEvent.event',
+            'compensations.calendarEvent',
+            'compensations.calendarEvent.event'
+        ]);
+
+        // Remap all by event group id
+        $unusedCompensationsMappedByGroupId = [];
+        foreach ($unusedCompensationsPerGroup as $compensation) {
+            $groupId = optional($compensation->calendarEvent->event)->group_id;
+            if ($groupId) {
+                if (!isset($unusedCompensationsMappedByGroupId[$groupId])) {
+                    $unusedCompensationsMappedByGroupId[$groupId] = [];
+                }
+                $unusedCompensationsMappedByGroupId[$groupId][] = $compensation;
+            }
+        }
+
         return view('admin.users.payments.index', [
             'user' => $user,
             'groups' => $groups,
-            'statistics_filter_date_format' => StatisticsController::getDateFormat()
+            'statistics_filter_date_format' => StatisticsController::getDateFormat(),
+            'unusedCompensationsMappedByGroupId' => $unusedCompensationsMappedByGroupId
         ]);
     }
 

@@ -1,9 +1,8 @@
 /**
  User payments view: admin/users/{user_id}/payments
  */
-.singular-meta-user-payments .singular-meta-user-payments__statuses .data-cards_property {
-    background-color: transparent;
-    border-color: #d4d4d4;
+.singular-meta-user-payments__group-unused-compensations .lms-compensation {
+    width: max-content;
 }
 
 .singular-meta-user-payments .singular-meta-user-payments__statuses {

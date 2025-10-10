@@ -42,7 +42,7 @@
                             @endphp
 
                             @if($filteredCompensations->isNotEmpty())
-                                <x-data-property-compensation-trigger
+                                <x-compensation.compensation-trigger
                                     :compensation="$filteredCompensations->first()"
                                 />
                             @endif

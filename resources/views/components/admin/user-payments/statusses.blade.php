@@ -14,12 +14,12 @@
         <li class="font-medium text-red-600">
             <span>{{ __('Canceled') }}: {{ count($monthlyStatus['canceled']['count']) }}</span>
 
-            @if($attendedCompensations = $monthlyStatus['canceled']['compensations'] ?? null)
+            @if($canceledCompensations = $monthlyStatus['canceled']['compensations'] ?? null)
                 <ul>
-                    @foreach($attendedCompensations as $attendedCompensation)
+                    @foreach($canceledCompensations as $canceledCompensation)
                         <li>
-                            <x-data-property-compensation-trigger
-                                :compensation="$attendedCompensation"
+                            <x-compensation.compensation-trigger
+                                :compensation="$canceledCompensation"
                             />
                         </li>
                     @endforeach
@@ -29,12 +29,12 @@
         <li class="font-medium text-yellow-600">
             <span>{{ __('No-show') }}: {{ count($monthlyStatus['no-show']['count']) }}</span>
 
-            @if($attendedCompensations = $monthlyStatus['no-show']['compensations'] ?? null)
+            @if($noShowCompensations = $monthlyStatus['no-show']['compensations'] ?? null)
                 <ul>
-                    @foreach($attendedCompensations as $attendedCompensation)
+                    @foreach($noShowCompensations as $noShowCompensation)
                         <li>
-                            <x-data-property-compensation-trigger
-                                :compensation="$attendedCompensation"
+                            <x-compensation.compensation-trigger
+                                :compensation="$noShowCompensation"
                             />
                         </li>
                     @endforeach

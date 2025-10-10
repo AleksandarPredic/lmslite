@@ -10,13 +10,13 @@
 @php($calendarEvent = $compensation->calendarEvent)
 
 <x-data-property
-    class="ml-4 admin-form__inner-field--flex flex"
+    class="lms-compensation ml-4 admin-form__inner-field--flex flex"
 >
     <a class="flex items-center" href="{{ route('admin.calendar-events.show', $calendarEvent) }}">
         <span class="mr-2">
-            <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#000000"><path d="M672-336v-336H336v-72h408v408h-72ZM480-144v-336H144v-72h408v408h-72Z"/></svg>
+            <x-compensation.partials.icon />
         </span>
-        <strong class="mr-2">{{ $compensation->free ? '[FREE]' :  '[PAID]' }}</strong>
+        <span class="mr-2">@if($compensation->free) <x-compensation.partials.label-free /> @else <x-compensation.partials.label-paid /> @endif</span>
         <span class="mr-2 lms-compensation-status-date">{{ $compensation->status ? '(' . ucfirst($compensation->status) . ')' : '(None)' }} {{ lmsCarbonDateFormat($calendarEvent->starting_at) }}</span>
         @if(! $compensation->free)
             @if($compensation->payment_completed)

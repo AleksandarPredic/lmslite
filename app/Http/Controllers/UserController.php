@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\RequestValidationRulesTrait;
+use App\Models\CalendarEventUserCompensation;
 use App\Models\CalendarEventUserStatus;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
@@ -13,12 +14,6 @@ use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
     use RequestValidationRulesTrait;
-
-    public const COMPENSATION_SEARCH_RANGE_IN_MONTHS_PAST = 3;
-    public const COMPENSATION_SEARCH_RANGE_IN_MONTHS_FUTURE = 1;
-
-    private const CALENDAR_EVENT_USER_STATUS_STATUSES_FOR_FREE_COMPENSATION = ['canceled'];
-    private const CALENDAR_EVENT_USER_STATUS_STATUSES_FOR_PAID_COMPENSATION = ['no-show'];
 
     /**
      * Display a listing of the resource.
@@ -326,7 +321,7 @@ class UserController extends Controller
      *
      * @return JsonResponse
      */
-    public function findUsersWithStatusesEligibleForCompensation()
+    public function findUserStatusesEligibleForCompensationForCalendarEvent()
     {
         $attributes = request()->validate([
             'user_id' => ['required', 'numeric', 'exists:users,id'],
@@ -336,11 +331,6 @@ class UserController extends Controller
         $user = User::find($attributes['user_id']);
         $calendarEventId = $attributes['calendar_event_id'];
 
-        // First check if the user already has Compensation for this Calendar Event
-        if ($user->hasCompensationForCalendarEvent($calendarEventId)) {
-            response()->json([]);
-        }
-
         /*
          * Find users statuses for:
          * - Users that are not on this event, as we are adding them async via ajax.
@@ -348,28 +338,13 @@ class UserController extends Controller
          * - Users who has no compensation already attached to this event
          * - Users who has no compensation relationship attached to the calendarEventStatus
          */
-        $calendarEventUserStatuses = User::find($attributes['user_id'])
-            ->calendarEventStatuses()
-            ->with(['calendarEvent', 'calendarEvent.event'])
-            ->whereIn(
-                'status',
-                array_merge(
-                    self::CALENDAR_EVENT_USER_STATUS_STATUSES_FOR_FREE_COMPENSATION,
-                    self::CALENDAR_EVENT_USER_STATUS_STATUSES_FOR_PAID_COMPENSATION
-                )
-            )
-            // Filter statuses whose calendar events occurred between now and 3 months ago
-            ->whereHas('calendarEvent', function($query) {
-            $query->where('starting_at', '<=', now()->addMonths(self::COMPENSATION_SEARCH_RANGE_IN_MONTHS_FUTURE))
-            ->where('starting_at', '>=', now()->subMonths(self::COMPENSATION_SEARCH_RANGE_IN_MONTHS_PAST));
-            })
-            // Exclude statuses which already have relationship for this calendar event
-            ->whereDoesntHave('compensations', function ($query) use ($calendarEventId) {
-            $query->where('calendar_event_id', $calendarEventId);
-            })
-            // Exclude statuses which have any compensation relationships
-            ->whereDoesntHave('compensations')
-            ->get();
+
+        // First check if the user already has Compensation for this Calendar Event
+        if ($user->hasCompensationForCalendarEvent($calendarEventId)) {
+            response()->json([]);
+        }
+
+        $calendarEventUserStatuses = CalendarEventUserCompensation::getUserStatusesEligibleForCompensation($user);
 
         /**
          * Map statuses to a simple array with calendar event and status
@@ -381,7 +356,7 @@ class UserController extends Controller
                 'status_id' => $status->id,
                 'calendar_event_date' => lmsCarbonDateFormat($status->calendarEvent->starting_at),
                 'status' => $status->status,
-                'paid_compensation' => in_array($status->status, self::CALENDAR_EVENT_USER_STATUS_STATUSES_FOR_PAID_COMPENSATION),
+                'paid_compensation' => in_array($status->status, CalendarEventUserCompensation::getCalendarEventUserStatusesForPaidCompensation()),
             ];
         })->toArray();
 

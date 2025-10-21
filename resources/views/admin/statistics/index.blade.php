@@ -46,6 +46,45 @@
                     });
                 }
             });
+
+            document.addEventListener('DOMContentLoaded', function() {
+                const courseSelect = document.getElementById('course_id');
+                const groupSelect = document.getElementById('group_id');
+
+                if (!courseSelect || !groupSelect) {
+                    return;
+                }
+
+                function filterGroupOptions() {
+                    const selectedCourseId = courseSelect.value;
+                    const groupOptions = groupSelect.querySelectorAll('option');
+
+                    groupOptions.forEach(option => {
+                        // Show all options if course is 0 or empty
+                        if (!selectedCourseId || selectedCourseId === '0') {
+                            option.style.display = '';
+                            return;
+                        }
+
+                        // Show only matching course groups
+                        if (option.value === '0') {
+                            // Do nothing for the none option so it is always visible
+                        } else if(option.classList.contains('group-course-id-' + selectedCourseId)) {
+                            option.style.display = '';
+                        } else {
+                            option.style.display = 'none';
+                        }
+
+                        // Set group value to 0 when course selection change
+                        groupSelect.value = '0';
+                    });
+                }
+
+                courseSelect.addEventListener('change', filterGroupOptions);
+
+                // Run on page load if course is already selected
+                filterGroupOptions();
+            });
         </script>
 
         <div>

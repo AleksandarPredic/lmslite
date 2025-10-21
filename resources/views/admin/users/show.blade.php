@@ -57,6 +57,11 @@
                     value="{{ $user->active ? __('Yes') : __('No') }}"
                 />
 
+                <x-admin.singular.info
+                    name="{{ __('Media consent') }}"
+                    value="{{ $user->media_consent ? __('Yes') : __('No') }}"
+                />
+
                 <div class="flex justify-end mt-4 px-4">
                     <x-admin.action-link-button href="{{ route('admin.users.payments.index', $user) }}" title="{{ __('Payments') }}" />
                     <x-admin.action-link-button href="{{ route('admin.users.nextCalendarEvents', $user) }}" title="{{ __('Next Events') }}" />

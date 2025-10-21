@@ -104,6 +104,13 @@
                 name="payment_note"
                 :label="__('Payment note')"
             >{{ old('payment_note') }}</x-admin.form.textarea>
+
+            <x-admin.form.select
+                name="media_consent"
+                :value="(int)old('media_consent', 0)"
+                :label="__('Consent for Photo and Video Use')"
+                :options="[0 => __('No'), 1 => __('Yes')]"
+            />
         </x-admin.form.wrapper>
     </x-admin.main>
 </x-app-layout>

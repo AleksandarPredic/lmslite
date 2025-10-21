@@ -38,6 +38,7 @@ class User extends Authenticatable
         'note',
         'payment_note',
         'thumbnail',
+        'media_consent',
     ];
 
     /**
@@ -58,7 +59,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'date_of_birth' => 'datetime',
-        'sign_up_date' => 'datetime'
+        'sign_up_date' => 'datetime',
+        'media_consent' => 'boolean',
     ];
 
     /**

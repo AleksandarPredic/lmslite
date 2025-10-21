@@ -40,7 +40,9 @@ class Group extends Component
      */
     public function render()
     {
-        $groups = GroupModel::where('active', true)->orderBy('name', 'ASC')->get();
+        $groups = GroupModel::where('active', true)
+            ->with('course')
+            ->orderBy('name', 'ASC')->get();
 
         // If group_id param is provided in the URL, use this to show groups that are not active but comiong from hardcoded links
         // Example we have this in the UserPayments index view
@@ -60,11 +62,20 @@ class Group extends Component
                 }
             }
         }
+        $options = [];
+        $options[] = [
+            'id' => 0,
+            'name' => __('None'),
+            'course_id' => 0,
+        ];
 
-        $options = ['0' => __('None')];
         if (! empty($groups)) {
             foreach ($groups as $group) {
-                $options[$group->id] = $group->name;
+                $options[] = [
+                    'id' => $group->id,
+                    'name' => $group->name,
+                    'course_id' => $group->course->id,
+                ];
             }
         }
 

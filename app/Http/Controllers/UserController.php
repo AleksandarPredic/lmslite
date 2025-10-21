@@ -254,6 +254,7 @@ class UserController extends Controller
             'active' => ['required', 'boolean'],
             'note' => array_merge(['nullable'], $this->getNoteFieldRules()),
             'payment_note' => array_merge(['nullable'], $this->getNoteFieldRules()),
+            'media_consent' => ['required', 'boolean'],
         ]);
 
         // Add random password for every user, but we will not yet use passwords. Maybe in next version

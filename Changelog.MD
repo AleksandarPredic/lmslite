@@ -1,5 +1,20 @@
 # Changelog
 
+## 2025-10-22
+- **BREAKING CHANGE: Replaced price_2 system with per-user discount system**
+    - Removed price_2 column from groups table
+    - Removed price_type column from user_groups pivot table
+    - Renamed price_1 to price on groups table
+    - Added discount_amount column (decimal 10,2) to user_groups pivot table
+    - Updated Group, UserGroup, and User models to use discount_amount instead of price_type
+    - Replaced price type dropdown with discount amount input field in group management view
+    - Updated payment calculations: final_price = price - discount_amount
+    - Updated GroupController with new updateUserDiscount() method
+    - Updated all views (create, edit, show, index) to remove price_2 references
+    - Updated factories and seeders to reflect new structure
+    - Visual indicator now shows when a discount is applied (pink background)
+    - Final price is displayed next to discount input for transparency
+
 ## 2025-04-04
 - Fixed user payments mobile view
 - Fixed navigation responsive links

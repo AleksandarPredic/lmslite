@@ -10,9 +10,10 @@ class UserGroup extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['group_id', 'user_id', 'price_type', 'inactive'];
+    protected $fillable = ['group_id', 'user_id', 'discount_amount', 'inactive'];
 
     protected $casts = [
         'inactive' => 'boolean',
+        'discount_amount' => 'decimal:2',
     ];
 }

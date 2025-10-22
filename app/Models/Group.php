@@ -24,8 +24,7 @@ class Group extends Model
         'course_id',
         'note',
         'active',
-        'price_1',
-        'price_2',
+        'price',
     ];
 
     /**
@@ -38,8 +37,7 @@ class Group extends Model
         'starting_at' => 'datetime',
         'ending_at' => 'datetime',
         'active' => 'boolean',
-        'price_1' => 'decimal:2',
-        'price_2' => 'decimal:2',
+        'price' => 'decimal:2',
     ];
 
     public function scopeOrderByName(Builder $query): Collection
@@ -60,7 +58,7 @@ class Group extends Model
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'user_groups')
-                    ->withPivot('id', 'price_type', 'inactive');
+                    ->withPivot('id', 'discount_amount', 'inactive');
     }
 
     public function payments()

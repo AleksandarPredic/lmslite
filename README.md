@@ -88,7 +88,7 @@ Ecah group manage screen will display these features:
 ### Managing users that are in the group
 We can:
 * Remove user from the group
-* Set the user price to price_1 or price_2. This is the price that user need to pay for this group.
+* Set a custom discount amount per user. The final price is calculated as: price - discount_amount.
 
 ### Create group
 When creating the group, the important is to set the group starting at and ending at dates. Those dates will be 
@@ -128,4 +128,3 @@ Here you can preview all Groups, user has ever been member of, sorted by Courses
 ### Seed UserType data
 `php artisan db:seed --class=RoleSeeder`
 `php artisan db:seed --class=ProdSeeder`
-

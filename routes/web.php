@@ -63,7 +63,7 @@ Route::name('admin.')->middleware('can:admin')->group(function () {
     Route::resource('/admin/groups', GroupController::class);
     Route::post('/admin/groups/{group}/users', [GroupController::class, 'addUser'])->name('groups.users.store');
     Route::delete('/admin/groups/{group}/users/{user}', [GroupController::class, 'removeUser'])->name('groups.users.destroy');
-    Route::patch('/admin/groups/{group}/users/{user}/price-type', [GroupController::class, 'updateUserPriceType'])->name('groups.users.update-price-type');
+    Route::patch('/admin/groups/{group}/users/{user}/discount', [GroupController::class, 'updateUserDiscount'])->name('groups.users.update-discount');
     Route::patch('/groups/{group}/users/{user}/toggle-inactive', [GroupController::class, 'toggleUserInactive'])
          ->name('groups.users.toggle-inactive');
 

@@ -111,7 +111,7 @@ class DatabaseSeeder extends Seeder
             UserGroup::create([
                 'group_id' => rand(1, 2),
                 'user_id' => $user->id,
-                'price_type' => 'price_1',
+                'discount_amount' => 0.00,
                 'inactive' => true,
             ]);
         }

@@ -131,7 +131,7 @@
                         </div>
 
                         <x-admin.singular.meta.item-wrapper class="text-lg singular-meta-user-payments__item-header {{ $cssCLassGroupHeader }}">
-                            {{ $group->name }} @if($userInactive)<strong class="ml-2">- ({{ __('Inactive') }})</strong>@endif
+                            {{ $group->name }} | <small class="mr-2">({{ __('Price') }})</small> {{ $group->price }} | <small class="mr-2">({{ __('Discount') }})</small> {{ $group->pivot->discount_amount }} @if($userInactive) | <strong> ({{ __('Inactive') }})</strong>@endif
                         </x-admin.singular.meta.item-wrapper>
 
                         <x-admin.singular.meta.list-wrapper class="{{ $cssCLassGroupList }}">

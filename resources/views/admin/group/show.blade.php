@@ -50,13 +50,8 @@
                 />
 
                 <x-admin.singular.property
-                    name="{{ __('Price 1') }}"
-                    value="{{ lmsPricePublicFormat($group->price_1) }}"
-                />
-
-                <x-admin.singular.property
-                    name="{{ __('Price 2') }}"
-                    value="{{ lmsPricePublicFormat($group->price_2) }}"
+                    name="{{ __('Price') }}"
+                    value="{{ lmsPricePublicFormat($group->price) }}"
                 />
 
                 <x-admin.singular.property
@@ -123,22 +118,35 @@
                                 :user="$user"
                             />
 
-                            {{-- Price assignment form --}}
-                            <form method="POST" action="{{ route('admin.groups.users.update-price-type', [$group, $user]) }}">
+                            {{-- Discount assignment form --}}
+                            <form
+                                method="POST"
+                                action="{{ route('admin.groups.users.update-discount', [$group, $user]) }}"
+                                class="inline-flex items-center gap-2 border rounded"
+                                onsubmit="return confirm('Are you sure you want to add discount for {{ $user->name }}?');"
+                            >
                                 @csrf
                                 @method('PATCH')
                                 @php
-                                    $selectedPriceType = $user->pivot->price_type;
-                                    $priceSelectBackground = $selectedPriceType === 'price_1' ? 'white' : '#f2dbdb';
+                                    $currentDiscount = $user->pivot->discount_amount ?? 0;
+                                    $hasDiscount = $currentDiscount > 0;
                                 @endphp
-                                <select name="price_type" class="text-sm border-gray-300 rounded-md shadow-sm" onchange="this.form.submit()" style="background-color: {{ $priceSelectBackground }};">
-                                    <option value="price_1" {{ $selectedPriceType === 'price_1' || empty($selectedPriceType) ? 'selected' : '' }}>
-                                        {{ __('Price 1') }}: {{ lmsPricePublicFormat($group->price_1) }}
-                                    </option>
-                                    <option value="price_2" {{ $selectedPriceType === 'price_2' ? 'selected' : '' }}>
-                                        {{ __('Price 2') }}: {{ lmsPricePublicFormat($group->price_2) }}
-                                    </option>
-                                </select>
+                                <div class="flex items-center gap-2 px-2" style="background-color: {{ $hasDiscount ? '#f2dbdb' : 'white' }};">
+                                    <label class="text-xs text-gray-600 mr-2">{{ __('Discount:') }}</label>
+                                    <input
+                                        type="number"
+                                        name="discount_amount"
+                                        step="0.01"
+                                        min="0"
+                                        max="{{ $group->price }}"
+                                        value="{{ $currentDiscount }}"
+                                        class="text-sm border-gray-300 rounded-md shadow-sm w-24 mr-4"
+                                    />
+
+                                    <button type="submit" class="font-bold py-2 px-2 rounded bg-gray-100 mb-2 mt-2">
+                                        {{ __('Update discount') }}
+                                    </button>
+                                </div>
                             </form>
 
                             {{-- # Links --}}

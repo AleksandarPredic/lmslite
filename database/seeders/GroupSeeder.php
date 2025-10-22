@@ -18,22 +18,19 @@ class GroupSeeder extends Seeder
         Group::factory([
             'name' => 'Painting',
             'course_id' => (Course::where('name', 'Painting')->first())->id,
-            'price_1' => 3500,
-            'price_2' => 2500,
+            'price' => 3500,
             'active' => true,
         ])->create();
 
         Group::factory([
             'name' => 'Programming',
             'course_id' => (Course::where('name', 'Programming')->first())->id,
-            'price_1' => 3000,
-            'price_2' => 2600,
+            'price' => 3000,
             'active' => true,
         ])->create();
 
         Group::factory([
             'name' => 'Empty data',
-            'price_2' => null,
         ])->create();
     }
 }

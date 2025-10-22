@@ -44,11 +44,7 @@
                             </x-data-property>
 
                             <x-data-property>
-                                {{ __('Price one') }}: {{ $group->price_1 ? lmsPricePublicFormat($group->price_1) : __('No price') }}
-                            </x-data-property>
-
-                            <x-data-property>
-                                {{ __('Price two') }}: {{ $group->price_2 ? lmsPricePublicFormat($group->price_2) : __('No price') }}
+                                {{ __('Price') }}: {{ $group->price ? lmsPricePublicFormat($group->price) : __('No price') }}
                             </x-data-property>
                         </x-slot>
 

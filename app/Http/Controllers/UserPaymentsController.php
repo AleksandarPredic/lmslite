@@ -34,7 +34,7 @@ class UserPaymentsController extends Controller
 
         // Get groups without 'active' filter, but filter by starting_at date
         $groups = $user->groups()
-                       ->withPivot('price_type', 'inactive')
+                       ->withPivot('discount_amount', 'inactive')
                        ->whereBetween('starting_at', [$startDate, $endDate])
                         ->orderBy('starting_at', 'desc')
                        ->get();
@@ -63,8 +63,8 @@ class UserPaymentsController extends Controller
             // Assign to group for easy access in the view
             $group->paymentsByMonth = $paymentsByMonth;
 
-            // Add user price type selected for this group
-            $group->user_price = $group->{$group->pivot->price_type};
+            // Add user price with discount applied
+            $group->user_price = $group->price - ($group->pivot->discount_amount ?? 0);
 
             // Calculate attendance statistics for this group
             $groupEventStatuses = $calendarEventUserStatuses->filter(function ($status) use ($group) {

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class CalendarEventUserCompensation extends Model
 {
-    private const COMPENSATION_SEARCH_RANGE_IN_MONTHS_PAST = 3;
+    private const COMPENSATION_SEARCH_RANGE_IN_MONTHS_PAST = 12;
     private const COMPENSATION_SEARCH_RANGE_IN_MONTHS_FUTURE = 1;
 
     private const CALENDAR_EVENT_USER_STATUS_STATUSES_FOR_FREE_COMPENSATION = ['canceled'];

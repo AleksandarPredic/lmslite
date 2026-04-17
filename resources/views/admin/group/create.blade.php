@@ -48,6 +48,7 @@
                 step="0.01"
                 :value="old('price')"
                 :label="__('Price')"
+                :required="true"
             />
 
             {{-- When creating group, only active option is allowed --}}

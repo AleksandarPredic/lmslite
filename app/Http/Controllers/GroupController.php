@@ -289,10 +289,13 @@ class GroupController extends Controller
             'name' => array_merge(['required'], $this->getNameFieldRules()),
             'starting_at' => array_merge(['required'], $this->getStartingAtFieldRules()),
             'ending_at' => array_merge(['required'], $this->getEndingAtFieldRules()),
-            'course_id' => ['nullable', 'numeric'],
+            'course_id' => ['required', 'numeric', 'min:1'],
             'note' => array_merge(['nullable'], $this->getNoteFieldRules()),
-            'price' => 'nullable|numeric|min:0|max:99999999.99',
+            'price' => 'required|numeric|min:0|max:99999999.99',
             'active' => ['required', 'boolean'],
+        ], [
+            'course_id.min' => __('Please select the course.'),
+            'course_id.required' => __('Please select the course.'),
         ]);
 
         // additional sanitization

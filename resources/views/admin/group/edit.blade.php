@@ -41,7 +41,9 @@
                 :label="__('Ending at')"
                 :required="true"
             />
-            <x-admin.form.course :value="$group->course->id ?? 0" />
+            <x-admin.form.course
+                :value="$group->course->id ?? 0"
+            />
 
             <x-admin.form.textarea
                 name="note"
@@ -54,6 +56,7 @@
                 step="0.01"
                 :value="old('price', $group->price)"
                 :label="__('Price')"
+                :required="true"
             />
 
             <x-admin.form.select
